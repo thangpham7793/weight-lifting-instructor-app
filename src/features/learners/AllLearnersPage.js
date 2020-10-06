@@ -1,33 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { PBTable } from "./register"
 
-const payload = [
-  {
-    learnerId: 1,
-    firstName: "Tom",
-    lastName: "Tony",
-    snatch: 100,
-    clean: 100,
-    jerk: 100,
-    cleanAndJerk: 100,
-    backSquat: 100,
-    frontSquat: 100,
-    pushPress: 100,
-  },
-  {
-    learnerId: 2,
-    firstName: "Tom",
-    lastName: "Tony",
-    snatch: 100,
-    clean: 100,
-    jerk: 100,
-    cleanAndJerk: 100,
-    backSquat: 100,
-    frontSquat: 100,
-    pushPress: 100,
-  },
-]
-
 export function AllLearnersPage() {
   const [learners, setLearners] = useState([])
 

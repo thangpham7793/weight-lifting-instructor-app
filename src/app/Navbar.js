@@ -1,21 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Link } from "react-router-dom"
+
+function NavLink({ to, label }) {
+  return (
+    <Link to={to} className="nav-item">
+      {label}
+    </Link>
+  )
+}
 
 //https://reactrouter.com/web/api/Redirect
-export const Navbar = () => {
+export const Navbar = ({ links }) => {
+  const navLinks = links.map(({ to, label }) => (
+    <NavLink key={to} to={to} label={label} />
+  ))
+
   return (
-    <nav>
+    <nav className="header index">
       <section>
-        <h1>Otago Weightlifting Instructor Space</h1>
         <div className="navContent">
-          <div className="navLinks">
-            <Link to="/">Posts</Link>
-            <Link to="/learners">Learners</Link>
-            <Link to="/schedules">Schedules</Link>
-            <Link to="/schedules/new">Upload New Schedule</Link>
-          </div>
+          <header>
+            <h1 className="main-title">Otago Weightlifting Instructor Space</h1>
+          </header>
+          <div className="navLinks">{navLinks}</div>
         </div>
       </section>
     </nav>
-  );
-};
+  )
+}

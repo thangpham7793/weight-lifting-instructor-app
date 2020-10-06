@@ -20,8 +20,12 @@ function camelCaseToNormal(camelCaseStr) {
 
 function makeTableData(rawData) {
   const rawColumns = Object.keys(rawData[0]).reduce((acc, k) => {
+    if (k === "learnerId") {
+      return acc
+    }
     return [...acc, { Header: camelCaseToNormal(k), accessor: k }]
   }, [])
+
   return [rawData, rawColumns]
 }
 
@@ -44,26 +48,23 @@ export function PBTable({ payload }) {
   } = useTable({ columns, data })
   return (
     // apply the table props
-
-    <table {...getTableProps()}>
+    <table {...getTableProps()} className="learner-table">
       <thead>
         {
           // Loop over the header rows
-
           headerGroups.map((headerGroup) => (
             // Apply the header row props
-
             <tr {...headerGroup.getHeaderGroupProps()}>
               {
                 // Loop over the headers in each row
-
                 headerGroup.headers.map((column) => (
                   // Apply the header cell props
-
-                  <th {...column.getHeaderProps()}>
+                  <th
+                    className="learner-table-cell head"
+                    {...column.getHeaderProps()}
+                  >
                     {
                       // Render the header
-
                       column.render("Header")
                     }
                   </th>
@@ -73,33 +74,29 @@ export function PBTable({ payload }) {
           ))
         }
       </thead>
-
       {/* Apply the table body props */}
-
       <tbody {...getTableBodyProps()}>
         {
           // Loop over the table rows
-
           rows.map((row) => {
             // Prepare the row for display
-
             prepareRow(row)
-
             return (
               // Apply the row props
-
               <tr {...row.getRowProps()}>
                 {
                   // Loop over the rows cells
-
                   row.cells.map((cell) => {
                     // Apply the cell props
-
                     return (
-                      <td {...cell.getCellProps()}>
+                      <td
+                        suppressContentEditableWarning={true}
+                        contentEditable="true" //does this update the state though? This doesn't update the state since React is not keeping track of actual DOM changes
+                        className="learner-table-cell"
+                        {...cell.getCellProps()}
+                      >
                         {
                           // Render the cell contents
-
                           cell.render("Cell")
                         }
                       </td>
