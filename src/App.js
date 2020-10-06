@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom"
+//https://reactrouter.com/web/api
+
+import { Navbar, NotFoundPage } from "./app/register"
+import { AllLearnersPage } from "./features/learners/register"
+import { ScheduleUploader } from "./features/schedules/register"
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <Navbar />
+      <div className="App">
+        {/* Switch ensure that only one component is rendered at a time You also register all your routes here! */}
+        <Switch>
+          <Route exact path="/learners" component={AllLearnersPage} />
+          <Route exact path="/error" component={NotFoundPage} />
+          <Route exact path="/schedules/new" component={ScheduleUploader} />
+          {/* basicall 404 page, but need to register it */}
+          <Redirect to="/error" />
+        </Switch>
+      </div>
+    </Router>
+  )
 }
 
-export default App;
+export default App
