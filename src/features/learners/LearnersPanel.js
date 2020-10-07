@@ -1,23 +1,12 @@
 import React, { useState, useEffect } from "react"
 
-function LearnerNameList({ learners, onLearnerItemClicked }) {
-  const learnerItems = learners.map(({ learnerId, firstName, lastName }) => {
-    return (
-      <li
-        key={learnerId} //this cannot be retrieved from getAttribute! need to be spelled lowercase
-        learnerid={learnerId}
-        onClick={onLearnerItemClicked}
-      >{`${firstName} ${lastName}`}</li>
-    )
-  })
-
-  return <ul>{learnerItems}</ul>
-}
+import { LearnerNameList, PBForm } from "./register"
 
 export function LearnersPanel() {
   const [learners, setLearners] = useState([])
   const [displayedLearners, setDisplayedLearners] = useState([])
   const [searchPhrase, setSearchPhrase] = useState("")
+  const [selectedLearner, setSelectedLearner] = useState({})
 
   //FIXME: not starts with
   function filterLearners(phrase) {
@@ -47,7 +36,13 @@ export function LearnersPanel() {
   }
 
   function onLearnerItemClicked(e) {
+    //it still works if it's camelCase here
     console.log(getLearnerById(e.target.getAttribute("learnerId")))
+    setSelectedLearner(getLearnerById(e.target.getAttribute("learnerId")))
+  }
+
+  function updateLearnerPbs(e) {
+    console.log("Updating learner pbs!")
   }
 
   useEffect(() => {
@@ -83,7 +78,10 @@ export function LearnersPanel() {
         </div>
       </div>
       <div className="personalBestsPanel">
-        <form></form>
+        <PBForm
+          selectedLearner={selectedLearner}
+          updateLearnerPbs={updateLearnerPbs}
+        />
       </div>
     </div>
   )
