@@ -17,20 +17,21 @@ const learnerSchema = Yup.object({
   pushPress: Yup.number().positive().required(),
 })
 
-function PersonalBestInput({ label, ...props }) {
+export function PersonalBestInput({ label, ...props }) {
   const [field, meta] = useField(props)
   return (
-    <>
+    <div>
       <label htmlFor={props.id || props.name}>{camelCaseToNormal(label)}</label>
       <input className="text-input" {...field} {...props} />
       {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
       ) : null}
-    </>
+    </div>
   )
 }
 
-export function PBForm({ selectedLearner, updateLearnerPbs }) {
+export function PBForm({ selectedLearner = {}, openLearnerPbsUpdateModal }) {
+  //it does changes, but doesn't show on the UI
   const inputs = Object.keys(selectedLearner).map((fieldName) => {
     if (fieldName === "learnerId") return null
     return (
@@ -39,17 +40,21 @@ export function PBForm({ selectedLearner, updateLearnerPbs }) {
         name={fieldName}
         type="text"
         key={fieldName}
+        value={selectedLearner[fieldName]} //this makes it readonly
       />
     )
   })
 
+  //it does get called, it's just that ... the initial values aren't reset?
+  console.log("I was re-rendered!")
+  //use modal then
   return (
     <>
       <h3>Personal Bests</h3>
       <Formik
         initialValues={selectedLearner}
-        validationSchema={learnerSchema}
-        onSubmit={updateLearnerPbs}
+        values={selectedLearner}
+        onSubmit={openLearnerPbsUpdateModal}
       >
         <Form>
           {inputs}

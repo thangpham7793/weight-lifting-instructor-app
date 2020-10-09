@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react"
 
-import { LearnerNameList, PBForm } from "./register"
+import { LearnerNameList, PersonalBestsForm } from "./register"
+
+function PBFormPanel({ pbForm }) {
+  return (
+    <div className="personalBestsPanel">
+      {pbForm ? pbForm : <div>Click on A Name</div>}
+    </div>
+  )
+}
 
 export function LearnersPanel() {
   const [learners, setLearners] = useState([])
   const [displayedLearners, setDisplayedLearners] = useState([])
   const [searchPhrase, setSearchPhrase] = useState("")
-  const [selectedLearner, setSelectedLearner] = useState({})
+  const [selectedLearner, setSelectedLearner] = useState(null)
+
+  //should make my own form... (and when a new learner is selected use that as the stored values)
 
   //FIXME: not starts with
   function filterLearners(phrase) {
@@ -36,13 +46,41 @@ export function LearnersPanel() {
   }
 
   function onLearnerItemClicked(e) {
+    const selected = getLearnerById(e.target.getAttribute("learnerId"))
+
     //it still works if it's camelCase here
-    console.log(getLearnerById(e.target.getAttribute("learnerId")))
-    setSelectedLearner(getLearnerById(e.target.getAttribute("learnerId")))
+    console.log(selected)
+
+    //must find a way to refresh trigger form refresh
+    setSelectedLearner(selected)
   }
 
-  function updateLearnerPbs(e) {
-    console.log("Updating learner pbs!")
+  function onPersonalBestsInputChange(e) {
+    const changedField = e.target.getAttribute("name")
+    const newValue = e.target.value.trim()
+
+    console.log(e.target.getAttribute("name"))
+
+    setSelectedLearner((selectedLearner) => {
+      let newSelectedLearner = { ...selectedLearner }
+      newSelectedLearner[changedField] = newValue
+      return newSelectedLearner
+    })
+  }
+
+  function onUpdatePersonalBests(e) {
+    e.preventDefault()
+    console.log(selectedLearner)
+
+    const newLearnersList = [...learners]
+
+    const updatedLearnerIndex = learners.findIndex(
+      ({ learnerId }) => learnerId === selectedLearner.learnerId
+    )
+    newLearnersList[updatedLearnerIndex] = selectedLearner
+
+    setDisplayedLearners(newLearnersList)
+    setLearners(newLearnersList)
   }
 
   useEffect(() => {
@@ -58,7 +96,7 @@ export function LearnersPanel() {
   }, [])
 
   return (
-    <div className="leanerPanelWrapper">
+    <div className="learnerPanelWrapper" style={{ display: "flex" }}>
       <div className="learnerListPanel" style={{ display: "flex" }}>
         <div
           className="searchInputWrapper"
@@ -77,12 +115,15 @@ export function LearnersPanel() {
           />
         </div>
       </div>
-      <div className="personalBestsPanel">
-        <PBForm
+      {selectedLearner ? (
+        <PersonalBestsForm
           selectedLearner={selectedLearner}
-          updateLearnerPbs={updateLearnerPbs}
+          onPersonalBestsInputChange={onPersonalBestsInputChange}
+          onUpdatePersonalBests={onUpdatePersonalBests}
         />
-      </div>
+      ) : (
+        <div>Click On A Name</div>
+      )}
     </div>
   )
 }
