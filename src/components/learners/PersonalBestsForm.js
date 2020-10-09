@@ -30,6 +30,7 @@ export function PersonalBestsForm({
         value={selectedLearner[fieldName]}
         onChange={onPersonalBestsInputChange}
         readOnly={!canEditAndUpdate}
+        style={{ opacity: canEditAndUpdate ? "1" : "0.75" }}
       />
     )
   })

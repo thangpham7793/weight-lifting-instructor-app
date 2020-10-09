@@ -9,8 +9,8 @@ import { Footer } from "./app/Footer"
 //https://reactrouter.com/web/api
 
 import { Navbar, NotFoundPage } from "./app/register"
-import { AllLearnersPage, LearnersPanel } from "./features/learners/register"
-import { ScheduleUploader } from "./features/schedules/register"
+import { AllLearnersPage, LearnersPanel } from "./components/learners/register"
+import { ScheduleUploader } from "./components/schedules/register"
 
 function App() {
   const links = [

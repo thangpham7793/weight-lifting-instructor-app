@@ -2,13 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import { LearnerNameList, PersonalBestsForm } from "./register"
 
-function PBFormPanel({ pbForm }) {
-  return (
-    <div className="personalBestsPanel">
-      {pbForm ? pbForm : <div>Click on A Name</div>}
-    </div>
-  )
-}
+import fetchService from "../../services/http"
 
 export function LearnersPanel() {
   const [learners, setLearners] = useState([])
@@ -99,8 +93,10 @@ export function LearnersPanel() {
 
   useEffect(() => {
     async function fetchLearners() {
-      const response = await fetch("http://localhost:5000/learners")
-      const payload = await response.json()
+      // const response = await fetch("http://localhost:5000/learners")
+      // const payload = await response.json()
+
+      const payload = await fetchService.fetchLearners()
 
       //the two operations are not synchronous!
       setLearners(payload)
