@@ -15,6 +15,7 @@ export function LearnersPanel() {
   const [displayedLearners, setDisplayedLearners] = useState([])
   const [searchPhrase, setSearchPhrase] = useState("")
   const [selectedLearner, setSelectedLearner] = useState(null)
+  const [canEditAndUpdate, setCanEditAndUpdate] = useState(false)
 
   //should make my own form... (and when a new learner is selected use that as the stored values)
 
@@ -59,7 +60,7 @@ export function LearnersPanel() {
     const changedField = e.target.getAttribute("name")
     const newValue = e.target.value.trim()
 
-    console.log(e.target.getAttribute("name"))
+    //console.log(e.target.getAttribute("name"))
 
     setSelectedLearner((selectedLearner) => {
       let newSelectedLearner = { ...selectedLearner }
@@ -69,8 +70,12 @@ export function LearnersPanel() {
   }
 
   function onUpdatePersonalBests(e) {
+    //disable submission
     e.preventDefault()
-    console.log(selectedLearner)
+
+    //disable edit
+
+    //console.log(selectedLearner)
 
     const newLearnersList = [...learners]
 
@@ -79,8 +84,17 @@ export function LearnersPanel() {
     )
     newLearnersList[updatedLearnerIndex] = selectedLearner
 
+    //updated the list because name can be updated
     setDisplayedLearners(newLearnersList)
     setLearners(newLearnersList)
+    //setCanEditAndUpdate(false)
+
+    //notify user of success when network call comes back
+    console.log("Updating ... Success!")
+  }
+
+  function enableEditAndUpdate() {
+    setCanEditAndUpdate(!canEditAndUpdate)
   }
 
   useEffect(() => {
@@ -120,6 +134,8 @@ export function LearnersPanel() {
           selectedLearner={selectedLearner}
           onPersonalBestsInputChange={onPersonalBestsInputChange}
           onUpdatePersonalBests={onUpdatePersonalBests}
+          canEditAndUpdate={canEditAndUpdate}
+          enableEditAndUpdate={enableEditAndUpdate}
         />
       ) : (
         <div>Click On A Name</div>
