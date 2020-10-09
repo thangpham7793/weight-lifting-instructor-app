@@ -1,7 +1,7 @@
 //https://dmitripavlutin.com/javascript-fetch-async-await/
 class httpServiceSingleton {
   constructor() {
-    //hide away implementation details from the client (components that call this)
+    //hide away implementation details from the client components
     this.fetchLearners = httpServiceSingleton._fetchJsonFactory("learners")
 
     //make sure that only an instance is created
@@ -17,7 +17,7 @@ class httpServiceSingleton {
     return `${this.BASE_URL}/${resourceUrl}`
   }
 
-  //factory function that makes use of closure
+  //factory functions that makes use of closure
   static _fetchPostFactory(resourceUrl) {
     const url = httpServiceSingleton._makeUrl(resourceUrl)
     return async function (payload) {

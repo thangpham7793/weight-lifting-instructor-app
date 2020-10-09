@@ -45,8 +45,8 @@ function App() {
           {/* basicall 404 page, but need to register it */}
           <Redirect to="/error" />
         </Switch>
-        <Footer />
       </div>
+      <Footer />
     </Router>
   )
 }

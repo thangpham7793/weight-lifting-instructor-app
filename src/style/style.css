@@ -110,23 +110,26 @@ a.disabled {
     "main"
     "footer";
   grid-template-columns: 1fr;
-  grid-template-rows: 3rem 1fr 1.5rem;
+  grid-template-rows: auto 1fr auto;
   text-align: center;
 }
 
 .header {
   grid-area: header;
   padding: var(--pd-sm) 0;
+  max-height: 3rem;
 }
 
 .main {
  grid-area: main; 
  background-image: linear-gradient(#00a896, #f0f3bd);
+ /* min-height: calc(100vw - 4.5rem); */
 }
 
 .footer {
   grid-area: footer;
   font-size: calc(var(--fs-sm) * 0.5);
+  min-height: 1.5rem;
 }
 
 .header, .footer {
