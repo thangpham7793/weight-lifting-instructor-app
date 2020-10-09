@@ -1,10 +1,10 @@
 import React from "react"
 
-export function NotificationDivFactory(
+export function FetchNotificationDivFactory(
   resourceName = null,
   postFetchAction = null
 ) {
-  return function NotificationDiv({ isFetchSuccess }) {
+  return function ({ isFetchSuccess }) {
     //NOTE: a factory function for customizing a notification div based on the kind of payload
 
     switch (isFetchSuccess) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 
 import { LearnerNameList, PersonalBestsForm } from "./register"
-import { NotificationDivFactory } from "../factoryComponent"
+import { FetchNotificationDivFactory } from "../factoryComponent"
 
 import fetchService from "../../services/http"
 
@@ -14,7 +14,7 @@ export function LearnersPanel() {
 
   //maybe these can be combined into a useNotification hook?
   const [isFetchSuccess, setIsFetchSuccess] = useState(null)
-  const FetchLearnersNotificationDiv = NotificationDivFactory(
+  const FetchLearnersNotificationDiv = FetchNotificationDivFactory(
     "learners",
     "Click On A Name"
   )
@@ -105,9 +105,9 @@ export function LearnersPanel() {
         setLearners(payload)
         setDisplayedLearners(payload)
         setIsFetchSuccess(true)
-        return
+      } else {
+        setIsFetchSuccess(false)
       }
-      setIsFetchSuccess(false)
     }
     fetchLearners()
   }, [])

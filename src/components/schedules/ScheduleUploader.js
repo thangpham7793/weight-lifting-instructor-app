@@ -1,63 +1,19 @@
 import React, { useState, useEffect } from "react"
 import { myExcelReader } from "./myExcelReader"
 import fetchService from "../../services/http"
-import { catchAsync } from "../../utils"
+import { FileUploader, ProgrammeOptions } from "./register"
+import { FetchNotificationDivFactory } from "../factoryComponent"
 
 //a good candidate for Redux, since needed by many components, lets just do useState for now
-function ProgrammeDropDown({
-  programmes,
-  onProgrammeSelected,
-  selectedProgrammeId,
-  isFetchSuccess,
-}) {
-  if (programmes.length === 1 && isFetchSuccess === null) {
-    return <div>Loading Programmes ...</div>
-  }
-
-  if (isFetchSuccess === false) {
-    return <div>Failed to load programmes ...</div>
-  }
-
-  const options = programmes.map(({ programmeName, programmeId }) => {
-    return (
-      <option key={programmeId} value={programmeId}>
-        {programmeName}
-      </option>
-    )
-  })
-  return (
-    <select onChange={onProgrammeSelected} value={selectedProgrammeId}>
-      {options}
-    </select>
-  )
-}
-
-function FileUploader({ onFileUploaded }) {
-  return (
-    <div>
-      <input
-        type="file"
-        id="fileUploader"
-        name="fileUploader"
-        accept=".xls, .xlsx"
-        onChange={onFileUploaded}
-      />
-      <pre id="jsonObject"> JSON : </pre>
-    </div>
-  )
-}
 
 export function ScheduleUploader() {
-  const [programmes, setProgrammes] = useState([
-    {
-      programmeId: 0,
-      programmeName: "None",
-    },
-  ])
-  const [selectedProgrammeId, setSelectedProgrammeId] = useState(
-    programmes[0].programmeId
-  )
+  const [programmes, setProgrammes] = useState(null)
+  const [selectedProgrammeId, setSelectedProgrammeId] = useState(null)
+
   const [isFetchSuccess, setIsFetchSuccess] = useState(null)
+  const FetchProgrammesNotificationDiv = FetchNotificationDivFactory(
+    "programmes"
+  )
 
   function onProgrammeSelected(e) {
     setSelectedProgrammeId(parseInt(e.target.value))
@@ -70,17 +26,21 @@ export function ScheduleUploader() {
 
       if (payload.programmes) {
         //effect here
-        setProgrammes((p) => [...payload.programmes, ...p])
+        setProgrammes((p) => [
+          ...payload.programmes,
+          {
+            programmeId: 0,
+            programmeName: "None",
+          },
+        ])
+        setSelectedProgrammeId(0)
         setIsFetchSuccess(true)
+      } else {
+        //another effect
+        setIsFetchSuccess(false)
       }
     }
-
-    function handleFailedFetch() {
-      //another effect
-      setIsFetchSuccess(false)
-    }
-
-    catchAsync(fetchProgrammes, handleFailedFetch)()
+    fetchProgrammes()
   }, [])
 
   function onFileUploaded(e) {
@@ -97,12 +57,16 @@ export function ScheduleUploader() {
     <>
       <div>
         <div>
-          <ProgrammeDropDown
-            onProgrammeSelected={onProgrammeSelected}
-            programmes={programmes}
-            selectedProgrammeId={selectedProgrammeId}
-            isFetchSuccess={isFetchSuccess}
-          />
+          {programmes ? (
+            <ProgrammeOptions
+              onProgrammeSelected={onProgrammeSelected}
+              programmes={programmes}
+              selectedProgrammeId={selectedProgrammeId}
+              isFetchSuccess={isFetchSuccess}
+            />
+          ) : (
+            <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
+          )}
         </div>
         <FileUploader onFileUploaded={onFileUploaded} />
       </div>
