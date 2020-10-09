@@ -1,9 +1,9 @@
 import XLSX from "xlsx"
+import fetchService from "../../services/http"
 
 export class myExcelReader {
-  constructor() {
+  constructor(programmeId) {
     this.reader = new FileReader()
-
     this.reader.makeTimeTable = function (exercisesArr) {
       const aggregate = {}
 
@@ -44,7 +44,9 @@ export class myExcelReader {
       )
       return aggregate
     }
-    this.reader.onload = function (event) {
+    this.reader.programmeId = programmeId
+    this.reader.onload = async function (event) {
+      //console.log(this.programmeId)
       const data = event.target.result
       const workbook = XLSX.read(data, {
         type: "binary",
@@ -53,6 +55,8 @@ export class myExcelReader {
       const payload = {
         scheduleName: "",
         timetable: "",
+        programmeId: this.programmeId,
+        weekCount: 0,
       }
 
       const rows = []
@@ -76,23 +80,17 @@ export class myExcelReader {
         4
       )
 
+      payload.weekCount = Math.max.apply(
+        null,
+        Object.keys(payload.timetable).map((week) => {
+          return parseInt(week.substring(week.length - 1))
+        })
+      )
+
       //TODO: need to calculate weekCount
       //TODO: need to weed out undefined row
-      const url = `http://localhost:5000/programmes/schedules`
-
-      const fetchOptions = {
-        method: "POST",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }
-      fetch(url, fetchOptions)
-        .then((res) => {
-          console.log(res.ok)
-        })
-        .catch((err) => {
-          console.log(`Error Sending Posting Timetable: ${err}`)
-        })
+      const success = await fetchService.postNewSchedule(payload)
+      console.log(success)
     }
     this.reader.onerror = function (event) {
       console.error("File could not be read! Code " + event.target.error.code)

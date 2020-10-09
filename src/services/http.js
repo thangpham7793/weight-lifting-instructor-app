@@ -1,8 +1,13 @@
 //https://dmitripavlutin.com/javascript-fetch-async-await/
+//TODO: need to implement decorator? to add async handler
 class httpServiceSingleton {
   constructor() {
     //hide away implementation details from the client components
     this.fetchLearners = httpServiceSingleton._fetchJsonFactory("learners")
+    this.fetchProgrammes = httpServiceSingleton._fetchJsonFactory("programmes")
+    this.postNewSchedule = httpServiceSingleton._fetchPostFactory(
+      "programmes/schedules"
+    )
 
     //make sure that only an instance is created
     this._instance = this
@@ -23,9 +28,12 @@ class httpServiceSingleton {
     return async function (payload) {
       const options = {
         method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       }
-      await fetch(url, options)
+      const { ok } = await fetch(url, options)
+      return ok
     }
   }
 
