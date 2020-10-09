@@ -1,10 +1,14 @@
+import { catchAsync } from "../utils"
+
 //https://dmitripavlutin.com/javascript-fetch-async-await/
 //TODO: need to implement decorator? to add async handler
 class httpServiceSingleton {
   constructor() {
     //hide away implementation details from the client components
     this.fetchLearners = httpServiceSingleton._fetchJsonFactory("learners")
+
     this.fetchProgrammes = httpServiceSingleton._fetchJsonFactory("programmes")
+
     this.postNewSchedule = httpServiceSingleton._fetchPostFactory(
       "programmes/schedules"
     )
@@ -25,7 +29,7 @@ class httpServiceSingleton {
   //factory functions that makes use of closure
   static _fetchPostFactory(resourceUrl) {
     const url = httpServiceSingleton._makeUrl(resourceUrl)
-    return async function (payload) {
+    return catchAsync(async function (payload) {
       const options = {
         method: "POST",
         mode: "cors",
@@ -34,15 +38,23 @@ class httpServiceSingleton {
       }
       const { ok } = await fetch(url, options)
       return ok
-    }
+    })
   }
 
   static _fetchJsonFactory(resourceUrl) {
     const url = httpServiceSingleton._makeUrl(resourceUrl)
-    return async function () {
+    return catchAsync(async function () {
       const response = await fetch(url)
       return response.json()
-    }
+    })
+  }
+
+  //FIXME: how to implement retry?
+  static _retryFetch(asyncFetchFunc) {
+    setInterval(async () => {
+      console.log("Refetching ...")
+      return catchAsync(asyncFetchFunc())
+    }, 5000)
   }
 
   static getInstance() {

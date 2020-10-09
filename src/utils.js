@@ -12,3 +12,16 @@ export function camelCaseToNormal(camelCaseStr) {
     }
   }, "")
 }
+
+//async error handler decorator
+export function catchAsync(asyncFunc, errorHandler = null) {
+  return async function (...args) {
+    try {
+      return await asyncFunc(...args)
+    } catch (error) {
+      errorHandler
+        ? errorHandler(asyncFunc)
+        : console.log(`Something went wrong: ${error}`)
+    }
+  }
+}

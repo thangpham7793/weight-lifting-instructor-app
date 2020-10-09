@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 
 import { LearnerNameList, PersonalBestsForm } from "./register"
+import { NotificationDivFactory } from "../factoryComponent"
 
 import fetchService from "../../services/http"
 
@@ -11,9 +12,13 @@ export function LearnersPanel() {
   const [selectedLearner, setSelectedLearner] = useState(null)
   const [canEditAndUpdate, setCanEditAndUpdate] = useState(false)
 
-  //should make my own form... (and when a new learner is selected use that as the stored values)
+  //maybe these can be combined into a useNotification hook?
+  const [isFetchSuccess, setIsFetchSuccess] = useState(null)
+  const FetchLearnersNotificationDiv = NotificationDivFactory(
+    "learners",
+    "Click On A Name"
+  )
 
-  //FIXME: not starts with
   function filterLearners(phrase) {
     const processedPhrase = phrase.trim().toLowerCase()
 
@@ -93,14 +98,16 @@ export function LearnersPanel() {
 
   useEffect(() => {
     async function fetchLearners() {
-      // const response = await fetch("http://localhost:5000/learners")
-      // const payload = await response.json()
-
       const payload = await fetchService.fetchLearners()
 
-      //the two operations are not synchronous!
-      setLearners(payload)
-      setDisplayedLearners(payload)
+      if (payload) {
+        //the two operations are not synchronous!
+        setLearners(payload)
+        setDisplayedLearners(payload)
+        setIsFetchSuccess(true)
+        return
+      }
+      setIsFetchSuccess(false)
     }
     fetchLearners()
   }, [])
@@ -134,7 +141,7 @@ export function LearnersPanel() {
           enableEditAndUpdate={enableEditAndUpdate}
         />
       ) : (
-        <div>Click On A Name</div>
+        <FetchLearnersNotificationDiv isFetchSuccess={isFetchSuccess} />
       )}
     </div>
   )

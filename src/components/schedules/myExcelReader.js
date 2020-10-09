@@ -1,6 +1,26 @@
 import XLSX from "xlsx"
 import fetchService from "../../services/http"
 
+function promisify(f) {
+  return function (...args) {
+    // return a wrapper-function
+    return new Promise((resolve, reject) => {
+      function callback(err, result) {
+        // our custom callback for f
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      }
+
+      args.push(callback) // append our custom callback to the end of f arguments
+
+      f.call(this, ...args) // call the original function
+    })
+  }
+}
+
 export class myExcelReader {
   constructor(programmeId) {
     this.reader = new FileReader()
@@ -49,7 +69,7 @@ export class myExcelReader {
       //console.log(this.programmeId)
       const data = event.target.result
       const workbook = XLSX.read(data, {
-        type: "binary",
+        type: "buffer",
       })
 
       const payload = {
@@ -87,13 +107,16 @@ export class myExcelReader {
         })
       )
 
-      //TODO: need to calculate weekCount
-      //TODO: need to weed out undefined row
       const success = await fetchService.postNewSchedule(payload)
-      console.log(success)
+      return success
     }
+
     this.reader.onerror = function (event) {
       console.error("File could not be read! Code " + event.target.error.code)
     }
+
+    this.reader.readAsArrayBufferPromise = promisify(
+      this.reader.readAsArrayBuffer
+    )
   }
 }
