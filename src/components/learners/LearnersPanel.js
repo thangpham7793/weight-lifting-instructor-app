@@ -20,7 +20,7 @@ export function LearnersPanel() {
     "Click On A Name"
   )
 
-  function filterLearners(phrase) {
+  function filterLearners(learners, phrase) {
     const processedPhrase = phrase.trim().toLowerCase()
 
     if (processedPhrase.length === 0) return learners
@@ -43,7 +43,7 @@ export function LearnersPanel() {
     //the two operations are not synchronous!
     setSearchPhrase(e.target.value)
     //dont set it using the searchPhrase because React may not have updated it with the new value
-    setDisplayedLearners(filterLearners(phrase))
+    setDisplayedLearners(filterLearners(learners, phrase))
   }
 
   function onLearnerItemClicked(e) {
@@ -69,12 +69,28 @@ export function LearnersPanel() {
     })
   }
 
-  function updateUILearnerList(updatedLearnerIndex) {
+  //FIXME: this may break if user's currently filtering!
+  function updateUILearnerList(updatedLearnerIndex, action = "UPDATE") {
     const newLearnersList = [...learners]
-    newLearnersList[updatedLearnerIndex] = selectedLearner
-    //updated the list because name can be updated
-    setDisplayedLearners(newLearnersList)
-    setLearners(newLearnersList)
+    switch (action) {
+      default:
+        newLearnersList[updatedLearnerIndex] = selectedLearner
+        //updated the list because name can be updated
+        setLearners(newLearnersList)
+        setDisplayedLearners(
+          filterLearners(newLearnersList, `${selectedLearner.firstName}`)
+        )
+        setSearchPhrase(`${selectedLearner.firstName}`)
+        break
+      case "DELETE":
+        //remove the deleted learner
+        newLearnersList.splice(updatedLearnerIndex, 1)
+        //should go back to the full list after deleting
+        setDisplayedLearners(newLearnersList)
+        setLearners(newLearnersList)
+        setSearchPhrase("")
+        break
+    }
   }
 
   async function onUpdatePersonalBests(e) {
