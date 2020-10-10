@@ -17,6 +17,7 @@ export function PersonalBestsForm({
   onUpdatePersonalBests,
   enableEditAndUpdate,
   canEditAndUpdate,
+  onDeleteLearner,
 }) {
   //it does changes, but doesn't show on the UI
   const inputs = Object.keys(selectedLearner).map((fieldName) => {
@@ -41,9 +42,18 @@ export function PersonalBestsForm({
       <h3>Personal Bests</h3>
       <form onSubmit={onUpdatePersonalBests} readOnly={!canEditAndUpdate}>
         {inputs}
-        <button type="submit" onClick={enableEditAndUpdate}>
-          {!canEditAndUpdate ? "Edit" : "Save"}
-        </button>
+        <div>
+          <button type="submit" onClick={enableEditAndUpdate}>
+            {!canEditAndUpdate ? "Edit" : "Save"}
+          </button>
+          <button
+            type="submit"
+            onClick={onDeleteLearner}
+            disabled={!canEditAndUpdate}
+          >
+            Delete
+          </button>
+        </div>
       </form>
     </>
   )

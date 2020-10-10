@@ -97,12 +97,24 @@ export function LearnersPanel() {
 
       updateUILearnerList(updatedLearnerIndex)
       console.log(`Sending ${JSON.stringify(selectedLearner)}`)
-      //console.log("Updating ... Success!")
+
+      const isUpdated = await fetchService.updateLearner({
+        learner: selectedLearner,
+      })
+
+      isUpdated
+        ? console.log("Updating ... Success!")
+        : console.log("Updating failed!")
     }
   }
 
   function enableEditAndUpdate() {
     setCanEditAndUpdate(!canEditAndUpdate)
+  }
+
+  async function onDeleteLearner(e) {
+    e.preventDefault()
+    console.log("Delete learner id ", selectedLearner.learnerId)
   }
 
   useEffect(() => {
@@ -148,6 +160,7 @@ export function LearnersPanel() {
           onUpdatePersonalBests={onUpdatePersonalBests}
           canEditAndUpdate={canEditAndUpdate}
           enableEditAndUpdate={enableEditAndUpdate}
+          onDeleteLearner={onDeleteLearner}
         />
       ) : (
         <FetchLearnersNotificationDiv isFetchSuccess={isFetchSuccess} />

@@ -27,7 +27,7 @@ export function catchAsync(asyncFunc, errorHandler = null) {
 }
 
 export function shallowEqual(obj1, obj2) {
-  return Object.keys(obj1).every((k) => {
-    return obj2.hasOwnProperty(k) && obj2[k] === obj1[k]
+  return Object.entries(obj1).every(([obj1Key, obj1Value]) => {
+    return obj2.hasOwnProperty(obj1Key) && obj1Value === obj2[obj1Key]
   })
 }
