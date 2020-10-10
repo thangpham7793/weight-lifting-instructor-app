@@ -88,9 +88,16 @@ export function LearnersPanel() {
         //should go back to the full list after deleting
         setDisplayedLearners(newLearnersList)
         setLearners(newLearnersList)
+        //reset searchPhrase
         setSearchPhrase("")
         break
     }
+  }
+
+  function getUpdatedLearnerIndex(learners, selectedLearner) {
+    return learners.findIndex(
+      ({ learnerId }) => learnerId === selectedLearner.learnerId
+    )
   }
 
   async function onUpdatePersonalBests(e) {
@@ -101,8 +108,9 @@ export function LearnersPanel() {
 
     //only update everything after learner presses save (which turns off editting)
     if (!canEditAndUpdate) {
-      const updatedLearnerIndex = learners.findIndex(
-        ({ learnerId }) => learnerId === selectedLearner.learnerId
+      const updatedLearnerIndex = getUpdatedLearnerIndex(
+        learners,
+        selectedLearner
       )
 
       //check if the selectedLearner actually changes
@@ -111,6 +119,7 @@ export function LearnersPanel() {
         return
       }
 
+      //...when should you update?
       updateUILearnerList(updatedLearnerIndex)
       console.log(`Sending ${JSON.stringify(selectedLearner)}`)
 
@@ -131,6 +140,21 @@ export function LearnersPanel() {
   async function onDeleteLearner(e) {
     e.preventDefault()
     console.log("Delete learner id ", selectedLearner.learnerId)
+
+    const isDeleted = await fetchService.deleteLearner(
+      selectedLearner.learnerId
+    )
+
+    if (isDeleted) {
+      const updatedLearnerIndex = getUpdatedLearnerIndex(
+        learners,
+        selectedLearner
+      )
+      updateUILearnerList(updatedLearnerIndex, "DELETE")
+      console.log("Deleting ... Success!")
+    } else {
+      console.log("Deleting failed!")
+    }
   }
 
   useEffect(() => {

@@ -17,6 +17,7 @@ class httpServiceSingleton {
     this.updateLearner = httpServiceSingleton._fetchPutFactory(
       "learners/details"
     )
+    this.deleteLearner = httpServiceSingleton._fetchDeleteFactory("learners")
 
     //make sure that only an instance is created
     this._instance = this
@@ -81,6 +82,21 @@ class httpServiceSingleton {
         },
       })
       return response.json()
+    })
+  }
+
+  static _fetchDeleteFactory(resourceUrl) {
+    const url = httpServiceSingleton._makeUrl(resourceUrl)
+    return catchAsync(async function (resourceId) {
+      const options = {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+          Authorization: `Bearer ${UserAuth.getToken()}`,
+        },
+      }
+      const { ok } = await fetch(`${url}/${resourceId}`, options)
+      return ok
     })
   }
 
