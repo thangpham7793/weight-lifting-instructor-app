@@ -6,12 +6,12 @@ class httpServiceSingleton {
   constructor() {
     //hide away implementation details from the client components
     this.fetchLearners = httpServiceSingleton._fetchJsonFactory("learners")
-
     this.fetchProgrammes = httpServiceSingleton._fetchJsonFactory("programmes")
 
     this.postNewSchedule = httpServiceSingleton._fetchPostFactory(
       "programmes/schedules"
     )
+    this.updateLearner = httpServiceSingleton._fetchPutFactory("learners/pbs")
 
     //make sure that only an instance is created
     this._instance = this
@@ -32,6 +32,20 @@ class httpServiceSingleton {
     return catchAsync(async function (payload) {
       const options = {
         method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+      const { ok } = await fetch(url, options)
+      return ok
+    })
+  }
+
+  static _fetchPutFactory(resourceUrl) {
+    const url = httpServiceSingleton._makeUrl(resourceUrl)
+    return catchAsync(async function (payload) {
+      const options = {
+        method: "PUT",
         mode: "cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

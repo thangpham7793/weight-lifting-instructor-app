@@ -1,2 +1,5 @@
-export * from './Navbar'
-export * from './NotFoundPage'
+export * from "./Navbar"
+export * from "./NotFoundPage"
+export * from "./Footer"
+export * from "./LoginForm"
+export * from "./Logo"

@@ -5,10 +5,9 @@ import {
   Route,
   Redirect,
 } from "react-router-dom"
-import { Footer } from "./app/Footer"
 //https://reactrouter.com/web/api
 
-import { Navbar, NotFoundPage } from "./app/register"
+import { Navbar, NotFoundPage, Footer, LoginForm, Logo } from "./app/register"
 import { AllLearnersPage, LearnersPanel } from "./components/learners/register"
 import { ScheduleUploader } from "./components/schedules/register"
 
@@ -36,8 +35,10 @@ function App() {
     <Router>
       <Navbar links={links} />
       <div className="App main">
+        <Logo />
         {/* Switch ensure that only one component is rendered at a time You also register all your routes here! */}
         <Switch>
+          <Route exact path="/" component={LoginForm} />
           <Route exact path="/learners" component={AllLearnersPage} />
           <Route exact path="/error" component={NotFoundPage} />
           <Route exact path="/schedules/new" component={ScheduleUploader} />
