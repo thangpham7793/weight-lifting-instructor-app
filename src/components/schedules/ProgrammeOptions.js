@@ -13,8 +13,17 @@ export function ProgrammeOptions({
     )
   })
   return (
-    <select onChange={onProgrammeSelected} value={selectedProgrammeId}>
-      {options}
-    </select>
+    <>
+      <div>
+        <label htmlFor="programmes">Publish to Programme: </label>
+      </div>
+      <select
+        name="programmes"
+        onChange={onProgrammeSelected}
+        value={selectedProgrammeId ? selectedProgrammeId : undefined}
+      >
+        {options}
+      </select>
+    </>
   )
 }

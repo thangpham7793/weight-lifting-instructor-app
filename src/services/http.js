@@ -2,7 +2,6 @@ import { catchAsync } from "../utils"
 import { UserAuth } from "./auth"
 
 //https://dmitripavlutin.com/javascript-fetch-async-await/
-//TODO: need to implement decorator? to add async handler
 class httpServiceSingleton {
   constructor() {
     //hide away implementation details from the client components
@@ -37,8 +36,10 @@ class httpServiceSingleton {
       const options = {
         method: "POST",
         mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        Authorization: `Bearer ${UserAuth.getToken()}`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${UserAuth.getToken()}`,
+        },
         body: JSON.stringify(payload),
       }
 
