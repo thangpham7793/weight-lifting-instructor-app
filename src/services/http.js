@@ -1,4 +1,5 @@
 import { catchAsync } from "../utils"
+import { UserAuth } from "./auth"
 
 //https://dmitripavlutin.com/javascript-fetch-async-await/
 //TODO: need to implement decorator? to add async handler
@@ -7,7 +8,10 @@ class httpServiceSingleton {
     //hide away implementation details from the client components
     this.fetchLearners = httpServiceSingleton._fetchJsonFactory("learners")
     this.fetchProgrammes = httpServiceSingleton._fetchJsonFactory("programmes")
-
+    this.postInstructorCredentials = httpServiceSingleton._fetchPostFactory(
+      "instructor/login",
+      true
+    )
     this.postNewSchedule = httpServiceSingleton._fetchPostFactory(
       "programmes/schedules"
     )
@@ -27,14 +31,21 @@ class httpServiceSingleton {
   }
 
   //factory functions that makes use of closure
-  static _fetchPostFactory(resourceUrl) {
+  static _fetchPostFactory(resourceUrl, returnJson = false) {
     const url = httpServiceSingleton._makeUrl(resourceUrl)
     return catchAsync(async function (payload) {
       const options = {
         method: "POST",
         mode: "cors",
         headers: { "Content-Type": "application/json" },
+        Authorization: `Bearer ${UserAuth.getToken()}`,
         body: JSON.stringify(payload),
+      }
+
+      if (returnJson) {
+        const response = await fetch(url, options)
+        const json = await response.json()
+        return [response.ok, json]
       }
       const { ok } = await fetch(url, options)
       return ok
@@ -47,7 +58,10 @@ class httpServiceSingleton {
       const options = {
         method: "PUT",
         mode: "cors",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${UserAuth.getToken()}`,
+        },
         body: JSON.stringify(payload),
       }
       const { ok } = await fetch(url, options)
@@ -58,7 +72,11 @@ class httpServiceSingleton {
   static _fetchJsonFactory(resourceUrl) {
     const url = httpServiceSingleton._makeUrl(resourceUrl)
     return catchAsync(async function () {
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${UserAuth.getToken()}`,
+        },
+      })
       return response.json()
     })
   }

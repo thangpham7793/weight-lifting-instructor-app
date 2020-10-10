@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { UserAuth } from "../services/register"
 import { validateCredentials } from "../services/register"
+import fetchService from "../services/http"
 import { Logo, WelcomePanel, LoginForm, LoginFormTextInput } from "./register"
 
 export function HomePanel() {
@@ -26,8 +27,17 @@ export function HomePanel() {
     }
     setErrorMessage(null)
     console.log("Logging in with ", credentials)
-    UserAuth.saveToken(credentials.email)
-    setIsLoggedIn(true)
+
+    const [oke, payload] = await fetchService.postInstructorCredentials(
+      credentials
+    )
+
+    if (!oke) {
+      setErrorMessage(payload.message)
+    } else {
+      UserAuth.saveToken(payload.token)
+      setIsLoggedIn(true)
+    }
   }
 
   const fields = Object.keys(credentials).map((fieldName) => (
