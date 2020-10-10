@@ -14,7 +14,9 @@ class httpServiceSingleton {
     this.postNewSchedule = httpServiceSingleton._fetchPostFactory(
       "programmes/schedules"
     )
-    this.updateLearner = httpServiceSingleton._fetchPutFactory("learners/pbs")
+    this.updateLearner = httpServiceSingleton._fetchPutFactory(
+      "learners/details"
+    )
 
     //make sure that only an instance is created
     this._instance = this

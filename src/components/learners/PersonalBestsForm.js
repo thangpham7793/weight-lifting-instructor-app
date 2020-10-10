@@ -35,8 +35,6 @@ export function PersonalBestsForm({
     )
   })
 
-  //it does get called, it's just that ... the initial values aren't reset?
-  console.log("I was re-rendered!")
   //use modal then
   return (
     <>

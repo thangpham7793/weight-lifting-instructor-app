@@ -4,6 +4,7 @@ import { LearnerNameList, PersonalBestsForm } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
 
 import fetchService from "../../services/http"
+import { shallowEqual } from "../../utils"
 
 export function LearnersPanel() {
   const [learners, setLearners] = useState([])
@@ -68,28 +69,36 @@ export function LearnersPanel() {
     })
   }
 
-  function onUpdatePersonalBests(e) {
-    //disable submission
-    e.preventDefault()
-
-    //disable edit
-
-    //console.log(selectedLearner)
-
+  function updateUILearnerList(updatedLearnerIndex) {
     const newLearnersList = [...learners]
-
-    const updatedLearnerIndex = learners.findIndex(
-      ({ learnerId }) => learnerId === selectedLearner.learnerId
-    )
     newLearnersList[updatedLearnerIndex] = selectedLearner
-
     //updated the list because name can be updated
     setDisplayedLearners(newLearnersList)
     setLearners(newLearnersList)
-    //setCanEditAndUpdate(false)
+  }
 
-    //notify user of success when network call comes back
-    console.log("Updating ... Success!")
+  async function onUpdatePersonalBests(e) {
+    //disable submission
+    e.preventDefault()
+
+    console.log(canEditAndUpdate)
+
+    //only update everything after learner presses save (which turns off editting)
+    if (!canEditAndUpdate) {
+      const updatedLearnerIndex = learners.findIndex(
+        ({ learnerId }) => learnerId === selectedLearner.learnerId
+      )
+
+      //check if the selectedLearner actually changes
+      if (shallowEqual(learners[updatedLearnerIndex], selectedLearner)) {
+        console.log("No need to rerender or update!")
+        return
+      }
+
+      updateUILearnerList(updatedLearnerIndex)
+      console.log(`Sending ${JSON.stringify(selectedLearner)}`)
+      //console.log("Updating ... Success!")
+    }
   }
 
   function enableEditAndUpdate() {
