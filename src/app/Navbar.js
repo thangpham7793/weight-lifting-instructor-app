@@ -11,7 +11,7 @@ function NavLink({ to, label }) {
 
 //https://reactrouter.com/web/api/Redirect
 export const Navbar = ({ links }) => {
-  const navLinks = links.map(({ to, label }) => (
+  let navLinks = links.map(({ to, label }) => (
     <NavLink key={to} to={to} label={label} />
   ))
 

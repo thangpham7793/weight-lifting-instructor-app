@@ -110,14 +110,13 @@ a.disabled {
     "main"
     "footer";
   grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 3rem 1fr 1.5rem;
   text-align: center;
 }
 
 .header {
   grid-area: header;
   padding: var(--pd-sm) 0;
-  max-height: 3rem;
 }
 
 .main {
@@ -129,7 +128,6 @@ a.disabled {
 .footer {
   grid-area: footer;
   font-size: calc(var(--fs-sm) * 0.5);
-  min-height: 1.5rem;
 }
 
 .header, .footer {
@@ -152,6 +150,11 @@ a.disabled {
 }
 
 /* INDEX PAGE */
+
+.login-form-title {
+  font-size: calc(var(--fs-md) * 0.75);
+}
+
 .main-title {
   font-weight: var(--fw-lg);
 }
@@ -190,6 +193,7 @@ a.logo {
 
 .nav-item {
   padding: 0 calc(var(--pd-sm));
+  font-size: calc(var(--fs-sm) / 1.5);
 }
 
 /* INDEX SCHEDULE LOGIN FORM */
