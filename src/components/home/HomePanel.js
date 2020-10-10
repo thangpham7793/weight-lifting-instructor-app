@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { UserAuth } from "../services/register"
-import { validateCredentials } from "../services/register"
-import fetchService from "../services/http"
+import { UserAuth } from "../../services/register"
+import { validateCredentials } from "../../services/register"
+import fetchService from "../../services/http"
 import { Logo, WelcomePanel, LoginForm, LoginFormTextInput } from "./register"
 
 export function HomePanel() {

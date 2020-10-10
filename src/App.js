@@ -7,16 +7,11 @@ import {
 } from "react-router-dom"
 //https://reactrouter.com/web/api
 
-import {
-  Navbar,
-  NotFoundPage,
-  Footer,
-  HomePanel,
-  ProtectedRoute,
-} from "./app/register"
+import { Navbar, NotFoundPage, Footer, ProtectedRoute } from "./app/register"
 
 import { AllLearnersPage, LearnersPanel } from "./components/learners/register"
 import { ScheduleUploader } from "./components/schedules/register"
+import { HomePanel } from "./components/home/register"
 
 function App() {
   const links = [
