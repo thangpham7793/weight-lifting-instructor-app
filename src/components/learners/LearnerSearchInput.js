@@ -19,7 +19,7 @@ export function LearnerSearchInput({
           value={searchPhrase}
           onChange={onSearchPhraseChanged}
           placeholder={
-            learners.length === 0 ? "Loading Learners ..." : "Type to Filter"
+            learners.length === 0 ? "No Learners Added Yet" : "Type to Filter"
           }
           disabled={learners.length === 0 ? true : false}
         />
@@ -27,7 +27,7 @@ export function LearnerSearchInput({
       <div className="learnerNameList">
         {learners.length === 0 ? (
           <ul>
-            <li className="learner-name">Loading Learners ...</li>
+            <li className="learner-name">No Learners Added Yet</li>
           </ul>
         ) : (
           <LearnerNameList

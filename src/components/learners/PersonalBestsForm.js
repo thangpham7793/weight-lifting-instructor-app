@@ -40,7 +40,9 @@ export function PersonalBestsForm({
   return (
     <div className="pbs-form-wrapper">
       <h3>{selectedLearner.firstName}</h3>
-      <form readOnly={!canEditAndUpdate}>{inputs}</form>
+      <form readOnly={!canEditAndUpdate} onDoubleClick={enableEditAndUpdate}>
+        {inputs}
+      </form>
       <div className="pbs-form-btn-wrapper">
         <button className="pbs-btn" onClick={enableEditAndUpdate}>
           {!canEditAndUpdate ? "Enable Edit" : "Disable Edit"}

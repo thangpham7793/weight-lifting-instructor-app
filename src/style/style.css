@@ -64,14 +64,16 @@ button {
 
 button:hover, button:focus, 
 a:hover, a:focus, 
-.learner-name:hover, .learner-name:focus {
+.learner-name:hover, .learner-name:focus, 
+.action-status-close:hover, .action-status-close:focus{
   background: var(--secondary-cl);
 /*   font-weight: var(--fw-md); */
   transition-duration: 0.2s;
   transform-origin: center;
 }
 
-a:hover, a:focus {
+a:hover, a:focus,
+{
   box-shadow: var(--bsd-sm);
   color: #111;
 }
@@ -753,3 +755,25 @@ a.logo {
 .pbs-form-btn-wrapper > button {
   width: 30%;
 }
+
+.action-status-div {
+  margin-top: calc(var(--mg-sm));
+  width: 20vw;
+  text-align: center;
+  background: var(--bg-cl);
+  margin-right: auto;
+  margin-left: auto;
+  font-size: calc(var(--fs-sm) / 1.2);
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.action-status-close {
+  position: absolute;
+  right: 0%;
+  top: 0%;
+  padding: 0 0.5rem;
+  color: var(--txt-cl);
+}
+
+

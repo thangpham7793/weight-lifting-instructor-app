@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import { PersonalBestsForm, LearnerSearchInput } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
+import { ActionNotificationDiv } from "../ActionNotificationDiv"
 
 import fetchService from "../../services/http"
 import { shallowEqual, safeSpinnerWrapper } from "../../utils"
@@ -12,6 +13,10 @@ export function LearnersPanel() {
   const [searchPhrase, setSearchPhrase] = useState("")
   const [selectedLearner, setSelectedLearner] = useState(null)
   const [canEditAndUpdate, setCanEditAndUpdate] = useState(false)
+  const [actionStatus, setActionStatus] = useState({
+    action: null,
+    isActionSuccess: null,
+  })
 
   //maybe these can be combined into a useNotification hook?
   const [isFetchSuccess, setIsFetchSuccess] = useState(null)
@@ -19,6 +24,10 @@ export function LearnersPanel() {
     "learners",
     "Click On A Name"
   )
+
+  function onCloseActionStatusDiv(e) {
+    setActionStatus({ action: null, isActionSuccess: null })
+  }
 
   function filterLearners(learners, phrase) {
     const processedPhrase = phrase.trim().toLowerCase()
@@ -96,9 +105,11 @@ export function LearnersPanel() {
   }
 
   async function updateLearner(selectedLearner) {
-    return await fetchService.updateLearner({
+    const res = await fetchService.updateLearner({
       learner: selectedLearner,
     })
+
+    return res ? res : false
   }
 
   async function onUpdatePersonalBests(e) {
@@ -123,6 +134,7 @@ export function LearnersPanel() {
         return
       }
 
+      setActionStatus({ action: "update", isActionSuccess: null })
       console.log(`Sending ${JSON.stringify(selectedLearner)}`)
 
       const isUpdated = await safeSpinnerWrapper(updateLearner)(selectedLearner)
@@ -130,11 +142,15 @@ export function LearnersPanel() {
       if (isUpdated) {
         //...when should you update?
         updateUILearnerList(updatedLearnerIndex)
+
+        setActionStatus({ action: "update", isActionSuccess: true })
       } else {
-        console.log("Updating failed!")
+        console.log("Updating failed!", isUpdated)
         //refill the form with the old information
         setSelectedLearner(learners[updatedLearnerIndex])
         setSearchPhrase(selectedLearner.firstName)
+
+        setActionStatus({ action: "update", isActionSuccess: false })
       }
     }
   }
@@ -154,14 +170,13 @@ export function LearnersPanel() {
     }
 
     console.log("Delete learner id ", selectedLearner.learnerId)
-
-    // const isDeleted = await fetchService.deleteLearner(
-    //   selectedLearner.learnerId
-    // )
-
-    const isDeleted = true
+    setActionStatus({ action: "delete", isActionSuccess: null })
+    const isDeleted = await fetchService.deleteLearner(
+      selectedLearner.learnerId
+    )
 
     if (isDeleted) {
+      setActionStatus({ action: "delete", isActionSuccess: true })
       const updatedLearnerIndex = getUpdatedLearnerIndex(
         learners,
         selectedLearner
@@ -169,6 +184,7 @@ export function LearnersPanel() {
       updateUILearnerList(updatedLearnerIndex, "DELETE")
       console.log("Deleting ... Success!")
     } else {
+      setActionStatus({ action: "delete", isActionSuccess: false })
       console.log("Deleting failed!")
     }
   }
@@ -190,26 +206,36 @@ export function LearnersPanel() {
   }, [])
 
   return (
-    <div className="learnerPanelWrapper" style={{ display: "flex" }}>
-      <LearnerSearchInput
-        searchPhrase={searchPhrase}
-        onSearchPhraseChanged={onSearchPhraseChanged}
-        learners={learners}
-        displayedLearners={displayedLearners}
-        onLearnerItemClicked={onLearnerItemClicked}
+    <>
+      <ActionNotificationDiv
+        actionStatus={actionStatus}
+        onCloseActionStatusDiv={onCloseActionStatusDiv}
       />
-      {selectedLearner ? (
-        <PersonalBestsForm
-          selectedLearner={selectedLearner}
-          onPersonalBestsInputChange={onPersonalBestsInputChange}
-          onUpdatePersonalBests={onUpdatePersonalBests}
-          canEditAndUpdate={canEditAndUpdate}
-          enableEditAndUpdate={enableEditAndUpdate}
-          onDeleteLearner={onDeleteLearner}
-        />
-      ) : (
-        <FetchLearnersNotificationDiv isFetchSuccess={isFetchSuccess} />
-      )}
-    </div>
+      <div className="learnerPanelWrapper" style={{ display: "flex" }}>
+        {isFetchSuccess ? (
+          <LearnerSearchInput
+            searchPhrase={searchPhrase}
+            onSearchPhraseChanged={onSearchPhraseChanged}
+            learners={learners}
+            displayedLearners={displayedLearners}
+            onLearnerItemClicked={onLearnerItemClicked}
+          />
+        ) : (
+          <FetchLearnersNotificationDiv isFetchSuccess={isFetchSuccess} />
+        )}
+        {selectedLearner ? (
+          <PersonalBestsForm
+            selectedLearner={selectedLearner}
+            onPersonalBestsInputChange={onPersonalBestsInputChange}
+            onUpdatePersonalBests={onUpdatePersonalBests}
+            canEditAndUpdate={canEditAndUpdate}
+            enableEditAndUpdate={enableEditAndUpdate}
+            onDeleteLearner={onDeleteLearner}
+          />
+        ) : (
+          <FetchLearnersNotificationDiv isFetchSuccess={isFetchSuccess} />
+        )}
+      </div>
+    </>
   )
 }
