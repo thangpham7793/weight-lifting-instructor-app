@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-import { LearnerNameList, PersonalBestsForm } from "./register"
+import { PersonalBestsForm, LearnerSearchInput } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
 
 import fetchService from "../../services/http"
@@ -48,11 +48,6 @@ export function LearnersPanel() {
 
   function onLearnerItemClicked(e) {
     const selected = getLearnerById(e.target.getAttribute("learnerId"))
-
-    //it still works if it's camelCase here
-    console.log(selected)
-
-    //must find a way to refresh trigger form refresh
     setSelectedLearner(selected)
   }
 
@@ -198,25 +193,13 @@ export function LearnersPanel() {
 
   return (
     <div className="learnerPanelWrapper" style={{ display: "flex" }}>
-      <div className="learnerListPanel" style={{ display: "flex" }}>
-        <div
-          className="searchInputWrapper"
-          style={{ display: "flex", flexDirection: "column" }}
-        >
-          <input
-            className="learnerSearchInput"
-            value={searchPhrase}
-            onChange={onSearchPhraseChanged}
-            placeholder="Type to Filter"
-          />
-        </div>
-        <div className="learnerNameList">
-          <LearnerNameList
-            learners={displayedLearners}
-            onLearnerItemClicked={onLearnerItemClicked}
-          />
-        </div>
-      </div>
+      <LearnerSearchInput
+        searchPhrase={searchPhrase}
+        onSearchPhraseChanged={onSearchPhraseChanged}
+        learners={learners}
+        displayedLearners={displayedLearners}
+        onLearnerItemClicked={onLearnerItemClicked}
+      />
       {selectedLearner ? (
         <PersonalBestsForm
           selectedLearner={selectedLearner}

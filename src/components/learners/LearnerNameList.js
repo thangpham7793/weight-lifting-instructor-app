@@ -12,5 +12,13 @@ export function LearnerNameList({ learners, onLearnerItemClicked }) {
     )
   })
 
-  return <ul>{learnerItems}</ul>
+  return (
+    <ul>
+      {learners.length === 0 ? (
+        <li className="learner-name">No Learner Found!</li>
+      ) : (
+        learnerItems
+      )}
+    </ul>
+  )
 }
