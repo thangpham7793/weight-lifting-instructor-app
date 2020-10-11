@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { myExcelReader } from "./myExcelReader"
-import fetchService from "../../services/http"
 import { FileUploader, ProgrammeOptions } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
+import httpService from "../../services/ProgrammeServiceSingleton"
 
 //a good candidate for Redux, since needed by many components, lets just do useState for now
-
 export function ScheduleUploader() {
   const [programmes, setProgrammes] = useState(null)
   const [selectedProgrammeId, setSelectedProgrammeId] = useState(null)
@@ -22,9 +21,10 @@ export function ScheduleUploader() {
   useEffect(() => {
     //this should stay here unless all components have a status tracking feature, which makes sense
     async function fetchProgrammes() {
-      const payload = await fetchService.fetchProgrammes()
+      const payload = await httpService.fetchProgrammes()
 
-      if (payload.programmes) {
+      if (payload) {
+        console.log(payload)
         //effect here
         setProgrammes((p) => [
           ...payload.programmes,

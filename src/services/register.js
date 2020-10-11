@@ -1,4 +1,6 @@
 export * from "./auth"
 export * from "./http"
 export * from "./validateCredentials"
-export * from "./learnerService"
+export * from "./InstructorServiceSingleton"
+export * from "./LearnerServiceSingleton"
+export * from "./ProgrammeServiceSingleton"

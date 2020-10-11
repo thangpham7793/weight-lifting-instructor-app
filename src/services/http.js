@@ -6,7 +6,6 @@ export class HttpServiceSingleton {
   //TODO: these methods can be refactored into their own service class as well
   constructor() {
     //hide away implementation details from the client components
-    this.fetchLearners = HttpServiceSingleton._fetchJsonFactory("learners")
     this.fetchProgrammes = HttpServiceSingleton._fetchJsonFactory("programmes")
     this.postInstructorCredentials = HttpServiceSingleton._fetchPostFactory(
       "instructor/login",

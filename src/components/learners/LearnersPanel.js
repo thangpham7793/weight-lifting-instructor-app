@@ -4,7 +4,7 @@ import { PersonalBestsForm, LearnerSearchInput } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
 import { ActionNotificationDiv } from "../ActionNotificationDiv"
 
-import learnerService from "../../services/learnerService"
+import httpService from "../../services/LearnerServiceSingleton"
 import { shallowEqual } from "../../utils"
 
 export function LearnersPanel() {
@@ -130,7 +130,7 @@ export function LearnersPanel() {
 
       setActionStatus({ action: "update", isActionSuccess: null })
 
-      const isUpdated = await learnerService.updateLearner(selectedLearner)
+      const isUpdated = await httpService.updateLearner(selectedLearner)
 
       if (isUpdated) {
         //...when should you update?
@@ -164,9 +164,7 @@ export function LearnersPanel() {
 
     setActionStatus({ action: "delete", isActionSuccess: null })
 
-    const isDeleted = await learnerService.deleteLearner(
-      selectedLearner.learnerId
-    )
+    const isDeleted = await httpService.deleteLearner(selectedLearner.learnerId)
 
     if (isDeleted) {
       setActionStatus({ action: "delete", isActionSuccess: true })
@@ -184,7 +182,7 @@ export function LearnersPanel() {
 
   useEffect(() => {
     async function fetchLearners() {
-      const payload = await learnerService.fetchLearners()
+      const payload = await httpService.fetchLearners()
 
       if (payload) {
         //the two operations are not synchronous!

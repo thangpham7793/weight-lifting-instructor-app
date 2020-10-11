@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { PBTable } from "./register"
-import fetchService from "../../services/http"
+import httpService from "../../services/LearnerServiceSingleton"
 
 export function AllLearnersPage() {
   const [learners, setLearners] = useState([])
 
   useEffect(() => {
     async function fetchLearners() {
-      const payload = await fetchService.fetchLearners()
+      const payload = await httpService.fetchLearners()
       setLearners(payload)
     }
     fetchLearners()
