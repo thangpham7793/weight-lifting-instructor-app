@@ -16,23 +16,23 @@ import { HomePanel } from "./components/home/register"
 function App() {
   const links = [
     {
-      to: "/",
-      label: "Home",
+      to: "/instructor",
+      label: "Home Panel",
     },
     {
-      to: "/learners",
+      to: "/instructor/learners",
       label: "Learners",
     },
     {
-      to: "/schedules",
+      to: "/instructor/schedules",
       label: "Schedules",
     },
     {
-      to: "/schedules/new",
+      to: "/instructor/schedules/new",
       label: "Publish Schedule",
     },
     {
-      to: "/testLearners",
+      to: "/instructor/testLearners",
       label: "Learners Panel",
     },
   ]
@@ -43,21 +43,25 @@ function App() {
       <div className="App main">
         {/* Switch ensure that only one component is rendered at a time You also register all your routes here! */}
         <Switch>
-          <Route exact path="/login" component={HomePanel} />
-          <ProtectedRoute exact path="/learners" component={AllLearnersPage} />
+          <Route exact path="/instructor/login" component={HomePanel} />
           <ProtectedRoute
             exact
-            path="/schedules/new"
+            path="/instructor/learners"
+            component={AllLearnersPage}
+          />
+          <ProtectedRoute
+            exact
+            path="/instructor/schedules/new"
             component={ScheduleUploader}
           />
           <ProtectedRoute
             exact
-            path="/testLearners"
+            path="/instructor/testLearners"
             component={LearnersPanel}
           />
-          <Route exact path="/error" component={NotFoundPage} />
+          <Route exact path="/instructor/error" component={NotFoundPage} />
           {/* basically a 404 page, but need to register it */}
-          <Redirect to="/login" />
+          <Redirect to="/instructor/login" />
         </Switch>
       </div>
       <Footer />

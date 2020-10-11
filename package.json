@@ -23,7 +23,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "jest": "npx jest src/tests/"
+    "jest": "npx jest src/tests/",
+    "deploy": "npm run build && mv build/ instructor/ && rm -r ../otago_weight_lifting_club_schedule_app/src/backend/public/instructor/ && mv instructor/ ../otago_weight_lifting_club_schedule_app/src/backend/public/"
   },
   "eslintConfig": {
     "extends": "react-app"
