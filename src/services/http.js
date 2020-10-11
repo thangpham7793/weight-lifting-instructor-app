@@ -21,7 +21,12 @@ export class HttpServiceSingleton {
     }
   }
 
-  static BASE_URL = "http://localhost:5000"
+  static BASE_URL = (function () {
+    const PROD = "https://lifting-schedule-v2.herokuapp.com"
+    const DEV = "http://localhost:5000"
+
+    return window.location.href.split(".").includes("herokuapp") ? PROD : DEV
+  })()
 
   static _makeUrl(resourceUrl) {
     return `${this.BASE_URL}/${resourceUrl}`
