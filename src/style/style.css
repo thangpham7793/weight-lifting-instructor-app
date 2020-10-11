@@ -52,17 +52,19 @@ button {
   margin-top: var(--mg-sm);
   padding: var(--pd-sm);
   margin-bottom: 1rem;
-  box-shadow: var(--bsd-md);
   border-radius: 2%;
   letter-spacing: 0.05rem;
   border: none;
   width: 30vw;
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
+  box-shadow: var(--bsd-md);
   cursor: pointer;
 }
 
-button:hover, button:focus, a:hover, a:focus {
+button:hover, button:focus, 
+a:hover, a:focus, 
+.learner-name:hover, .learner-name:focus {
   background: var(--secondary-cl);
 /*   font-weight: var(--fw-md); */
   transition-duration: 0.2s;
@@ -684,4 +686,70 @@ a.logo {
   .fb-content {
     width: 50vw;
   }
+}
+
+
+/* Learner Panel */
+
+.learnerPanelWrapper {
+  justify-content: space-evenly;
+}
+
+.learnerPanelWrapper > div {
+  margin: var(--mg-sm) 0;
+  box-shadow: var(--bsd-md);
+  border: 1px solid var(--primary-cl);
+  border-radius: 1%;
+  padding: calc(var(--pd-sm) / 2);
+  background: var(--txt-cl);
+  color: var(--primary-cl);
+  min-width: calc((100vw - 4 * var(--mg-sm)) / 2);
+  max-height: calc(100vw - 3.5rem - var(--mg-sm));
+}
+
+.learnerSearchInput {
+ font-size: calc(var(--fs-sm) * 0.8 ); 
+ padding: calc(var(--pd-sm) * 0.5) 0;
+}
+
+.learnerNameList {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-left: var(--mg-sm);
+}
+
+.learner-name {
+  cursor: pointer;
+  box-shadow: var(--bsd-sm);
+  border: 1px solid var(--primary-cl);
+  border-radius: 2%;
+  margin: 0 var(--mg-sm);
+  padding: calc(0.5 * var(--pd-sm));
+  min-width: 13rem;
+  background: #eee;
+}
+
+.learner-name + .learner-name {
+  margin: var(--mg-sm);
+}
+
+.pbs-form-wrapper {
+  text-align: initial;
+}
+
+.pbs-form-wrapper > h3 {
+  text-align: center;
+}
+
+.pbs-form-wrapper > form {
+  color: #222;
+}
+ 
+.pbs-form-btn-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pbs-form-btn-wrapper > button {
+  width: 30%;
 }

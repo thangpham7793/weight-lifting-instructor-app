@@ -27,8 +27,8 @@ export function LearnersPanel() {
 
     return learners.filter(
       ({ firstName, lastName }) =>
-        firstName.toLowerCase().startsWith(processedPhrase) ||
-        lastName.toLowerCase().startsWith(processedPhrase)
+        firstName.toLowerCase().trim().startsWith(processedPhrase) ||
+        lastName.toLowerCase().trim().startsWith(processedPhrase)
     )
   }
 
@@ -58,7 +58,7 @@ export function LearnersPanel() {
 
   function onPersonalBestsInputChange(e) {
     const changedField = e.target.getAttribute("name")
-    const newValue = e.target.value.trim()
+    const newValue = e.target.value
 
     //console.log(e.target.getAttribute("name"))
 
@@ -104,32 +104,43 @@ export function LearnersPanel() {
     //disable submission
     e.preventDefault()
 
-    console.log(canEditAndUpdate)
+    const updatedLearnerIndex = getUpdatedLearnerIndex(
+      learners,
+      selectedLearner
+    )
 
-    //only update everything after learner presses save (which turns off editting)
-    if (!canEditAndUpdate) {
-      const updatedLearnerIndex = getUpdatedLearnerIndex(
-        learners,
-        selectedLearner
+    if (
+      !window.confirm(
+        `Are you sure you want to update ${selectedLearner.firstName}'s record?`
       )
-
+    ) {
+      setSelectedLearner(null)
+      setDisplayedLearners(learners)
+      setSearchPhrase("")
+      return
+    } else {
       //check if the selectedLearner actually changes
       if (shallowEqual(learners[updatedLearnerIndex], selectedLearner)) {
         console.log("No need to rerender or update!")
         return
       }
 
-      //...when should you update?
-      updateUILearnerList(updatedLearnerIndex)
       console.log(`Sending ${JSON.stringify(selectedLearner)}`)
 
-      const isUpdated = await fetchService.updateLearner({
-        learner: selectedLearner,
-      })
+      // const isUpdated = await fetchService.updateLearner({
+      //   learner: selectedLearner,
+      // })
+      const isUpdated = false
 
-      isUpdated
-        ? console.log("Updating ... Success!")
-        : console.log("Updating failed!")
+      if (isUpdated) {
+        //...when should you update?
+        updateUILearnerList(updatedLearnerIndex)
+      } else {
+        console.log("Updating failed!")
+        //refill the form with the old information
+        setSelectedLearner(learners[updatedLearnerIndex])
+        setSearchPhrase(selectedLearner.firstName)
+      }
     }
   }
 
@@ -139,11 +150,23 @@ export function LearnersPanel() {
 
   async function onDeleteLearner(e) {
     e.preventDefault()
+
+    if (
+      !window.confirm(
+        `Are you sure you want to delete ${selectedLearner.firstName}'s record?`
+      )
+    ) {
+      setCanEditAndUpdate(false)
+      return
+    }
+
     console.log("Delete learner id ", selectedLearner.learnerId)
 
-    const isDeleted = await fetchService.deleteLearner(
-      selectedLearner.learnerId
-    )
+    // const isDeleted = await fetchService.deleteLearner(
+    //   selectedLearner.learnerId
+    // )
+
+    const isDeleted = true
 
     if (isDeleted) {
       const updatedLearnerIndex = getUpdatedLearnerIndex(
@@ -184,6 +207,7 @@ export function LearnersPanel() {
             className="learnerSearchInput"
             value={searchPhrase}
             onChange={onSearchPhraseChanged}
+            placeholder="Type to Filter"
           />
         </div>
         <div className="learnerNameList">

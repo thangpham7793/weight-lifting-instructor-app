@@ -4,7 +4,7 @@ import { camelCaseToNormal } from "../../utils"
 
 function PersonalBestInput({ label, ...props }) {
   return (
-    <div>
+    <div className="pbs-field">
       <label htmlFor={props.id || props.name}>{camelCaseToNormal(label)}</label>
       <input className="text-input" {...props} />
     </div>
@@ -38,23 +38,28 @@ export function PersonalBestsForm({
 
   //use modal then
   return (
-    <>
-      <h3>Personal Bests</h3>
-      <form onSubmit={onUpdatePersonalBests} readOnly={!canEditAndUpdate}>
-        {inputs}
-        <div>
-          <button type="submit" onClick={enableEditAndUpdate}>
-            {!canEditAndUpdate ? "Edit" : "Save"}
-          </button>
-          <button
-            type="submit"
-            onClick={onDeleteLearner}
-            disabled={!canEditAndUpdate}
-          >
-            Delete
-          </button>
-        </div>
-      </form>
-    </>
+    <div className="pbs-form-wrapper">
+      <h3>{selectedLearner.firstName}</h3>
+      <form readOnly={!canEditAndUpdate}>{inputs}</form>
+      <div className="pbs-form-btn-wrapper">
+        <button className="pbs-btn" onClick={enableEditAndUpdate}>
+          {!canEditAndUpdate ? "Enable Edit" : "Disable Edit"}
+        </button>
+        <button
+          className="pbs-btn"
+          onClick={onUpdatePersonalBests}
+          disabled={!canEditAndUpdate}
+        >
+          {!canEditAndUpdate ? "Edit" : "Save"}
+        </button>
+        <button
+          className="pbs-btn"
+          onClick={onDeleteLearner}
+          disabled={!canEditAndUpdate}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
   )
 }
