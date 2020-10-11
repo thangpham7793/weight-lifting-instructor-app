@@ -4,7 +4,7 @@ import { PersonalBestsForm, LearnerSearchInput } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
 
 import fetchService from "../../services/http"
-import { shallowEqual } from "../../utils"
+import { shallowEqual, spinner } from "../../utils"
 
 export function LearnersPanel() {
   const [learners, setLearners] = useState([])
@@ -90,15 +90,12 @@ export function LearnersPanel() {
   }
 
   function getUpdatedLearnerIndex(learners, selectedLearner) {
-    return learners.findIndex(
-      ({ learnerId }) => learnerId === selectedLearner.learnerId
-    )
+    return learners.findIndex(({ learnerId }) => {
+      return learnerId === selectedLearner.learnerId
+    })
   }
 
   async function onUpdatePersonalBests(e) {
-    //disable submission
-    e.preventDefault()
-
     const updatedLearnerIndex = getUpdatedLearnerIndex(
       learners,
       selectedLearner
@@ -122,10 +119,11 @@ export function LearnersPanel() {
 
       console.log(`Sending ${JSON.stringify(selectedLearner)}`)
 
-      // const isUpdated = await fetchService.updateLearner({
-      //   learner: selectedLearner,
-      // })
-      const isUpdated = false
+      spinner.show(true)
+      const isUpdated = await fetchService.updateLearner({
+        learner: selectedLearner,
+      })
+      spinner.show(false)
 
       if (isUpdated) {
         //...when should you update?
@@ -144,8 +142,6 @@ export function LearnersPanel() {
   }
 
   async function onDeleteLearner(e) {
-    e.preventDefault()
-
     if (
       !window.confirm(
         `Are you sure you want to delete ${selectedLearner.firstName}'s record?`
