@@ -19,9 +19,7 @@ export function catchAsync(asyncFunc, errorHandler = null) {
     try {
       return await asyncFunc(...args)
     } catch (error) {
-      errorHandler
-        ? errorHandler(asyncFunc)
-        : console.log(`Something went wrong: ${error}`)
+      errorHandler?.(error) ?? console.log(`Something went wrong: ${error}`)
     }
   }
 }
@@ -44,3 +42,12 @@ export const spinner = (function () {
   }
   return { show }
 })()
+
+export function safeSpinnerWrapper(func) {
+  return async function (...args) {
+    spinner.show(true)
+    const res = await catchAsync(func)(...args)
+    spinner.show(false)
+    return res
+  }
+}

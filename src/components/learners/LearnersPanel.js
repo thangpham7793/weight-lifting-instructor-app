@@ -4,7 +4,7 @@ import { PersonalBestsForm, LearnerSearchInput } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
 
 import fetchService from "../../services/http"
-import { shallowEqual, spinner } from "../../utils"
+import { shallowEqual, safeSpinnerWrapper } from "../../utils"
 
 export function LearnersPanel() {
   const [learners, setLearners] = useState([])
@@ -95,6 +95,12 @@ export function LearnersPanel() {
     })
   }
 
+  async function updateLearner(selectedLearner) {
+    return await fetchService.updateLearner({
+      learner: selectedLearner,
+    })
+  }
+
   async function onUpdatePersonalBests(e) {
     const updatedLearnerIndex = getUpdatedLearnerIndex(
       learners,
@@ -119,11 +125,7 @@ export function LearnersPanel() {
 
       console.log(`Sending ${JSON.stringify(selectedLearner)}`)
 
-      spinner.show(true)
-      const isUpdated = await fetchService.updateLearner({
-        learner: selectedLearner,
-      })
-      spinner.show(false)
+      const isUpdated = await safeSpinnerWrapper(updateLearner)(selectedLearner)
 
       if (isUpdated) {
         //...when should you update?

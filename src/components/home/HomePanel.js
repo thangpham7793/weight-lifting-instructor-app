@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { UserAuth } from "../../services/register"
 import { validateCredentials } from "../../services/register"
 import fetchService from "../../services/http"
+import { safeSpinnerWrapper } from "../../utils"
 import { Logo, WelcomePanel, LoginForm, LoginFormTextInput } from "./register"
 
 export function HomePanel() {
@@ -18,6 +19,19 @@ export function HomePanel() {
     })
   }
 
+  async function logIn(credentials) {
+    let oke, payload
+    try {
+      ;[oke, payload] = await fetchService.postInstructorCredentials(
+        credentials
+      )
+    } catch (error) {
+      ;[oke, payload] = [false, { message: "Server is offline!" }]
+    } finally {
+      return [oke, payload]
+    }
+  }
+
   async function onFormSubmitted(e) {
     e.preventDefault()
     const error = validateCredentials(credentials)
@@ -28,9 +42,7 @@ export function HomePanel() {
     setErrorMessage(null)
     console.log("Logging in with ", credentials)
 
-    const [oke, payload] = await fetchService.postInstructorCredentials(
-      credentials
-    )
+    const [oke, payload] = await safeSpinnerWrapper(logIn)(credentials)
 
     if (!oke) {
       setErrorMessage(payload.message)
