@@ -2,26 +2,22 @@ import { catchAsync } from "../utils"
 import { UserAuth } from "./auth"
 
 //https://dmitripavlutin.com/javascript-fetch-async-await/
-class httpServiceSingleton {
+export class HttpServiceSingleton {
+  //TODO: these methods can be refactored into their own service class as well
   constructor() {
     //hide away implementation details from the client components
-    this.fetchLearners = httpServiceSingleton._fetchJsonFactory("learners")
-    this.fetchProgrammes = httpServiceSingleton._fetchJsonFactory("programmes")
-    this.postInstructorCredentials = httpServiceSingleton._fetchPostFactory(
+    this.fetchLearners = HttpServiceSingleton._fetchJsonFactory("learners")
+    this.fetchProgrammes = HttpServiceSingleton._fetchJsonFactory("programmes")
+    this.postInstructorCredentials = HttpServiceSingleton._fetchPostFactory(
       "instructor/login",
       true
     )
-    this.postNewSchedule = httpServiceSingleton._fetchPostFactory(
+    this.postNewSchedule = HttpServiceSingleton._fetchPostFactory(
       "programmes/schedules"
     )
-    this.updateLearner = httpServiceSingleton._fetchPutFactory(
-      "learners/details"
-    )
-    this.deleteLearner = httpServiceSingleton._fetchDeleteFactory("learners")
-
     //make sure that only an instance is created
     this._instance = this
-    if (httpServiceSingleton._instance) {
+    if (HttpServiceSingleton._instance) {
       return this._instance
     }
   }
@@ -34,7 +30,7 @@ class httpServiceSingleton {
 
   //factory functions that makes use of closure
   static _fetchPostFactory(resourceUrl, returnJson = false) {
-    const url = httpServiceSingleton._makeUrl(resourceUrl)
+    const url = HttpServiceSingleton._makeUrl(resourceUrl)
     return catchAsync(async function (payload) {
       const options = {
         method: "POST",
@@ -57,7 +53,7 @@ class httpServiceSingleton {
   }
 
   static _fetchPutFactory(resourceUrl) {
-    const url = httpServiceSingleton._makeUrl(resourceUrl)
+    const url = HttpServiceSingleton._makeUrl(resourceUrl)
     return catchAsync(async function (payload) {
       const options = {
         method: "PUT",
@@ -74,7 +70,7 @@ class httpServiceSingleton {
   }
 
   static _fetchJsonFactory(resourceUrl) {
-    const url = httpServiceSingleton._makeUrl(resourceUrl)
+    const url = HttpServiceSingleton._makeUrl(resourceUrl)
     return catchAsync(async function () {
       const response = await fetch(url, {
         headers: {
@@ -86,7 +82,7 @@ class httpServiceSingleton {
   }
 
   static _fetchDeleteFactory(resourceUrl) {
-    const url = httpServiceSingleton._makeUrl(resourceUrl)
+    const url = HttpServiceSingleton._makeUrl(resourceUrl)
     return catchAsync(async function (resourceId) {
       const options = {
         method: "DELETE",
@@ -109,9 +105,9 @@ class httpServiceSingleton {
   }
 
   static getInstance() {
-    return httpServiceSingleton._instance || new httpServiceSingleton()
+    return HttpServiceSingleton._instance || new HttpServiceSingleton()
   }
 }
 
 //only export an instance (singleton)
-export default httpServiceSingleton.getInstance()
+export default HttpServiceSingleton.getInstance()

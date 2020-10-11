@@ -4,8 +4,8 @@ import { PersonalBestsForm, LearnerSearchInput } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
 import { ActionNotificationDiv } from "../ActionNotificationDiv"
 
-import fetchService from "../../services/http"
-import { shallowEqual, safeSpinnerWrapper } from "../../utils"
+import learnerService from "../../services/learnerService"
+import { shallowEqual } from "../../utils"
 
 export function LearnersPanel() {
   const [learners, setLearners] = useState([])
@@ -92,6 +92,8 @@ export function LearnersPanel() {
         //should go back to the full list after deleting
         setDisplayedLearners(newLearnersList)
         setLearners(newLearnersList)
+        //reset form
+        setSelectedLearner(null)
         //reset searchPhrase
         setSearchPhrase("")
         break
@@ -102,14 +104,6 @@ export function LearnersPanel() {
     return learners.findIndex(({ learnerId }) => {
       return learnerId === selectedLearner.learnerId
     })
-  }
-
-  async function updateLearner(selectedLearner) {
-    const res = await fetchService.updateLearner({
-      learner: selectedLearner,
-    })
-
-    return res ? res : false
   }
 
   async function onUpdatePersonalBests(e) {
@@ -135,9 +129,8 @@ export function LearnersPanel() {
       }
 
       setActionStatus({ action: "update", isActionSuccess: null })
-      console.log(`Sending ${JSON.stringify(selectedLearner)}`)
 
-      const isUpdated = await safeSpinnerWrapper(updateLearner)(selectedLearner)
+      const isUpdated = await learnerService.updateLearner(selectedLearner)
 
       if (isUpdated) {
         //...when should you update?
@@ -169,9 +162,9 @@ export function LearnersPanel() {
       return
     }
 
-    console.log("Delete learner id ", selectedLearner.learnerId)
     setActionStatus({ action: "delete", isActionSuccess: null })
-    const isDeleted = await fetchService.deleteLearner(
+
+    const isDeleted = await learnerService.deleteLearner(
       selectedLearner.learnerId
     )
 
@@ -191,7 +184,7 @@ export function LearnersPanel() {
 
   useEffect(() => {
     async function fetchLearners() {
-      const payload = await fetchService.fetchLearners()
+      const payload = await learnerService.fetchLearners()
 
       if (payload) {
         //the two operations are not synchronous!
