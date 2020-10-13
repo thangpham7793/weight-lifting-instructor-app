@@ -9,7 +9,7 @@ import {
 
 import { Navbar, NotFoundPage, Footer, ProtectedRoute } from "./app/register"
 
-import { AllLearnersPage, LearnersPanel } from "./components/learners/register"
+import { LearnersPanel } from "./components/learners/register"
 import { ScheduleUploader } from "./components/schedules/register"
 import { HomePanel } from "./components/home/register"
 
@@ -21,7 +21,7 @@ function App() {
     },
     {
       to: "/instructor/learners",
-      label: "Learners",
+      label: "Learners Panel",
     },
     {
       to: "/instructor/schedules",
@@ -29,11 +29,7 @@ function App() {
     },
     {
       to: "/instructor/schedules/new",
-      label: "Publish Schedule",
-    },
-    {
-      to: "/instructor/testLearners",
-      label: "Learners Panel",
+      label: "Upload Schedule",
     },
   ]
 
@@ -46,17 +42,12 @@ function App() {
           <Route exact path="/instructor/login" component={HomePanel} />
           <ProtectedRoute
             exact
-            path="/instructor/learners"
-            component={AllLearnersPage}
-          />
-          <ProtectedRoute
-            exact
             path="/instructor/schedules/new"
             component={ScheduleUploader}
           />
           <ProtectedRoute
             exact
-            path="/instructor/testLearners"
+            path="/instructor/learners"
             component={LearnersPanel}
           />
           <Route exact path="/instructor/error" component={NotFoundPage} />

@@ -55,19 +55,24 @@ export function ScheduleUploader() {
 
   return (
     <>
-      <div>
-        <div>
-          {programmes ? (
-            <ProgrammeOptions
-              onProgrammeSelected={onProgrammeSelected}
-              programmes={programmes}
-              selectedProgrammeId={selectedProgrammeId}
-              isFetchSuccess={isFetchSuccess}
-            />
-          ) : (
-            <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
-          )}
-        </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-around",
+          minHeight: "50%",
+        }}
+      >
+        {programmes ? (
+          <ProgrammeOptions
+            onProgrammeSelected={onProgrammeSelected}
+            programmes={programmes}
+            selectedProgrammeId={selectedProgrammeId}
+            isFetchSuccess={isFetchSuccess}
+          />
+        ) : (
+          <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
+        )}
         <FileUploader onFileUploaded={onFileUploaded} />
       </div>
     </>

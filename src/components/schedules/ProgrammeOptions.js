@@ -21,6 +21,7 @@ export function ProgrammeOptions({
         name="programmes"
         onChange={onProgrammeSelected}
         value={selectedProgrammeId ? selectedProgrammeId : undefined}
+        style={{ width: "20vw", margin: "0 auto" }}
       >
         {options}
       </select>
