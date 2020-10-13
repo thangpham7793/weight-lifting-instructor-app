@@ -2,13 +2,25 @@ import React, { useState, useEffect } from "react"
 import { myExcelReader } from "./myExcelReader"
 import { FileUploader, ProgrammeOptions } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
+import { TextField, makeStyles } from "@material-ui/core"
 import httpService from "../../services/ProgrammeServiceSingleton"
+
+const useStyles = makeStyles((theme) => ({
+  scheduleName: {
+    textAlign: "center",
+    width: "20%",
+    margin: "0 auto",
+    fontFamily: "var(--ff)",
+    color: "var(--txt-cl)",
+  },
+}))
 
 //a good candidate for Redux, since needed by many components, lets just do useState for now
 export function ScheduleUploader() {
+  const classes = useStyles()
   const [programmes, setProgrammes] = useState(null)
   const [selectedProgrammeId, setSelectedProgrammeId] = useState(null)
-
+  const [scheduleName, setScheduleName] = useState("")
   const [isFetchSuccess, setIsFetchSuccess] = useState(null)
   const FetchProgrammesNotificationDiv = FetchNotificationDivFactory(
     "programmes"
@@ -16,6 +28,10 @@ export function ScheduleUploader() {
 
   function onProgrammeSelected(e) {
     setSelectedProgrammeId(parseInt(e.target.value))
+  }
+
+  function onScheduleNameChanged(e) {
+    setScheduleName(e.target.value)
   }
 
   useEffect(() => {
@@ -45,7 +61,7 @@ export function ScheduleUploader() {
 
   function onFileUploaded(e) {
     const selectedFile = e.target.files[0]
-    const r = new myExcelReader(selectedProgrammeId)
+    const r = new myExcelReader(selectedProgrammeId, scheduleName)
     //empty rows are skipped!
     //this is async (oneload and onerror are defined inside the r instance)
     r.reader
@@ -54,27 +70,37 @@ export function ScheduleUploader() {
   }
 
   return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around",
-          minHeight: "50%",
-        }}
-      >
-        {programmes ? (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+        minHeight: "50%",
+      }}
+    >
+      {programmes ? (
+        <>
+          <TextField
+            label="Cycle Name"
+            className={classes.scheduleName}
+            onChange={onScheduleNameChanged}
+            value={scheduleName}
+          />
           <ProgrammeOptions
             onProgrammeSelected={onProgrammeSelected}
             programmes={programmes}
             selectedProgrammeId={selectedProgrammeId}
             isFetchSuccess={isFetchSuccess}
           />
-        ) : (
-          <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
-        )}
+        </>
+      ) : (
+        <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
+      )}
+      {scheduleName.length > 5 ? (
         <FileUploader onFileUploaded={onFileUploaded} />
-      </div>
-    </>
+      ) : (
+        <div>Please Enter The Cycle's Name Before Uploading</div>
+      )}
+    </div>
   )
 }

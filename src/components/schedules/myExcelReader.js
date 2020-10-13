@@ -22,8 +22,10 @@ function promisify(f) {
 }
 
 export class myExcelReader {
-  constructor(programmeId) {
+  constructor(programmeId, scheduleName) {
     this.reader = new FileReader()
+    this.reader.programmeId = programmeId
+    this.reader.scheduleName = scheduleName
     this.reader.makeTimeTable = function (exercisesArr) {
       const aggregate = {}
 
@@ -64,7 +66,6 @@ export class myExcelReader {
       )
       return aggregate
     }
-    this.reader.programmeId = programmeId
     this.reader.onload = async function (event) {
       //console.log(this.programmeId)
       const data = event.target.result
@@ -72,11 +73,13 @@ export class myExcelReader {
         type: "buffer",
       })
 
+      console.log(workbook)
+
       const payload = {
-        scheduleName: "",
+        scheduleName: this.scheduleName,
         timetable: "",
         programmeId: this.programmeId,
-        weekCount: 0,
+        weekCount: workbook.SheetNames.length,
       }
 
       const rows = []
@@ -86,9 +89,6 @@ export class myExcelReader {
         const XL_row_object = XLSX.utils.sheet_to_json(
           workbook.Sheets[sheetName]
         )
-
-        //programmeName here
-        payload.scheduleName = sheetName
         rows.push(...XL_row_object)
       })
 
@@ -100,15 +100,16 @@ export class myExcelReader {
         4
       )
 
-      payload.weekCount = Math.max.apply(
-        null,
-        Object.keys(payload.timetable).map((week) => {
-          return parseInt(week.substring(week.length - 1))
-        })
-      )
+      // payload.weekCount = Math.max.apply(
+      //   null,
+      //   Object.keys(payload.timetable).map((week) => {
+      //     return parseInt(week.substring(week.length - 1))
+      //   })
+      // )
 
-      const success = await fetchService.postNewSchedule(payload)
-      return success
+      console.log(payload)
+      // const success = await fetchService.postNewSchedule(payload)
+      // return success
     }
 
     this.reader.onerror = function (event) {

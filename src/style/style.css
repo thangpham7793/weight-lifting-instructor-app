@@ -72,8 +72,7 @@ a:hover, a:focus,
   transform-origin: center;
 }
 
-a:hover, a:focus,
-{
+a:hover, a:focus {
   box-shadow: var(--bsd-sm);
   color: #111;
 }
@@ -781,4 +780,4 @@ a.logo {
   color: var(--txt-cl);
 }
 
-
+/* file uploader */

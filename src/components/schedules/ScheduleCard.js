@@ -18,6 +18,7 @@ import { Delete, Edit, Share } from "@material-ui/icons"
 const useStyles = makeStyles((theme) => ({
   root: {
     background: "var(--txt-cl)",
+    boxShadow: "var(--bsd-md)",
   },
   media: {},
   expand: {
@@ -42,10 +43,20 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "none",
     padding: "var(--pd-sm)",
     width: "max-content",
+    "&:hover": {
+      color: "var(--secondary-cl)",
+      background: "#333",
+    },
   },
 }))
 
-export default function ScheduleCard() {
+export default function ScheduleCard({
+  onEditScheduleClicked,
+  onPublishScheduleClicked,
+  onDeleteScheduleClicked,
+  createdAt,
+  scheduleName,
+}) {
   const classes = useStyles()
 
   return (
@@ -61,13 +72,25 @@ export default function ScheduleCard() {
       </CardContent>
       {/* edit/delete/publish maybe edit should take to a new page */}
       <CardActions disableSpacing className={classes.actionBtnWrapper}>
-        <IconButton className={classes.scheduleActionBtn} aria-label="edit">
+        <IconButton
+          className={classes.scheduleActionBtn}
+          aria-label="edit"
+          onClick={onEditScheduleClicked}
+        >
           <Edit />
         </IconButton>
-        <IconButton className={classes.scheduleActionBtn} aria-label="publish">
+        <IconButton
+          className={classes.scheduleActionBtn}
+          aria-label="publish"
+          onClick={onPublishScheduleClicked}
+        >
           <Share />
         </IconButton>
-        <IconButton className={classes.scheduleActionBtn} aria-label="delete">
+        <IconButton
+          className={classes.scheduleActionBtn}
+          aria-label="delete"
+          onClick={onDeleteScheduleClicked}
+        >
           <Delete />
         </IconButton>
       </CardActions>

@@ -26,7 +26,10 @@ export function FileUploader({ onFileUploaded }) {
         accept=".xls, .xlsx"
         onChange={onFileUploaded}
       />
-      {/* <pre id="jsonObject"> JSON : </pre> */}
+      <pre id="jsonObject" style={{ fontSize: "10px", color: "black" }}>
+        {" "}
+        JSON :{" "}
+      </pre>
     </div>
   )
 }
