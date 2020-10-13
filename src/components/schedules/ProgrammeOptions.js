@@ -7,24 +7,20 @@ export function ProgrammeOptions({
 }) {
   const options = programmes.map(({ programmeName, programmeId }) => {
     return (
-      <option
-        key={programmeId}
-        value={programmeId}
-        selected={programmeId === selectedProgrammeId}
-      >
+      <option key={programmeId} value={programmeId}>
         {programmeName}
       </option>
     )
   })
   return (
     <>
-      <div>
+      <div style={{ textAlign: "left", margin: "0 auto" }}>
         <label htmlFor="teams">Publish to Team: </label>
       </div>
       <select
         name="teams"
         onChange={onProgrammeSelected}
-        value={selectedProgrammeId ? selectedProgrammeId : undefined}
+        value={selectedProgrammeId ? selectedProgrammeId : 0}
         style={{ width: "20vw", margin: "0 auto" }}
       >
         {options}

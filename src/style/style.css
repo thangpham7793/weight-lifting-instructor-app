@@ -781,3 +781,8 @@ a.logo {
 }
 
 /* file uploader */
+
+label.Mui-focused {
+  color: var(--bg-cl) !important;
+  font-family: var(--ff) !important;
+}

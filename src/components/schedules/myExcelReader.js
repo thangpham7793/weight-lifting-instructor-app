@@ -43,7 +43,7 @@ export class myExcelReader {
       function extractDailyExercises(w, d) {
         exercisesArr
           .filter(({ week, day }) => week === w && day === d)
-          .reduce((acc, { exercise, instruction }) => {
+          .reduce((acc, { exerciseName, instruction }) => {
             //initialise prop week if not exist
             if (acc[`week ${w}`] === undefined) {
               acc[`week ${w}`] = {}
@@ -55,7 +55,7 @@ export class myExcelReader {
             }
 
             //push obj to proper week and day
-            acc[`week ${w}`][`day ${d}`].push({ exercise, instruction })
+            acc[`week ${w}`][`day ${d}`].push({ exerciseName, instruction })
 
             return acc
           }, aggregate)
@@ -72,8 +72,6 @@ export class myExcelReader {
       const workbook = XLSX.read(data, {
         type: "buffer",
       })
-
-      console.log(workbook)
 
       const payload = {
         scheduleName: this.scheduleName,
@@ -100,16 +98,8 @@ export class myExcelReader {
         4
       )
 
-      // payload.weekCount = Math.max.apply(
-      //   null,
-      //   Object.keys(payload.timetable).map((week) => {
-      //     return parseInt(week.substring(week.length - 1))
-      //   })
-      // )
-
-      console.log(payload)
-      // const success = await fetchService.postNewSchedule(payload)
-      // return success
+      const success = await fetchService.postNewSchedule(payload)
+      return success
     }
 
     this.reader.onerror = function (event) {

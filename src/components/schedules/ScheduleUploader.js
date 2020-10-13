@@ -10,8 +10,22 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     width: "20%",
     margin: "0 auto",
+  },
+  input: {
     fontFamily: "var(--ff)",
     color: "var(--txt-cl)",
+  },
+  formLabelRoot: {
+    fontFamily: "var(--ff)",
+    color: "var(--txt-cl)",
+  },
+  formLabelFocused: {
+    fontFamily: "var(--ff)",
+    color: "var(--txt-cl)",
+    "'& label.Mui-focused'": {
+      fontFamily: "var(--ff)",
+      color: "var(--txt-cl)",
+    },
   },
 }))
 
@@ -85,6 +99,10 @@ export function ScheduleUploader() {
             className={classes.scheduleName}
             onChange={onScheduleNameChanged}
             value={scheduleName}
+            InputProps={{ className: classes.input }}
+            InputLabelProps={{
+              className: classes.formLabelRoot,
+            }}
           />
           <ProgrammeOptions
             onProgrammeSelected={onProgrammeSelected}
