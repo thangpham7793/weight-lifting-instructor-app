@@ -711,7 +711,7 @@ a.logo {
 }
 
 .learnerNameList > ul {
-  max-height: 50%;
+  height: 30vw;
   overflow-y: scroll;
   box-shadow: var(--bsd-md);
   background: var(--bg-cl);
@@ -736,6 +736,7 @@ a.logo {
 
 .pbs-form-wrapper {
   text-align: initial;
+  overflow-y: scroll;
 }
 
 .pbs-form-wrapper > h3 {
@@ -753,6 +754,11 @@ a.logo {
 
 .pbs-form-btn-wrapper > button {
   width: 30%;
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  font-size: calc(var(--fs-sm) * 0.8);
+  align-items: center;
 }
 
 .action-status-div {

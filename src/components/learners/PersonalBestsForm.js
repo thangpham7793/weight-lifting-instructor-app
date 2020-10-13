@@ -1,4 +1,5 @@
 import React from "react"
+import { Edit, Delete, Save } from "@material-ui/icons"
 
 import { camelCaseToNormal } from "../../utils"
 
@@ -47,21 +48,24 @@ export function PersonalBestsForm({
       </form>
       <div className="pbs-form-btn-wrapper">
         <button className="pbs-btn" onClick={enableEditAndUpdate}>
-          {!canEditAndUpdate ? "Enable Edit" : "Disable Edit"}
+          {!canEditAndUpdate ? "Enable Edit " : "Disable Edit "}
+          <Edit className="pbs-btn-icon" />
         </button>
         <button
           className="pbs-btn"
           onClick={onUpdatePersonalBests}
           disabled={!canEditAndUpdate}
         >
-          {!canEditAndUpdate ? "Edit" : "Save"}
+          {"Save "}
+          <Save className="pbs-btn-icon" />
         </button>
         <button
           className="pbs-btn"
           onClick={onDeleteLearner}
           disabled={!canEditAndUpdate}
         >
-          Delete
+          {"Delete "}
+          <Delete className="pbs-btn-icon" />
         </button>
       </div>
     </div>

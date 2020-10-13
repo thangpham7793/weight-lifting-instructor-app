@@ -52,7 +52,7 @@ export default function ScheduleCard() {
     <Card className={classes.root}>
       <CardHeader
         title="October Peaking Cycle"
-        subheader="September 14, 2016"
+        subheader="September 14, 2016" //TODO: should a created_at field be added?
       />
       <CardContent>
         <Typography variant="body2" component="p">
