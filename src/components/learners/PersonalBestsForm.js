@@ -39,7 +39,9 @@ export function PersonalBestsForm({
   //use modal then
   return (
     <div className="pbs-form-wrapper">
-      <h3>{selectedLearner.firstName}</h3>
+      <h3 style={{ textTransform: "capitalize" }}>
+        {selectedLearner.firstName}
+      </h3>
       <form readOnly={!canEditAndUpdate} onDoubleClick={enableEditAndUpdate}>
         {inputs}
       </form>

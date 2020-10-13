@@ -533,7 +533,6 @@ a.logo {
 .close {
   display: inline-block;
   color: var(--txt-cl);
-  float: right;
   font-size: calc(var(--fs-md) * 1.5);
   font-weight: var(--fw-lg);
   position: absolute;
@@ -652,18 +651,9 @@ a.logo {
     width: 5vw;
   }
   
-  #email, #password {
-/*     width: 10vw; */
-  }
-  
   .modal-content {
     width: 60vw;
     margin-top: 2vh;
-  }
-  
-  .pbs-field > input {
-/*     width: 10vw; */
-/*     margin-right: 15vw;     */
   }
 
   button, .pbs-btn {
@@ -706,18 +696,26 @@ a.logo {
   background: var(--txt-cl);
   color: var(--primary-cl);
   min-width: calc((100vw - 4 * var(--mg-sm)) / 2);
-  max-height: calc(100vw - 3.5rem - var(--mg-sm));
+  max-height: calc(80vw - 3.5rem - var(--mg-sm));
 }
 
 .learnerSearchInput {
  font-size: calc(var(--fs-sm) * 0.8 ); 
  padding: calc(var(--pd-sm) * 0.5) 0;
+ box-shadow: var(--bsd-md);
 }
 
 .learnerNameList {
-  overflow-y: scroll;
-  overflow-x: hidden;
   margin-left: var(--mg-sm);
+  min-height: 100%;
+}
+
+.learnerNameList > ul {
+  max-height: 50%;
+  overflow-y: scroll;
+  box-shadow: var(--bsd-md);
+  background: var(--bg-cl);
+  padding-top: var(--pd-sm);
 }
 
 .learner-name {
@@ -729,6 +727,7 @@ a.logo {
   padding: calc(0.5 * var(--pd-sm));
   min-width: 13rem;
   background: #eee;
+  text-transform: capitalize;
 }
 
 .learner-name + .learner-name {
