@@ -12,7 +12,7 @@ export function FileUploader({ onFileUploaded }) {
           margin: "0 auto",
           border: "1px solid var(--txt-cl)",
         }}
-        for="fileUploader"
+        htmlFor="fileUploader"
       >
         <CloudUploadRounded
           style={{ color: "var(--bg-cl)", fontSize: "var(--fs-lg)" }}
