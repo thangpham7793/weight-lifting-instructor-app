@@ -50,20 +50,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function ScheduleCard({
+export function ScheduleCard({
   onEditScheduleClicked,
   onPublishScheduleClicked,
   onDeleteScheduleClicked,
   createdAt,
+  weekCount,
   scheduleName,
+  scheduleId,
 }) {
   const classes = useStyles()
 
   return (
     <Card className={classes.root}>
       <CardHeader
-        title="October Peaking Cycle"
-        subheader="September 14, 2016" //TODO: should a created_at field be added?
+        title={scheduleName ? scheduleName : "Unnamed"}
+        subheader={
+          weekCount ? `${weekCount} week(s)` : "No Exercises Added Yet"
+        } //TODO: should a created_at field be added?
       />
       <CardContent>
         <Typography variant="body2" component="p">
@@ -76,6 +80,7 @@ export default function ScheduleCard({
           className={classes.scheduleActionBtn}
           aria-label="edit"
           onClick={onEditScheduleClicked}
+          scheduleid={scheduleId}
         >
           <Edit />
         </IconButton>
@@ -83,6 +88,7 @@ export default function ScheduleCard({
           className={classes.scheduleActionBtn}
           aria-label="publish"
           onClick={onPublishScheduleClicked}
+          scheduleid={scheduleId}
         >
           <Share />
         </IconButton>
@@ -90,6 +96,7 @@ export default function ScheduleCard({
           className={classes.scheduleActionBtn}
           aria-label="delete"
           onClick={onDeleteScheduleClicked}
+          scheduleid={scheduleId}
         >
           <Delete />
         </IconButton>

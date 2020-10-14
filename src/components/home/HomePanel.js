@@ -58,6 +58,7 @@ export function HomePanel() {
     <div>
       <Logo />
       {isLoggedIn ? (
+        // <Redirect to="/instructor/schedules" />
         <WelcomePanel onLogOutClicked={onLogOutClicked} />
       ) : (
         <LoginForm
