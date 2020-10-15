@@ -1,11 +1,17 @@
-import React, { useState } from "react"
-import { ScheduleCard } from "./ScheduleCard"
+import React, { useState, useEffect } from "react"
+import { ScheduleCards } from "./register"
 import { Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
+import { FetchNotificationDivFactory } from "../factoryComponent"
+import { ActionNotificationDiv } from "../ActionNotificationDiv"
 
+import httpService from "../../services/ProgrammeServiceSingleton"
+
+const FetchScheduleNotificationDiv = FetchNotificationDivFactory("schedules")
 const useStyles = makeStyles((theme) => ({
   container: {
     justifyContent: "space-around",
+    marginTop: "var(--mg-sm)",
   },
   item: {
     margin: "var(--mg-sm)",
@@ -13,75 +19,90 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-//this is more general
-// function GridItem({ xs, sm, md, lg, xl, className, component, ...props }) {
-//   const Component = component
-//   return (
-//     <Grid item xs={xs} sm={sm} md={md} lg={lg} xl={xl} className={className}>
-//       <Component {...props} />
-//     </Grid>
-//   )
-// }
-
-//can also make a more general wrapper
-function GridItemWrapper(Component, styleHook) {
-  return function (props) {
-    const classes = styleHook()
-    return (
-      <Grid item xs={8} sm={6} md={3} className={classes.item}>
-        <Component {...props} />
-      </Grid>
-    )
-  }
-}
-
-const CustomScheduleCard = GridItemWrapper(ScheduleCard, useStyles)
-
 export function SchedulePanel() {
+  const [schedules, setSchedules] = useState(null)
+  const [isFetchSucccess, setIsFetchSuccess] = useState(null)
+  const [actionStatus, setActionStatus] = useState({
+    action: null,
+    isActionSuccess: true,
+  })
+
   function onEditScheduleClicked(e) {
     //need to use currentTarget since it's a material icon component so need to get the reference to the underlying base DOM element
     console.log(e.currentTarget.getAttribute("scheduleId"))
   }
 
-  const data = [
-    {
-      scheduleId: 1,
-      scheduleName: "test",
-      weekCount: 2,
-    },
-    {
-      scheduleId: 2,
-      scheduleName: "test",
-      weekCount: 2,
-    },
-    {
-      scheduleId: 3,
-      scheduleName: "test",
-      weekCount: 2,
-    },
-  ]
+  async function onDeleteScheduleClicked(e) {
+    const clickedSchedudleId = e.currentTarget.getAttribute("scheduleId")
 
-  const [schedules, setSchedules] = useState(data)
-
-  const scheduleCards = schedules.map(
-    ({ scheduleId, scheduleName, weekCount }) => {
-      return (
-        <CustomScheduleCard
-          key={scheduleId}
-          scheduleId={scheduleId}
-          scheduleName={scheduleName}
-          weekCount={weekCount}
-          onEditScheduleClicked={onEditScheduleClicked}
-        />
+    if (
+      window.confirm(
+        `Are you sure you want to delete schedule id ${clickedSchedudleId}`
       )
+    ) {
+      setActionStatus({ action: "delete", isActionSuccess: null })
+      console.log(`Delete schedule id ${clickedSchedudleId}}`)
+      const isDeleted = await httpService.deleteSchedule(clickedSchedudleId)
+      if (isDeleted) {
+        setActionStatus({ action: "delete", isActionSuccess: true })
+      } else {
+        setActionStatus({ action: "delete", isActionSuccess: false })
+        setSchedules(updateSchedulesList(schedules, clickedSchedudleId))
+      }
     }
-  )
+  }
+
+  function updateSchedulesList(schedules, clickedSchedudleId) {
+    return schedules.filter(
+      ({ scheduleId }) => scheduleId !== clickedSchedudleId
+    )
+  }
+
+  function onPublishScheduleClicked(e) {
+    console.log(
+      `Publish schedule id ${e.currentTarget.getAttribute("scheduleId")}`
+    )
+  }
+
+  function onCloseActionStatusDiv(e) {
+    setActionStatus({ action: null, isActionSuccess: null })
+  }
+
+  useEffect(() => {
+    async function fetchSchedules() {
+      const res = await httpService.fetchScheduleInfo()
+      if (res) {
+        setIsFetchSuccess(true)
+        setSchedules(res)
+      }
+      setIsFetchSuccess(false)
+    }
+    fetchSchedules()
+  }, [])
 
   const classes = useStyles()
 
   return (
-    <Grid container className={classes.container}>
-      {scheduleCards}
-    </Grid>
+    <>
+      <ActionNotificationDiv
+        actionStatus={actionStatus}
+        onCloseActionStatusDiv={onCloseActionStatusDiv}
+      />
+      <Grid container className={classes.container}>
+        {!schedules ? (
+          <FetchScheduleNotificationDiv
+            isFetchSuccess={isFetchSucccess}
+            style={{ margin: "5% auto" }}
+          />
+        ) : (
+          <ScheduleCards
+            schedules={schedules}
+            onEditScheduleClicked={onEditScheduleClicked}
+            onPublishScheduleClicked={onPublishScheduleClicked}
+            onDeleteScheduleClicked={onDeleteScheduleClicked}
+          />
+        )}
+      </Grid>
+    </>
   )
 }

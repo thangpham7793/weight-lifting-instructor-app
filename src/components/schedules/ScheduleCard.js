@@ -4,12 +4,13 @@ import { makeStyles } from "@material-ui/core/styles"
 import {
   Card,
   CardHeader,
-  CardMedia,
+  List,
   CardContent,
   CardActions,
   IconButton,
-  Avatar,
+  ListItem,
   Typography,
+  ListItemText,
 } from "@material-ui/core"
 
 import { red } from "@material-ui/core/colors"
@@ -58,6 +59,7 @@ export function ScheduleCard({
   weekCount,
   scheduleName,
   scheduleId,
+  programmes,
 }) {
   const classes = useStyles()
 
@@ -70,11 +72,19 @@ export function ScheduleCard({
         } //TODO: should a created_at field be added?
       />
       <CardContent>
-        <Typography variant="body2" component="p">
-          What should be put in here?
-        </Typography>
+        {programmes.length === 0 ? null : (
+          <List style={{ textAlign: "left" }}>
+            <Typography variant="subtitle1">
+              Currently Used by Team(s):{" "}
+            </Typography>
+            {programmes.map((p) => (
+              <ListItem key={p.programmeId}>
+                <ListItemText primary={p.programmeName} />
+              </ListItem>
+            ))}
+          </List>
+        )}
       </CardContent>
-      {/* edit/delete/publish maybe edit should take to a new page */}
       <CardActions disableSpacing className={classes.actionBtnWrapper}>
         <IconButton
           className={classes.scheduleActionBtn}

@@ -26,7 +26,10 @@ export function ActionNotificationDiv({
   }
 
   return (
-    <div className="action-status-div" style={{ display: display }}>
+    <div
+      className="action-status-div"
+      style={{ display: display, width: "35%" }}
+    >
       <div>{message}</div>
       <span className="action-status-close" onClick={onCloseActionStatusDiv}>
         X

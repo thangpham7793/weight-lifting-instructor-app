@@ -11,9 +11,6 @@ export class HttpServiceSingleton {
       "instructor/login",
       true
     )
-    this.postNewSchedule = HttpServiceSingleton._fetchPostFactory(
-      "programmes/schedules"
-    )
     //make sure that only an instance is created
     this._instance = this
     if (HttpServiceSingleton._instance) {

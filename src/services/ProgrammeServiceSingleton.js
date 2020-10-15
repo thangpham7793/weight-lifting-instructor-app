@@ -5,19 +5,63 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
   constructor() {
     super()
     console.log("I was created!")
+    //this can probably be accomplished with a loop
     this.fetchProgrammes = safeSpinnerWrapper(this.fetchProgrammes)
+    this.fetchSchedules = safeSpinnerWrapper(this.fetchSchedules)
+    this.fetchScheduleInfo = safeSpinnerWrapper(this.fetchScheduleInfo)
+    this.deleteSchedule = safeSpinnerWrapper(this.deleteSchedule)
+    this.publishSchedule = safeSpinnerWrapper(this.publishSchedule)
+    this.unpublishSchedule = safeSpinnerWrapper(this.unpublishSchedule)
+
     this._instance = this
     if (ProgrammeServiceSingleton._instance) {
       return this._instance
     }
   }
 
+  //programmes
   async fetchProgrammes() {
     const res = await ProgrammeServiceSingleton._fetchJsonFactory(
       "programmes"
     )()
     return res ? res : false
   }
+
+  async createProgramme() {}
+  async updateProgramme() {}
+
+  //schedules
+  async fetchSchedules() {
+    const res = await ProgrammeServiceSingleton._fetchJsonFactory(
+      "programmes/schedules"
+    )()
+    return res ? res : false
+  }
+
+  async deleteSchedule(id) {
+    const res = await ProgrammeServiceSingleton._fetchDeleteFactory(
+      "programmes/schedules"
+    )(id)
+    return res ? res : false
+  }
+
+  async postNewSchedule(payload) {
+    const res = await ProgrammeServiceSingleton._fetchPostFactory(
+      "programmes/schedules"
+    )(payload)
+    return res ? res : false
+  }
+
+  async fetchScheduleInfo() {
+    const res = await ProgrammeServiceSingleton._fetchJsonFactory(
+      "programmes/schedules/info"
+    )()
+    return res ? res : false
+  }
+  //schedule and programme
+  async publishSchedule(scheduelId, programmeId) {}
+
+  async unpublishSchedule(scheduelId, programmeId) {}
 
   static getProgrammeInstance() {
     return (
