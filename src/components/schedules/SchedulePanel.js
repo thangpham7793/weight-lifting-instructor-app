@@ -27,13 +27,17 @@ export function SchedulePanel() {
     isActionSuccess: true,
   })
 
+  function getClickedScheduleId(e) {
+    return parseInt(e.currentTarget.getAttribute("scheduleId"))
+  }
+
   function onEditScheduleClicked(e) {
     //need to use currentTarget since it's a material icon component so need to get the reference to the underlying base DOM element
     console.log(e.currentTarget.getAttribute("scheduleId"))
   }
 
   async function onDeleteScheduleClicked(e) {
-    const clickedSchedudleId = e.currentTarget.getAttribute("scheduleId")
+    const clickedSchedudleId = getClickedScheduleId(e)
 
     if (
       window.confirm(
@@ -41,21 +45,28 @@ export function SchedulePanel() {
       )
     ) {
       setActionStatus({ action: "delete", isActionSuccess: null })
-      console.log(`Delete schedule id ${clickedSchedudleId}}`)
+      console.log(`Delete schedule id ${clickedSchedudleId}`)
       const isDeleted = await httpService.deleteSchedule(clickedSchedudleId)
       if (isDeleted) {
         setActionStatus({ action: "delete", isActionSuccess: true })
+        setSchedules(
+          updateSchedulesList("delete", schedules, clickedSchedudleId)
+        )
       } else {
         setActionStatus({ action: "delete", isActionSuccess: false })
-        setSchedules(updateSchedulesList(schedules, clickedSchedudleId))
       }
     }
   }
 
-  function updateSchedulesList(schedules, clickedSchedudleId) {
-    return schedules.filter(
-      ({ scheduleId }) => scheduleId !== clickedSchedudleId
-    )
+  function updateSchedulesList(action, schedules, clickedSchedudleId) {
+    switch (action) {
+      case "delete":
+        return schedules.filter(
+          ({ scheduleId }) => scheduleId !== clickedSchedudleId
+        )
+      default:
+        return schedules
+    }
   }
 
   function onPublishScheduleClicked(e) {
