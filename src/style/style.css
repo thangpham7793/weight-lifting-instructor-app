@@ -36,6 +36,12 @@ body {
   line-height: 1.5rem;
 }
 
+.MuiTypography-root {
+  font-family: var(--ff);
+  font-size: var(--sm);
+  line-height: 1.5rem;
+}
+
 h1 {
   font-size: calc(0.5 * var(--fs-md));
 }
@@ -795,5 +801,5 @@ label.Mui-focused {
 
 .add-new-schedule-dialog {
   height: 60vw;
-  background: var(--secondary-cl);
+  background: #02c39a;
 }

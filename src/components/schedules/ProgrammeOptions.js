@@ -1,30 +1,39 @@
 import React from "react"
+import {
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  FormControl,
+  Checkbox,
+} from "@material-ui/core"
 
-export function ProgrammeOptions({
-  programmes,
-  onProgrammeSelected,
-  selectedProgrammeId,
-}) {
-  const options = programmes.map(({ programmeName, programmeId }) => {
+export function ProgrammeOptions({ programmes, onProgrammeChecked }) {
+  const checkboxes = programmes.map(({ programmeName, programmeId }) => {
     return (
-      <option key={programmeId} value={programmeId}>
-        {programmeName}
-      </option>
+      <FormControlLabel
+        key={programmeId}
+        control={
+          <Checkbox
+            onChange={onProgrammeChecked}
+            name={programmeName}
+            value={programmeId}
+            color="primary"
+          />
+        }
+        label={programmeName}
+      />
     )
   })
+
   return (
     <>
-      <div style={{ textAlign: "left", margin: "0 auto" }}>
-        <label htmlFor="teams">Publish to Team: </label>
-      </div>
-      <select
-        name="teams"
-        onChange={onProgrammeSelected}
-        value={selectedProgrammeId ? selectedProgrammeId : 0}
-        style={{ width: "20vw", margin: "0 auto" }}
+      <FormControl
+        component="fieldset"
+        style={{ marginBottom: "var(--mg-sm)" }}
       >
-        {options}
-      </select>
+        <FormLabel component="legend">Publish to Team: </FormLabel>
+        <FormGroup>{checkboxes}</FormGroup>
+      </FormControl>
     </>
   )
 }

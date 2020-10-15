@@ -2,18 +2,23 @@ import React, { useState, useEffect } from "react"
 import { myExcelReader } from "./myExcelReader"
 import { FileUploader, ProgrammeOptions } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
-import { TextField, makeStyles } from "@material-ui/core"
+import {
+  TextField,
+  Typography,
+  makeStyles,
+  Grid,
+  FormHelperText,
+} from "@material-ui/core"
 import httpService from "../../services/ProgrammeServiceSingleton"
 
 const useStyles = makeStyles((theme) => ({
-  // scheduleName: {
-  //   textAlign: "center",
-  //   width: "20%",
-  //   margin: "0 auto",
-  // },
+  scheduleName: {
+    marginBottom: "var(--mg-sm)",
+  },
   input: {
     fontFamily: "var(--ff)",
     color: "#001e18",
+    marginBottom: "var(--mg-sm)",
   },
   formLabelRoot: {
     fontFamily: "var(--ff)",
@@ -33,15 +38,32 @@ const useStyles = makeStyles((theme) => ({
 export function ScheduleUploader() {
   const classes = useStyles()
   const [programmes, setProgrammes] = useState(null)
-  const [selectedProgrammeId, setSelectedProgrammeId] = useState(null)
+  const [selectedProgrammeIds, setSelectedProgrammeIds] = useState([])
   const [scheduleName, setScheduleName] = useState("")
   const [isFetchSuccess, setIsFetchSuccess] = useState(null)
   const FetchProgrammesNotificationDiv = FetchNotificationDivFactory(
     "programmes"
   )
 
-  function onProgrammeSelected(e) {
-    setSelectedProgrammeId(parseInt(e.target.value))
+  function findIndexAndDelete(val, arr) {
+    arr.splice(
+      arr.findIndex((v) => v === val),
+      1
+    )
+  }
+
+  function onProgrammeChecked(e) {
+    const checkedProgrammeId = parseInt(e.target.value)
+    if (e.target.checked) {
+      console.log(checkedProgrammeId)
+      setSelectedProgrammeIds([...selectedProgrammeIds, checkedProgrammeId])
+    } else {
+      setSelectedProgrammeIds((selectedProgrammeIds) => {
+        let newArr = [...selectedProgrammeIds]
+        findIndexAndDelete(checkedProgrammeId, newArr)
+        return newArr
+      })
+    }
   }
 
   function onScheduleNameChanged(e) {
@@ -56,14 +78,7 @@ export function ScheduleUploader() {
       if (payload) {
         console.log(payload)
         //effect here
-        setProgrammes((p) => [
-          ...payload.programmes,
-          {
-            programmeId: 0,
-            programmeName: "None",
-          },
-        ])
-        setSelectedProgrammeId(0)
+        setProgrammes(payload.programmes)
         setIsFetchSuccess(true)
       } else {
         //another effect
@@ -75,16 +90,18 @@ export function ScheduleUploader() {
 
   function onFileUploaded(e) {
     const selectedFile = e.target.files[0]
-    const r = new myExcelReader(selectedProgrammeId, scheduleName)
+    const r = new myExcelReader(selectedProgrammeIds, scheduleName)
     //empty rows are skipped!
     //this is async (oneload and onerror are defined inside the r instance)
-    r.reader
-      .readAsArrayBufferPromise(selectedFile)
-      .then((res) => console.log(res))
+    r.reader.readAsArrayBufferPromise(selectedFile)
   }
 
   return (
-    <div
+    <Grid
+      container
+      xs={8}
+      md={12}
+      lg={12}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -104,20 +121,23 @@ export function ScheduleUploader() {
             }}
           />
           <ProgrammeOptions
-            onProgrammeSelected={onProgrammeSelected}
             programmes={programmes}
-            selectedProgrammeId={selectedProgrammeId}
             isFetchSuccess={isFetchSuccess}
+            onProgrammeChecked={onProgrammeChecked}
           />
           {scheduleName.length > 5 ? (
             <FileUploader onFileUploaded={onFileUploaded} />
           ) : (
-            <div>Please Enter The Cycle's Name Before Uploading</div>
+            <FormHelperText>
+              <Typography component="div">
+                Please Enter The Cycle's Name Before Uploading
+              </Typography>
+            </FormHelperText>
           )}
         </>
       ) : (
         <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
       )}
-    </div>
+    </Grid>
   )
 }

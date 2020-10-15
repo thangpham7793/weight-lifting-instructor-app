@@ -1,10 +1,30 @@
 import XLSX from "xlsx"
 import httpService from "../../services/ProgrammeServiceSingleton"
 
+function promisify(f, resolve, reject) {
+  return function (...args) {
+    // return a wrapper-function
+    return new Promise(() => {
+      function callback(err, result) {
+        // our custom callback for f
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      }
+
+      args.push(callback) // append our custom callback to the end of f arguments
+
+      f.call(this, ...args) // call the original function
+    })
+  }
+}
+
 export class myExcelReader {
-  constructor(programmeId, scheduleName) {
+  constructor(programmeIds, scheduleName) {
     this.reader = new FileReader()
-    this.reader.programmeId = programmeId
+    this.reader.programmeIds = programmeIds
     this.reader.scheduleName = scheduleName
     this.reader.makeTimeTable = function (exercisesArr) {
       const aggregate = {}
@@ -47,7 +67,6 @@ export class myExcelReader {
       return aggregate
     }
     this.reader.onload = async function (event) {
-      //console.log(this.programmeId)
       const data = event.target.result
       const workbook = XLSX.read(data, {
         type: "buffer",
@@ -56,7 +75,7 @@ export class myExcelReader {
       const payload = {
         scheduleName: this.scheduleName,
         timetable: "",
-        programmeId: this.programmeId,
+        programmeIds: this.programmeIds,
         weekCount: workbook.SheetNames.length,
       }
 
@@ -84,6 +103,16 @@ export class myExcelReader {
 
     this.reader.onerror = function (event) {
       console.error("File could not be read! Code " + event.target.error.code)
+    }
+
+    this.reader.readAsArrayBufferPromise = promisify(
+      this.reader.readAsArrayBuffer,
+      this.reader.onsuccess,
+      this.reader.onerror
+    )
+
+    this.reader.onsuccess = function (res) {
+      console.log(res)
     }
   }
 }

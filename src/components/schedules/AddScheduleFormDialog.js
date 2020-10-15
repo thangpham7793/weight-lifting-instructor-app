@@ -5,8 +5,7 @@ import {
   DialogActions,
   DialogTitle,
   DialogContent,
-  DialogContentText,
-  Button,
+  Typography,
 } from "@material-ui/core"
 
 export function AddScheduleFormDialog({ handleClose, open }) {
@@ -16,11 +15,28 @@ export function AddScheduleFormDialog({ handleClose, open }) {
       onClose={handleClose}
       aria-labelledby="form-dialog-title"
     >
+      <DialogTitle
+        style={{
+          backgroundColor: "var(--txt-cl)",
+        }}
+      >
+        <Typography style={{ fontWeight: "var(--fw-md)" }}>
+          New Cycle
+        </Typography>
+      </DialogTitle>
       <DialogContent className="add-new-schedule-dialog">
         <ScheduleUploader />
       </DialogContent>
-      <DialogActions>
-        <button onClick={handleClose}>Cancel</button>
+      <DialogActions
+        style={{
+          justifyContent: "center",
+          padding: "0",
+          backgroundColor: "var(--txt-cl)",
+        }}
+      >
+        <button onClick={handleClose} style={{ width: "max-content" }}>
+          Close
+        </button>
       </DialogActions>
     </Dialog>
   )
