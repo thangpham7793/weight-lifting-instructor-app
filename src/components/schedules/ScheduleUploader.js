@@ -6,14 +6,14 @@ import { TextField, makeStyles } from "@material-ui/core"
 import httpService from "../../services/ProgrammeServiceSingleton"
 
 const useStyles = makeStyles((theme) => ({
-  scheduleName: {
-    textAlign: "center",
-    width: "20%",
-    margin: "0 auto",
-  },
+  // scheduleName: {
+  //   textAlign: "center",
+  //   width: "20%",
+  //   margin: "0 auto",
+  // },
   input: {
     fontFamily: "var(--ff)",
-    color: "var(--txt-cl)",
+    color: "#001e18",
   },
   formLabelRoot: {
     fontFamily: "var(--ff)",
@@ -89,7 +89,6 @@ export function ScheduleUploader() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-around",
-        minHeight: "50%",
       }}
     >
       {programmes ? (
@@ -110,14 +109,14 @@ export function ScheduleUploader() {
             selectedProgrammeId={selectedProgrammeId}
             isFetchSuccess={isFetchSuccess}
           />
+          {scheduleName.length > 5 ? (
+            <FileUploader onFileUploaded={onFileUploaded} />
+          ) : (
+            <div>Please Enter The Cycle's Name Before Uploading</div>
+          )}
         </>
       ) : (
         <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
-      )}
-      {scheduleName.length > 5 ? (
-        <FileUploader onFileUploaded={onFileUploaded} />
-      ) : (
-        <div>Please Enter The Cycle's Name Before Uploading</div>
       )}
     </div>
   )

@@ -793,4 +793,7 @@ label.Mui-focused {
   margin-top: 0.23rem;
 }
 
-
+.add-new-schedule-dialog {
+  height: 60vw;
+  background: var(--secondary-cl);
+}

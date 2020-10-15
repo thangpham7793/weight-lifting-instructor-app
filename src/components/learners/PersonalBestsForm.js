@@ -48,24 +48,24 @@ export function PersonalBestsForm({
       </form>
       <div className="pbs-form-btn-wrapper">
         <button className="pbs-btn" onClick={enableEditAndUpdate}>
-          {!canEditAndUpdate ? "Enable Edit " : "Disable Edit "}
           <Edit className="pbs-btn-icon" />
+          {!canEditAndUpdate ? "Enable Edit " : "Disable Edit "}
         </button>
         <button
           className="pbs-btn"
           onClick={onUpdatePersonalBests}
           disabled={!canEditAndUpdate}
         >
-          {"Save "}
           <Save className="pbs-btn-icon" />
+          {"Save "}
         </button>
         <button
           className="pbs-btn"
           onClick={onDeleteLearner}
           disabled={!canEditAndUpdate}
         >
-          {"Delete "}
           <Delete className="pbs-btn-icon" />
+          {"Delete "}
         </button>
       </div>
     </div>
