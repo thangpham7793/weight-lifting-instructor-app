@@ -22,10 +22,12 @@ function promisify(f, resolve, reject) {
 }
 
 export class myExcelReader {
-  constructor(programmeIds, scheduleName) {
+  constructor(programmeIds, scheduleName, isNew = true, scheduleId = null) {
     this.reader = new FileReader()
     this.reader.programmeIds = programmeIds
     this.reader.scheduleName = scheduleName
+    this.reader.isNew = isNew
+    this.reader.scheduleId = scheduleId
     this.reader.makeTimeTable = function (exercisesArr) {
       const aggregate = {}
 
@@ -72,13 +74,6 @@ export class myExcelReader {
         type: "buffer",
       })
 
-      const payload = {
-        scheduleName: this.scheduleName,
-        timetable: "",
-        programmeIds: this.programmeIds,
-        weekCount: workbook.SheetNames.length,
-      }
-
       const rows = []
 
       workbook.SheetNames.forEach(function (sheetName) {
@@ -89,16 +84,26 @@ export class myExcelReader {
         rows.push(...XL_row_object)
       })
 
-      payload.timetable = this.makeTimeTable(rows)
+      let payload = { timetable: this.makeTimeTable(rows) }
+      let isActionSuccess
 
-      document.getElementById("jsonObject").innerHTML = JSON.stringify(
-        payload,
-        null,
-        4
-      )
-
-      const success = await httpService.postNewSchedule(payload)
-      return success
+      if (isNew) {
+        payload = {
+          ...payload,
+          scheduleName: this.scheduleName,
+          programmeIds: this.programmeIds,
+          weekCount: workbook.SheetNames.length,
+        }
+        isActionSuccess = await httpService.postNewSchedule(payload)
+      } else {
+        payload = {
+          ...payload,
+          scheduleId: this.scheduleId,
+          weekCount: workbook.SheetNames.length,
+        }
+        isActionSuccess = await httpService.repostSchedule(payload)
+      }
+      return isActionSuccess
     }
 
     this.reader.onerror = function (event) {
@@ -106,13 +111,7 @@ export class myExcelReader {
     }
 
     this.reader.readAsArrayBufferPromise = promisify(
-      this.reader.readAsArrayBuffer,
-      this.reader.onsuccess,
-      this.reader.onerror
+      this.reader.readAsArrayBuffer
     )
-
-    this.reader.onsuccess = function (res) {
-      console.log(res)
-    }
   }
 }

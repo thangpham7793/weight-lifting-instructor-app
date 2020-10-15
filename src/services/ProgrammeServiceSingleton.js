@@ -12,6 +12,7 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
     this.deleteSchedule = safeSpinnerWrapper(this.deleteSchedule)
     this.publishSchedule = safeSpinnerWrapper(this.publishSchedule)
     this.unpublishSchedule = safeSpinnerWrapper(this.unpublishSchedule)
+    this.repostSchedule = safeSpinnerWrapper(this.repostSchedule)
 
     this._instance = this
     if (ProgrammeServiceSingleton._instance) {
@@ -47,6 +48,13 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
 
   async postNewSchedule(payload) {
     const res = await ProgrammeServiceSingleton._fetchPostFactory(
+      "programmes/schedules"
+    )(payload)
+    return res ? res : false
+  }
+
+  async repostSchedule(payload) {
+    const res = await ProgrammeServiceSingleton._fetchPutFactory(
       "programmes/schedules"
     )(payload)
     return res ? res : false
