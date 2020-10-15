@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { ScheduleCards } from "./register"
+import { ScheduleCards, AddScheduleFloatingButton } from "./register"
 import { Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { FetchNotificationDivFactory } from "../factoryComponent"
@@ -99,19 +99,22 @@ export function SchedulePanel() {
         actionStatus={actionStatus}
         onCloseActionStatusDiv={onCloseActionStatusDiv}
       />
+      <AddScheduleFloatingButton />
       <Grid container className={classes.container}>
         {!schedules ? (
           <FetchScheduleNotificationDiv
             isFetchSuccess={isFetchSucccess}
-            style={{ margin: "5% auto" }}
+            style={{ margin: "0 auto" }}
           />
         ) : (
-          <ScheduleCards
-            schedules={schedules}
-            onEditScheduleClicked={onEditScheduleClicked}
-            onPublishScheduleClicked={onPublishScheduleClicked}
-            onDeleteScheduleClicked={onDeleteScheduleClicked}
-          />
+          <>
+            <ScheduleCards
+              schedules={schedules}
+              onEditScheduleClicked={onEditScheduleClicked}
+              onPublishScheduleClicked={onPublishScheduleClicked}
+              onDeleteScheduleClicked={onDeleteScheduleClicked}
+            />
+          </>
         )}
       </Grid>
     </>

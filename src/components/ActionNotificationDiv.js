@@ -6,11 +6,11 @@ export function ActionNotificationDiv({
 }) {
   const { action, isActionSuccess } = actionStatus
 
-  let message
-  let display = ""
+  let message = "Action Status"
+  let visibility = ""
 
   if (!action) {
-    display = "none"
+    visibility = "hidden"
   } else {
     switch (isActionSuccess) {
       default:
@@ -28,7 +28,7 @@ export function ActionNotificationDiv({
   return (
     <div
       className="action-status-div"
-      style={{ display: display, width: "35%" }}
+      style={{ visibility: visibility, width: "35%" }}
     >
       <div>{message}</div>
       <span className="action-status-close" onClick={onCloseActionStatusDiv}>

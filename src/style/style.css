@@ -786,3 +786,11 @@ label.Mui-focused {
   color: var(--bg-cl) !important;
   font-family: var(--ff) !important;
 }
+
+.add-schedule-btn-wrapper {
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+  margin-top: 0.23rem;
+}
+
+
