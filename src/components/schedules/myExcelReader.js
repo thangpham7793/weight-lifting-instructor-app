@@ -1,26 +1,6 @@
 import XLSX from "xlsx"
 import httpService from "../../services/ProgrammeServiceSingleton"
 
-function promisify(f, resolve, reject) {
-  return function (...args) {
-    // return a wrapper-function
-    return new Promise(() => {
-      function callback(err, result) {
-        // our custom callback for f
-        if (err) {
-          reject(err)
-        } else {
-          resolve(result)
-        }
-      }
-
-      args.push(callback) // append our custom callback to the end of f arguments
-
-      f.call(this, ...args) // call the original function
-    })
-  }
-}
-
 export class myExcelReader {
   constructor(programmeIds, scheduleName, isNew = true, scheduleId = null) {
     this.reader = new FileReader()
@@ -106,12 +86,17 @@ export class myExcelReader {
       return isActionSuccess
     }
 
-    this.reader.onerror = function (event) {
+    this.reader.onerror = (event) => {
       console.error("File could not be read! Code " + event.target.error.code)
     }
 
-    this.reader.readAsArrayBufferPromise = promisify(
-      this.reader.readAsArrayBuffer
-    )
+    this.reader.readAsArrayBufferPromise = (file) => {
+      return new Promise((resolve, reject) => {
+        let r = new FileReader()
+        r.onload = (e) => resolve(e.target.result)
+        r.onerror = reject
+        r.readAsArrayBuffer(file)
+      })
+    }
   }
 }
