@@ -6,7 +6,6 @@ export class HttpServiceSingleton {
   //TODO: these methods can be refactored into their own service class as well
   constructor() {
     //hide away implementation details from the client components
-    this.fetchProgrammes = HttpServiceSingleton._fetchJsonFactory("programmes")
     this.postInstructorCredentials = HttpServiceSingleton._fetchPostFactory(
       "instructor/login"
     )
@@ -97,7 +96,8 @@ export class HttpServiceSingleton {
     //FIXME: may need to switch based on status code!
     switch (response.status) {
       case 204:
-        return { ok: true, payload: null }
+        console.log("No Content")
+        return { ok, payload: null }
       default:
         break
     }

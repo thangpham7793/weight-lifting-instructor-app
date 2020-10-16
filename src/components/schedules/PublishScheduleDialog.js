@@ -28,7 +28,6 @@ export function PublishScheduleDialog({
   function onProgrammeChecked(e) {
     const checkedProgrammeId = parseInt(e.target.value)
     if (e.target.checked) {
-      console.log(checkedProgrammeId)
       setSelectedProgrammeIds([...selectedProgrammeIds, checkedProgrammeId])
     } else {
       setSelectedProgrammeIds((selectedProgrammeIds) => {
@@ -39,8 +38,24 @@ export function PublishScheduleDialog({
     }
   }
 
-  function onPublishScheduleClicked() {
-    callDecoratedPublishService([scheduleId, selectedProgrammeIds])
+  async function onPublishScheduleClicked() {
+    const { ok } = await callDecoratedPublishService([
+      scheduleId,
+      selectedProgrammeIds,
+    ])
+
+    if (ok) {
+      onActionSuccess("publish", {
+        scheduleId,
+        programmes: getAddedProgrammes(selectedProgrammeIds, programmes),
+      })
+    }
+  }
+
+  function getAddedProgrammes(selectedProgrammeIds, programmes) {
+    return programmes.filter((p) =>
+      selectedProgrammeIds.includes(p.programmeId)
+    )
   }
 
   useEffect(() => {
@@ -49,7 +64,6 @@ export function PublishScheduleDialog({
         scheduleId
       )
       if (ok) {
-        console.log(payload)
         setIsFetchSuccess(true)
         setProgrammes(payload)
         return

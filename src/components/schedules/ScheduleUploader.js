@@ -97,7 +97,7 @@ export function ScheduleUploader({ onActionSuccess }) {
     r.reader.readAsArrayBufferPromise(selectedFile)
 
     const buffer = await fileReaderPromise(selectedFile)
-    const payload = makeSchedulePayload(
+    const newSchedule = makeSchedulePayload(
       buffer,
       selectedProgrammeIds,
       scheduleName,
@@ -106,20 +106,35 @@ export function ScheduleUploader({ onActionSuccess }) {
 
     setActionStatus({ action: "upload", isActionSuccess: null })
 
-    const isUploaded = await httpService.postNewSchedule(payload)
-    if (isUploaded) {
+    const { ok, payload } = await httpService.postNewSchedule(newSchedule)
+    if (ok) {
       setActionStatus({ action: "upload", isActionSuccess: true })
       //update schedule list
       //actually need the newly created id as well!
       //so need to pull out the programmes that have been addded + id returned from the server
       //TODO: need to change the hook api to always return status and payload
-      onActionSuccess("upload", payload)
+
+      const newScheduleInfoObject = makeNewScheduleInfoObject(
+        payload,
+        programmes
+      )
+
+      onActionSuccess("upload", newScheduleInfoObject)
       console.log("Upload Successful!")
       return
     }
 
     setActionStatus({ action: "upload", isActionSuccess: false })
     console.log("Upload failed!")
+  }
+
+  function makeNewScheduleInfoObject(payload, programmes) {
+    return {
+      ...payload,
+      programmes: programmes.filter((p) =>
+        selectedProgrammeIds.includes(p.programmeId)
+      ),
+    }
   }
 
   return (

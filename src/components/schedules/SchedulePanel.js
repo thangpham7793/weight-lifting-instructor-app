@@ -78,6 +78,26 @@ export function SchedulePanel() {
         break
       case "upload":
         newSchedules = [...schedules, payload]
+        break
+      //should be just this as the child component has all the information needed to return a new schedule info object
+      case "publish":
+        const { scheduleId, programmes } = payload
+
+        console.log(scheduleId, programmes)
+
+        newSchedules = [...schedules]
+        //this returns a reference to the item in the array
+        const updatedSchedule = newSchedules.find(
+          (s) => s.scheduleId === scheduleId
+        )
+        //does this modify the wrapper array?
+        updatedSchedule.programmes = [
+          ...updatedSchedule.programmes,
+          ...programmes,
+        ]
+        break
+      case "repost":
+        newSchedules = [...schedules, payload]
         return
       default:
         return schedules
