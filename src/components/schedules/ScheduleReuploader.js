@@ -22,7 +22,7 @@ export function ScheduleReuploader({ scheduleId }) {
   async function onFileUploaded(e) {
     const selectedFile = e.target.files[0]
     const buffer = await fileReaderPromise(selectedFile)
-    const payload = makeSchedulePayload(buffer, [], "", scheduleId, false)
+    const payload = makeSchedulePayload(buffer, [], "", false, scheduleId)
 
     setActionStatus({ action: "re-post", isActionSuccess: null })
 

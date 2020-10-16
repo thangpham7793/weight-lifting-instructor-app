@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { myExcelReader } from "./myExcelReader"
+import { fileReaderPromise, makeSchedulePayload } from "../../services/register"
 import { FileUploader, ProgrammeOptions } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
 import {
@@ -10,6 +11,7 @@ import {
   FormHelperText,
 } from "@material-ui/core"
 import httpService from "../../services/ProgrammeServiceSingleton"
+import { ActionNotificationDiv } from "../ActionNotificationDiv"
 
 const useStyles = makeStyles((theme) => ({
   scheduleName: {
@@ -44,6 +46,14 @@ export function ScheduleUploader() {
   const FetchProgrammesNotificationDiv = FetchNotificationDivFactory(
     "programmes"
   )
+  const [actionStatus, setActionStatus] = useState({
+    action: null,
+    isActionSuccess: true,
+  })
+
+  function onCloseActionStatusDiv(e) {
+    setActionStatus({ action: null, isActionSuccess: null })
+  }
 
   function findIndexAndDelete(val, arr) {
     arr.splice(
@@ -88,12 +98,33 @@ export function ScheduleUploader() {
     fetchProgrammes()
   }, [])
 
-  function onFileUploaded(e) {
+  async function onFileUploaded(e) {
     const selectedFile = e.target.files[0]
     const r = new myExcelReader(selectedProgrammeIds, scheduleName)
     //empty rows are skipped!
     //this is async (oneload and onerror are defined inside the r instance)
     r.reader.readAsArrayBufferPromise(selectedFile)
+
+    const buffer = await fileReaderPromise(selectedFile)
+    const payload = makeSchedulePayload(
+      buffer,
+      selectedProgrammeIds,
+      scheduleName,
+      true
+    )
+
+    setActionStatus({ action: "upload", isActionSuccess: null })
+
+    const isUploaded = await httpService.postNewSchedule(payload)
+    if (isUploaded) {
+      setActionStatus({ action: "upload", isActionSuccess: true })
+
+      console.log("Upload Successful!")
+      return
+    }
+
+    setActionStatus({ action: "upload", isActionSuccess: false })
+    console.log("Upload failed!")
   }
 
   return (
@@ -125,6 +156,12 @@ export function ScheduleUploader() {
             isFetchSuccess={isFetchSuccess}
             onProgrammeChecked={onProgrammeChecked}
           />
+          {actionStatus.action ? (
+            <ActionNotificationDiv
+              actionStatus={actionStatus}
+              onCloseActionStatusDiv={onCloseActionStatusDiv}
+            />
+          ) : null}
           {scheduleName.length > 5 ? (
             <FileUploader onFileUploaded={onFileUploaded} />
           ) : (

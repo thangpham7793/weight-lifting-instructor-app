@@ -3,6 +3,7 @@ import {
   ScheduleCards,
   AddScheduleFloatingButton,
   ReuploadScheduleDialog,
+  PublishScheduleDialog,
 } from "./register"
 import { Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
@@ -15,7 +16,6 @@ const FetchScheduleNotificationDiv = FetchNotificationDivFactory("schedules")
 const useStyles = makeStyles((theme) => ({
   container: {
     justifyContent: "space-around",
-    marginTop: "var(--mg-sm)",
   },
   item: {
     margin: "var(--mg-sm)",
@@ -28,7 +28,8 @@ export function SchedulePanel() {
   const [isFetchSucccess, setIsFetchSuccess] = useState(null)
 
   const [clickedScheduleId, setClickedScheduleId] = useState(null)
-  const [open, setOpen] = useState(false)
+  const [openReuploadDialog, setOpenReuploadDialog] = useState(false)
+  const [openPublishDialog, setOpenPublishDialog] = useState(false)
 
   const [actionStatus, setActionStatus] = useState({
     action: null,
@@ -42,12 +43,15 @@ export function SchedulePanel() {
   function onEditScheduleClicked(e) {
     //need to use currentTarget since it's a material icon component so need to get the reference to the underlying base DOM element
     console.log(e.currentTarget.getAttribute("scheduleId"))
-    setOpen(true)
+    setOpenReuploadDialog(true)
     setClickedScheduleId(getClickedScheduleId(e))
   }
 
+  //shared by all dialogs since only one can be opened at the same time
   function onDialogCloseClicked(e) {
-    setOpen(false)
+    setOpenReuploadDialog(false)
+    setOpenPublishDialog(false)
+    // window.reload()
   }
 
   async function onDeleteScheduleClicked(e) {
@@ -87,6 +91,8 @@ export function SchedulePanel() {
     console.log(
       `Publish schedule id ${e.currentTarget.getAttribute("scheduleId")}`
     )
+    setOpenPublishDialog(true)
+    setClickedScheduleId(getClickedScheduleId(e))
   }
 
   function onCloseActionStatusDiv(e) {
@@ -132,7 +138,12 @@ export function SchedulePanel() {
         )}
       </Grid>
       <ReuploadScheduleDialog
-        open={open}
+        open={openReuploadDialog}
+        onDialogCloseClicked={onDialogCloseClicked}
+        scheduleId={clickedScheduleId}
+      />
+      <PublishScheduleDialog
+        open={openPublishDialog}
         onDialogCloseClicked={onDialogCloseClicked}
         scheduleId={clickedScheduleId}
       />

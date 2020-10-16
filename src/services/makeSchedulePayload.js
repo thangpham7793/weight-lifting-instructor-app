@@ -61,8 +61,8 @@ export function makeSchedulePayload(
   data,
   programmeIds,
   scheduleName,
-  scheduleId = null,
-  isNew = true
+  isNew = true,
+  scheduleId = null
 ) {
   const { rows, weekCount } = parseRows(data)
   const timetable = makeTimeTable(rows)
