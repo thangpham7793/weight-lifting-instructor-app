@@ -22,20 +22,18 @@ export function ScheduleReuploader({ scheduleId }) {
   async function onFileUploaded(e) {
     const selectedFile = e.target.files[0]
     const buffer = await fileReaderPromise(selectedFile)
-    const payload = makeSchedulePayload(buffer, [], "", false, scheduleId)
+    const data = makeSchedulePayload(buffer, [], "", false, scheduleId)
 
     setActionStatus({ action: "re-post", isActionSuccess: null })
 
-    const isUpdated = await httpService.repostSchedule(payload)
-    if (isUpdated) {
+    const { ok, payload } = await httpService.repostSchedule(data)
+    if (ok) {
       setActionStatus({ action: "re-post", isActionSuccess: true })
-
       console.log("Update Successful!")
       return
     }
 
     setActionStatus({ action: "re-post", isActionSuccess: false })
-
     console.log("Update failed!")
   }
 

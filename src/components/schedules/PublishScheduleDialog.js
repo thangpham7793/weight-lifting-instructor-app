@@ -45,11 +45,13 @@ export function PublishScheduleDialog({
 
   useEffect(() => {
     async function getAvailableProgrammesToPublish(scheduleId) {
-      const res = await httpService.getAvailableProgrammesToPublish(scheduleId)
-      if (res) {
-        console.log(res)
+      const { ok, payload } = await httpService.getAvailableProgrammesToPublish(
+        scheduleId
+      )
+      if (ok) {
+        console.log(payload)
         setIsFetchSuccess(true)
-        setProgrammes(res)
+        setProgrammes(payload)
         return
       }
       setIsFetchSuccess(false)

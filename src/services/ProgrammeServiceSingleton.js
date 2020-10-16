@@ -26,10 +26,7 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
 
   //programmes
   async fetchProgrammes() {
-    const res = await ProgrammeServiceSingleton._fetchJsonFactory(
-      "programmes"
-    )()
-    return res ? res : false
+    return await ProgrammeServiceSingleton._fetchJsonFactory("programmes")()
   }
 
   async createProgramme() {}
@@ -37,53 +34,46 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
 
   //schedules
   async fetchSchedules() {
-    const res = await ProgrammeServiceSingleton._fetchJsonFactory(
+    return await ProgrammeServiceSingleton._fetchJsonFactory(
       "programmes/schedules"
     )()
-    return res ? res : false
   }
 
   async deleteSchedule(id) {
-    const res = await ProgrammeServiceSingleton._fetchDeleteFactory(
+    return await ProgrammeServiceSingleton._fetchDeleteFactory(
       "programmes/schedules"
     )(id)
-    return res ? res : false
   }
 
   async postNewSchedule(payload) {
-    const res = await ProgrammeServiceSingleton._fetchPostFactory(
+    return await ProgrammeServiceSingleton._fetchPostFactory(
       "programmes/schedules"
     )(payload)
-    return res ? res : false
   }
 
   async repostSchedule(payload) {
-    const res = await ProgrammeServiceSingleton._fetchPutFactory(
+    return await ProgrammeServiceSingleton._fetchPutFactory(
       "programmes/schedules"
     )(payload)
-    return res ? res : false
   }
 
   async fetchScheduleInfo() {
-    const res = await ProgrammeServiceSingleton._fetchJsonFactory(
+    return await ProgrammeServiceSingleton._fetchJsonFactory(
       "programmes/schedules/info"
     )()
-    return res ? res : false
   }
   //schedule and programme
   async getAvailableProgrammesToPublish(scheduleId) {
-    const res = await ProgrammeServiceSingleton._fetchJsonFactory(
+    return await ProgrammeServiceSingleton._fetchJsonFactory(
       `programmes/schedules/${scheduleId}/publish/available.programmes`
     )()
-    return res ? res : false
   }
 
   //TODO: can use req.params as well no need to serialize
   async publishSchedule(scheduleId, programmeIds) {
-    const res = await ProgrammeServiceSingleton._fetchPostFactory(
+    return await ProgrammeServiceSingleton._fetchPostFactory(
       `programmes/schedules/${scheduleId}/publish`
     )({ programmeIds })
-    return res ? res : false
   }
 
   async unpublishSchedule(scheduelId, programmeId) {}

@@ -8,8 +8,7 @@ export class HttpServiceSingleton {
     //hide away implementation details from the client components
     this.fetchProgrammes = HttpServiceSingleton._fetchJsonFactory("programmes")
     this.postInstructorCredentials = HttpServiceSingleton._fetchPostFactory(
-      "instructor/login",
-      true
+      "instructor/login"
     )
     //make sure that only an instance is created
     this._instance = this
@@ -30,7 +29,7 @@ export class HttpServiceSingleton {
   }
 
   //factory functions that makes use of closure
-  static _fetchPostFactory(resourceUrl, returnJson = false) {
+  static _fetchPostFactory(resourceUrl) {
     const url = HttpServiceSingleton._makeUrl(resourceUrl)
     return catchAsync(async function (payload) {
       const options = {
@@ -38,18 +37,15 @@ export class HttpServiceSingleton {
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${UserAuth.getToken()}`,
         },
         body: JSON.stringify(payload),
       }
 
-      if (returnJson) {
-        const response = await fetch(url, options)
-        const json = await response.json()
-        return [response.ok, json]
+      if (UserAuth.isAuthenticated()) {
+        options.headers.Authorization = `Bearer ${UserAuth.getToken()}`
       }
-      const { ok } = await fetch(url, options)
-      return ok
+
+      return HttpServiceSingleton._makePayload(await fetch(url, options))
     })
   }
 
@@ -65,8 +61,7 @@ export class HttpServiceSingleton {
         },
         body: JSON.stringify(payload),
       }
-      const { ok } = await fetch(url, options)
-      return ok
+      return HttpServiceSingleton._makePayload(await fetch(url, options))
     })
   }
 
@@ -78,7 +73,7 @@ export class HttpServiceSingleton {
           Authorization: `Bearer ${UserAuth.getToken()}`,
         },
       })
-      return response.json()
+      return HttpServiceSingleton._makePayload(response)
     })
   }
 
@@ -92,9 +87,23 @@ export class HttpServiceSingleton {
           Authorization: `Bearer ${UserAuth.getToken()}`,
         },
       }
-      const { ok } = await fetch(`${url}/${resourceId}`, options)
-      return ok
+      const response = await fetch(`${url}/${resourceId}`, options)
+      return HttpServiceSingleton._makePayload(response)
     })
+  }
+
+  static async _makePayload(response) {
+    const ok = response.ok
+    //FIXME: may need to switch based on status code!
+    switch (response.status) {
+      case 204:
+        return { ok: true, payload: null }
+      default:
+        break
+    }
+    const payload = await response.json()
+    console.log({ ok, payload })
+    return { ok, payload: payload ? payload : null }
   }
 
   //FIXME: how to implement retry?

@@ -7,8 +7,13 @@ export function AllLearnersPage() {
 
   useEffect(() => {
     async function fetchLearners() {
-      const payload = await httpService.fetchLearners()
-      setLearners(payload)
+      const { ok, payload } = await httpService.fetchLearners()
+      if (ok) {
+        setLearners(payload)
+        return
+      } else {
+        console.log(`Failed to fetch learners`)
+      }
     }
     fetchLearners()
   }, [])

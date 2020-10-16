@@ -97,10 +97,10 @@ export function SchedulePanel() {
 
   useEffect(() => {
     async function fetchSchedules() {
-      const res = await httpService.fetchScheduleInfo()
-      if (res) {
+      const { ok, payload } = await httpService.fetchScheduleInfo()
+      if (ok) {
         setIsFetchSuccess(true)
-        setSchedules(res)
+        setSchedules(payload)
       }
       setIsFetchSuccess(false)
     }

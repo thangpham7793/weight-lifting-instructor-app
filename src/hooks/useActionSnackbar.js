@@ -11,8 +11,8 @@ export function useActionSnackbar(action, serviceMethod) {
   //FIXME: actually need to standardise all serviceMethods returned types!
   async function callDecoratedService(payload = []) {
     setActionStatus({ action: action, isActionSuccess: null })
-    const isSuccessful = await serviceMethod(...payload)
-    if (isSuccessful) {
+    const res = await serviceMethod(...payload)
+    if (res.ok) {
       setActionStatus({ action: action, isActionSuccess: true })
       console.log(`${capitalise(action)} Successful!`)
     } else {
@@ -20,7 +20,7 @@ export function useActionSnackbar(action, serviceMethod) {
       console.log(`${capitalise(action)} failed!`)
     }
     //for custom side-effect outside of the component
-    return isSuccessful
+    return res
   }
 
   function onCloseActionStatusDiv() {

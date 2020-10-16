@@ -18,12 +18,9 @@ export class InstructorServiceSingleton extends HttpServiceSingleton {
   }
 
   async instructorLogin(credentials) {
-    const res = await InstructorServiceSingleton._fetchPostFactory(
-      "instructor/login",
-      true
+    return await InstructorServiceSingleton._fetchPostFactory(
+      "instructor/login"
     )(credentials)
-
-    return res ? res : [false, {}]
   }
 }
 

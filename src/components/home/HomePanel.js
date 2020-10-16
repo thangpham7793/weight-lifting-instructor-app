@@ -29,10 +29,11 @@ export function HomePanel() {
     setErrorMessage(null)
     console.log("Logging in with ", credentials)
 
-    const [oke, payload] = await httpService.instructorLogin(credentials)
+    const { ok, payload } = await httpService.instructorLogin(credentials)
 
-    if (!oke) {
+    if (!ok) {
       setErrorMessage(payload.message)
+      return
     } else {
       UserAuth.saveToken(payload.token)
       setIsLoggedIn(true)

@@ -74,9 +74,9 @@ export function ScheduleUploader({ onActionSuccess }) {
   useEffect(() => {
     //this should stay here unless all components have a status tracking feature, which makes sense
     async function fetchProgrammes() {
-      const payload = await httpService.fetchProgrammes()
+      const { ok, payload } = await httpService.fetchProgrammes()
 
-      if (payload) {
+      if (ok) {
         console.log(payload)
         //effect here
         setProgrammes(payload.programmes)

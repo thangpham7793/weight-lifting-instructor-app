@@ -130,15 +130,15 @@ export function LearnersPanel() {
 
       setActionStatus({ action: "update", isActionSuccess: null })
 
-      const isUpdated = await httpService.updateLearner(selectedLearner)
+      const { ok, payload } = await httpService.updateLearner(selectedLearner)
 
-      if (isUpdated) {
+      if (ok) {
         //...when should you update?
         updateUILearnerList(updatedLearnerIndex)
 
         setActionStatus({ action: "update", isActionSuccess: true })
       } else {
-        console.log("Updating failed!", isUpdated)
+        console.log("Updating failed!", ok)
         //refill the form with the old information
         setSelectedLearner(learners[updatedLearnerIndex])
         setSearchPhrase(selectedLearner.firstName)
@@ -164,9 +164,11 @@ export function LearnersPanel() {
 
     setActionStatus({ action: "delete", isActionSuccess: null })
 
-    const isDeleted = await httpService.deleteLearner(selectedLearner.learnerId)
+    const { ok, payload } = await httpService.deleteLearner(
+      selectedLearner.learnerId
+    )
 
-    if (isDeleted) {
+    if (ok) {
       setActionStatus({ action: "delete", isActionSuccess: true })
       const updatedLearnerIndex = getUpdatedLearnerIndex(
         learners,
@@ -182,9 +184,9 @@ export function LearnersPanel() {
 
   useEffect(() => {
     async function fetchLearners() {
-      const payload = await httpService.fetchLearners()
+      const { ok, payload } = await httpService.fetchLearners()
 
-      if (payload) {
+      if (ok) {
         //the two operations are not synchronous!
         setLearners(payload)
         setDisplayedLearners(payload)
