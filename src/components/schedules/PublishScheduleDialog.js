@@ -113,6 +113,7 @@ export function PublishScheduleDialog({
           }}
         >
           <button
+            disabled={selectedProgrammeIds.length > 0 ? false : true}
             onClick={onPublishScheduleClicked}
             style={{ width: "max-content" }}
           >

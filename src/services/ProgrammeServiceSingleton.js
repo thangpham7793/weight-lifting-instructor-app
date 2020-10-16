@@ -82,7 +82,7 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
   async publishSchedule(scheduleId, programmeIds) {
     const res = await ProgrammeServiceSingleton._fetchPostFactory(
       `programmes/schedules/${scheduleId}/publish`
-    )(programmeIds)
+    )({ programmeIds })
     return res ? res : false
   }
 
