@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 export function SchedulePanel() {
   const [schedules, setSchedules] = useState(null)
   const [isFetchSucccess, setIsFetchSuccess] = useState(null)
-
   const [clickedScheduleId, setClickedScheduleId] = useState(null)
   const [openReuploadDialog, setOpenReuploadDialog] = useState(false)
   const [openPublishDialog, setOpenPublishDialog] = useState(false)

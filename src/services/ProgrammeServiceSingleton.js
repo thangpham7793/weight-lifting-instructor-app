@@ -14,6 +14,9 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
     this.unpublishSchedule = safeSpinnerWrapper(this.unpublishSchedule)
     this.repostSchedule = safeSpinnerWrapper(this.repostSchedule)
     this.postNewSchedule = safeSpinnerWrapper(this.postNewSchedule)
+    this.getAvailableProgrammesToPublish = safeSpinnerWrapper(
+      this.getAvailableProgrammesToPublish
+    )
 
     this._instance = this
     if (ProgrammeServiceSingleton._instance) {
@@ -68,6 +71,14 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
     return res ? res : false
   }
   //schedule and programme
+  async getAvailableProgrammesToPublish(scheduleId) {
+    const res = await ProgrammeServiceSingleton._fetchJsonFactory(
+      `programmes/schedules/${scheduleId}/publish/available.programmes`
+    )()
+    return res ? res : false
+  }
+
+  //TODO: can use req.params as well no need to serialize
   async publishSchedule(scheduelId, programmeId) {}
 
   async unpublishSchedule(scheduelId, programmeId) {}

@@ -41,7 +41,6 @@ export function ActionNotificationDiv({
       className="action-status-div"
       style={{
         visibility: visibility,
-        width: "50%",
         color,
         fontWeight: "600",
         background,

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react"
 import { myExcelReader } from "./myExcelReader"
-import { fileReaderPromise, makeSchedulePayload } from "../../services/register"
+import {
+  fileReaderPromise,
+  makeSchedulePayload,
+  findIndexAndDelete,
+} from "../../services/register"
 import { FileUploader, ProgrammeOptions } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
-import {
-  TextField,
-  Typography,
-  makeStyles,
-  Grid,
-  FormHelperText,
-} from "@material-ui/core"
+import { TextField, makeStyles, Grid, FormHelperText } from "@material-ui/core"
 import httpService from "../../services/ProgrammeServiceSingleton"
 import { ActionNotificationDiv } from "../ActionNotificationDiv"
 
@@ -53,13 +51,6 @@ export function ScheduleUploader() {
 
   function onCloseActionStatusDiv(e) {
     setActionStatus({ action: null, isActionSuccess: null })
-  }
-
-  function findIndexAndDelete(val, arr) {
-    arr.splice(
-      arr.findIndex((v) => v === val),
-      1
-    )
   }
 
   function onProgrammeChecked(e) {
@@ -129,7 +120,7 @@ export function ScheduleUploader() {
 
   return (
     <Grid
-      container
+      item
       xs={8}
       md={12}
       lg={12}
@@ -155,6 +146,7 @@ export function ScheduleUploader() {
             programmes={programmes}
             isFetchSuccess={isFetchSuccess}
             onProgrammeChecked={onProgrammeChecked}
+            label="Publish to Team: "
           />
           {actionStatus.action ? (
             <ActionNotificationDiv
@@ -166,9 +158,7 @@ export function ScheduleUploader() {
             <FileUploader onFileUploaded={onFileUploaded} />
           ) : (
             <FormHelperText>
-              <Typography component="div">
-                Please Enter The Cycle's Name Before Uploading
-              </Typography>
+              Please Enter The Cycle's Name Before Uploading
             </FormHelperText>
           )}
         </>
