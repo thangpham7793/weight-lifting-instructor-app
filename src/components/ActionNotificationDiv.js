@@ -1,4 +1,8 @@
 import React from "react"
+import {
+  CheckCircleOutlineRounded,
+  ErrorOutlineRounded,
+} from "@material-ui/icons"
 
 export function ActionNotificationDiv({
   actionStatus,
@@ -7,6 +11,8 @@ export function ActionNotificationDiv({
   const { action, isActionSuccess } = actionStatus
 
   let message = "Action Status"
+  let color = ""
+  let background = ""
   let visibility = ""
 
   if (!action) {
@@ -15,12 +21,17 @@ export function ActionNotificationDiv({
     switch (isActionSuccess) {
       default:
         message = `Applying ${action.toUpperCase()} ...`
+        background = "#fff"
         break
       case true:
         message = `${action.toUpperCase()} Successful!`
+        color = "green"
+        background = "rgb(107, 236, 172)"
         break
       case false:
-        message = `Failed to load ${action.toUpperCase()}`
+        message = `${action.toUpperCase()} Failed!`
+        color = "red"
+        background = "rgb(241, 162, 142)"
         break
     }
   }
@@ -28,9 +39,20 @@ export function ActionNotificationDiv({
   return (
     <div
       className="action-status-div"
-      style={{ visibility: visibility, width: "35%" }}
+      style={{
+        visibility: visibility,
+        width: "50%",
+        color,
+        fontWeight: "600",
+        background,
+      }}
     >
-      <div>{message}</div>
+      {isActionSuccess ? (
+        <CheckCircleOutlineRounded />
+      ) : (
+        <ErrorOutlineRounded />
+      )}
+      <span>{message}</span>
       <span className="action-status-close" onClick={onCloseActionStatusDiv}>
         X
       </span>

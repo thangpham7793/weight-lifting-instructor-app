@@ -770,20 +770,35 @@ a.logo {
   margin-top: calc(var(--mg-sm));
   width: 20vw;
   text-align: center;
-  background: var(--bg-cl);
+  background: rgb(241, 162, 142);
   margin-right: auto;
   margin-left: auto;
-  font-size: calc(var(--fs-sm) / 1.2);
-  padding: 0.5rem 0;
+  font-size: calc(var(--fs-sm) / 1.25);
+  padding: 0.5rem;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-status-div > svg {
+  font-size: 2rem;
+  margin-right: 0.25rem;
 }
 
 .action-status-close {
   position: absolute;
   right: 0%;
   top: 0%;
-  padding: 0 0.5rem;
-  color: var(--txt-cl);
+  padding: 0 0.25rem;
+  color: #111;
+  font-size: 0.75rem;
+}
+
+.action-status-close:hover,
+.action-status-close:focus {
+  background: #111;
+  color: #fff;
 }
 
 /* file uploader */
