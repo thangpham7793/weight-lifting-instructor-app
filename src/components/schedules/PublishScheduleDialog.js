@@ -15,7 +15,7 @@ export function PublishScheduleDialog({
   const [selectedProgrammeIds, setSelectedProgrammeIds] = useState([])
   const [programmes, setProgrammes] = useState(null)
 
-  const [setIsFetchSuccess, FetchNotificationDiv] = useFetchSnackbar(
+  const { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
     "available programmes"
   )
 

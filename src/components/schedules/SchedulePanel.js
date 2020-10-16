@@ -26,12 +26,10 @@ export function SchedulePanel() {
   const [openReuploadDialog, setOpenReuploadDialog] = useState(false)
   const [openPublishDialog, setOpenPublishDialog] = useState(false)
 
-  //FIXME: remove this broke the programme
-  const [
-    isFetchSuccess,
-    setIsFetchSuccess,
-    FetchNotificationDiv,
-  ] = useFetchSnackbar("schedules")
+  // ATTENTION: use object as API rather than array since we can pick and choose what to destructure. Downside is the prop name is fixed.
+  const { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
+    "schedules"
+  )
 
   const { callDecoratedDeleteService, DeleteSnackbar } = useActionSnackbar(
     "delete",

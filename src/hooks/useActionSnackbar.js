@@ -8,7 +8,7 @@ export function useActionSnackbar(action, serviceMethod) {
     isActionSuccess: true,
   })
 
-  //FIXME: actually need to standardise all serviceMethods returned types!
+  // basically like a middleware that intercepts the response
   async function callDecoratedService(payload = []) {
     setActionStatus({ action: action, isActionSuccess: null })
     const res = await serviceMethod(...payload)

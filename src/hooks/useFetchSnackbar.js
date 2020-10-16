@@ -31,5 +31,5 @@ export function useFetchSnackbar(resourceName = null, postFetchAction = null) {
     return <Component isFetchSuccess={isFetchSuccess} {...props} />
   }
 
-  return [isFetchSuccess, setIsFetchSuccess, FetchNotificationDiv]
+  return { isFetchSuccess, setIsFetchSuccess, FetchNotificationDiv }
 }
