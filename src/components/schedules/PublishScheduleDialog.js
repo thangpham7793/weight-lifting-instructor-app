@@ -9,6 +9,7 @@ export function PublishScheduleDialog({
   scheduleId,
   onDialogCloseClicked,
   open,
+  onActionSuccess,
 }) {
   // const [isFetchSuccess, setIsFetchSuccess] = useState(null)
   const [selectedProgrammeIds, setSelectedProgrammeIds] = useState([])

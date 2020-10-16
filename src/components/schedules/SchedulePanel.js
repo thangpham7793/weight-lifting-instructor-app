@@ -64,19 +64,23 @@ export function SchedulePanel() {
     ) {
       const isSuccessful = await callDecoratedDeleteService([clickedId])
       if (isSuccessful) {
-        updateSchedulesList("delete", schedules, clickedId)
+        updateSchedulesList("delete", clickedId)
       }
     }
   }
 
-  function updateSchedulesList(action, schedules, clickedSchedudleId) {
+  //similar to Redux (maybe use React.Context?)
+  function updateSchedulesList(action, payload) {
     let newSchedules
     switch (action) {
       case "delete":
         newSchedules = schedules.filter(({ scheduleId }) => {
-          return scheduleId !== clickedSchedudleId
+          return scheduleId !== payload
         })
         break
+      case "upload":
+        newSchedules = [...schedules, payload]
+        return
       default:
         return schedules
     }
@@ -108,7 +112,7 @@ export function SchedulePanel() {
   return (
     <>
       <DeleteSnackbar />
-      <AddScheduleFloatingButton />
+      <AddScheduleFloatingButton onActionSuccess={updateSchedulesList} />
       <Grid container className={classes.container}>
         {!schedules ? (
           <FetchNotificationDiv style={{ margin: "0 auto" }} />
@@ -127,11 +131,13 @@ export function SchedulePanel() {
         open={openReuploadDialog}
         onDialogCloseClicked={onDialogCloseClicked}
         scheduleId={clickedScheduleId}
+        onActionSuccess={updateSchedulesList}
       />
       <PublishScheduleDialog
         open={openPublishDialog}
         onDialogCloseClicked={onDialogCloseClicked}
         scheduleId={clickedScheduleId}
+        onActionSuccess={updateSchedulesList}
       />
     </>
   )

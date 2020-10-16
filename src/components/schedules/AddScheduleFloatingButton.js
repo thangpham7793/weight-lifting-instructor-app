@@ -3,7 +3,7 @@ import { Fab } from "@material-ui/core"
 import { CloudUpload } from "@material-ui/icons"
 import { AddScheduleFormDialog } from "./register"
 
-export function AddScheduleFloatingButton() {
+export function AddScheduleFloatingButton({ onActionSuccess }) {
   const [open, setOpen] = React.useState(false)
 
   function onDialogOpenClicked() {
@@ -29,7 +29,11 @@ export function AddScheduleFloatingButton() {
           New Cycle
         </span>
       </Fab>
-      <AddScheduleFormDialog open={open} handleClose={handleClose} />
+      <AddScheduleFormDialog
+        open={open}
+        handleClose={handleClose}
+        onActionSuccess={onActionSuccess}
+      />
     </>
   )
 }

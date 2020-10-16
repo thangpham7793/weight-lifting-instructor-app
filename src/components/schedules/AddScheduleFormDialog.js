@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core"
 
-export function AddScheduleFormDialog({ handleClose, open }) {
+export function AddScheduleFormDialog({ handleClose, open, onActionSuccess }) {
   return (
     <Dialog
       open={open}
@@ -25,7 +25,7 @@ export function AddScheduleFormDialog({ handleClose, open }) {
         </Typography>
       </DialogTitle>
       <DialogContent className="add-new-schedule-dialog">
-        <ScheduleUploader />
+        <ScheduleUploader onActionSuccess={onActionSuccess} />
       </DialogContent>
       <DialogActions
         style={{

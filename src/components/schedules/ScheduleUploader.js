@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 //a good candidate for Redux, since needed by many components, lets just do useState for now
-export function ScheduleUploader() {
+export function ScheduleUploader({ onActionSuccess }) {
   const classes = useStyles()
   const [programmes, setProgrammes] = useState(null)
   const [selectedProgrammeIds, setSelectedProgrammeIds] = useState([])
@@ -109,7 +109,11 @@ export function ScheduleUploader() {
     const isUploaded = await httpService.postNewSchedule(payload)
     if (isUploaded) {
       setActionStatus({ action: "upload", isActionSuccess: true })
-
+      //update schedule list
+      //actually need the newly created id as well!
+      //so need to pull out the programmes that have been addded + id returned from the server
+      //TODO: need to change the hook api to always return status and payload
+      onActionSuccess("upload", payload)
       console.log("Upload Successful!")
       return
     }
