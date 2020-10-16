@@ -1,38 +1,30 @@
 import React, { useState, useEffect } from "react"
 import { ProgrammeOptions } from "./register"
 import { Dialog, DialogActions, DialogTitle, Grid } from "@material-ui/core"
-import { FetchNotificationDivFactory } from "../factoryComponent"
 import { findIndexAndDelete } from "../../services/register"
+import { useActionSnackbar, useFetchSnackbar } from "../../hooks/register"
 import httpService from "../../services/ProgrammeServiceSingleton"
-import { ActionNotificationDiv } from "../ActionNotificationDiv"
-import { useActionSnackbar } from "../../hooks/register"
-
-const FetchAvailableProgrammesNotificationDiv = FetchNotificationDivFactory(
-  "available programmes"
-)
 
 export function PublishScheduleDialog({
   scheduleId,
   onDialogCloseClicked,
   open,
 }) {
-  const [isFetchSuccess, setIsFetchSuccess] = useState(null)
+  // const [isFetchSuccess, setIsFetchSuccess] = useState(null)
   const [selectedProgrammeIds, setSelectedProgrammeIds] = useState([])
-  //need to get all programmes that do not have a particular schedule
   const [programmes, setProgrammes] = useState(null)
-  // const [actionStatus, setActionStatus] = useState({
-  //   action: null,
-  //   isActionSuccess: true,
-  // })
 
-  const [actionStatus, setActionStatus, decoratedService] = useActionSnackbar(
-    "publish",
-    httpService.publishSchedule
-  )
+  const [
+    isFetchSuccess,
+    setIsFetchSuccess,
+    FetchNotificationDiv,
+  ] = useFetchSnackbar("available programmes")
 
-  function onCloseActionStatusDiv(e) {
-    setActionStatus({ action: null, isActionSuccess: null })
-  }
+  const {
+    publishActionStatus,
+    callDecoratedPublishService,
+    PublishSnackbar,
+  } = useActionSnackbar("publish", httpService.publishSchedule)
 
   function onProgrammeChecked(e) {
     const checkedProgrammeId = parseInt(e.target.value)
@@ -49,7 +41,7 @@ export function PublishScheduleDialog({
   }
 
   function onPublishScheduleClicked() {
-    decoratedService([scheduleId, selectedProgrammeIds])
+    callDecoratedPublishService([scheduleId, selectedProgrammeIds])
   }
 
   useEffect(() => {
@@ -67,7 +59,7 @@ export function PublishScheduleDialog({
     if (open) {
       getAvailableProgrammesToPublish(scheduleId)
     }
-  }, [scheduleId, open])
+  }, [scheduleId, open, setIsFetchSuccess])
 
   return (
     <Grid item xs={10} sm={8} md={6}>
@@ -93,16 +85,9 @@ export function PublishScheduleDialog({
               label="Publish to Team"
             />
           ) : (
-            <FetchAvailableProgrammesNotificationDiv
-              isFetchSuccess={isFetchSuccess}
-            />
+            <FetchNotificationDiv isFetchSuccess={isFetchSuccess} />
           )}
-          {actionStatus.action ? (
-            <ActionNotificationDiv
-              actionStatus={actionStatus}
-              onCloseActionStatusDiv={onCloseActionStatusDiv}
-            />
-          ) : null}
+          {publishActionStatus.action ? <PublishSnackbar /> : null}
         </div>
         <DialogActions
           style={{

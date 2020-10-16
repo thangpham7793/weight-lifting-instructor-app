@@ -7,12 +7,10 @@ import {
 } from "./register"
 import { Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import { FetchNotificationDivFactory } from "../factoryComponent"
 import { ActionNotificationDiv } from "../ActionNotificationDiv"
-
+import { useActionSnackbar, useFetchSnackbar } from "../../hooks/register"
 import httpService from "../../services/ProgrammeServiceSingleton"
 
-const FetchScheduleNotificationDiv = FetchNotificationDivFactory("schedules")
 const useStyles = makeStyles((theme) => ({
   container: {
     justifyContent: "space-around",
@@ -25,15 +23,20 @@ const useStyles = makeStyles((theme) => ({
 
 export function SchedulePanel() {
   const [schedules, setSchedules] = useState(null)
-  const [isFetchSucccess, setIsFetchSuccess] = useState(null)
   const [clickedScheduleId, setClickedScheduleId] = useState(null)
   const [openReuploadDialog, setOpenReuploadDialog] = useState(false)
   const [openPublishDialog, setOpenPublishDialog] = useState(false)
 
-  const [actionStatus, setActionStatus] = useState({
-    action: null,
-    isActionSuccess: true,
-  })
+  const [
+    isFetchSuccess,
+    setIsFetchSuccess,
+    FetchNotificationDiv,
+  ] = useFetchSnackbar("schedules")
+
+  const { callDecoratedDeleteService, DeleteSnackbar } = useActionSnackbar(
+    "delete",
+    httpService.deleteSchedule
+  )
 
   function getClickedScheduleId(e) {
     return parseInt(e.currentTarget.getAttribute("scheduleId"))
@@ -54,36 +57,30 @@ export function SchedulePanel() {
   }
 
   async function onDeleteScheduleClicked(e) {
-    const clickedSchedudleId = getClickedScheduleId(e)
-
+    const clickedId = getClickedScheduleId(e)
+    setClickedScheduleId(getClickedScheduleId(e))
     if (
-      window.confirm(
-        `Are you sure you want to delete schedule id ${clickedSchedudleId}`
-      )
+      window.confirm(`Are you sure you want to delete schedule id ${clickedId}`)
     ) {
-      setActionStatus({ action: "delete", isActionSuccess: null })
-      console.log(`Delete schedule id ${clickedSchedudleId}`)
-      const isDeleted = await httpService.deleteSchedule(clickedSchedudleId)
-      if (isDeleted) {
-        setActionStatus({ action: "delete", isActionSuccess: true })
-        setSchedules(
-          updateSchedulesList("delete", schedules, clickedSchedudleId)
-        )
-      } else {
-        setActionStatus({ action: "delete", isActionSuccess: false })
+      const isSuccessful = await callDecoratedDeleteService([clickedId])
+      if (isSuccessful) {
+        updateSchedulesList("delete", schedules, clickedId)
       }
     }
   }
 
   function updateSchedulesList(action, schedules, clickedSchedudleId) {
+    let newSchedules
     switch (action) {
       case "delete":
-        return schedules.filter(
-          ({ scheduleId }) => scheduleId !== clickedSchedudleId
-        )
+        newSchedules = schedules.filter(({ scheduleId }) => {
+          return scheduleId !== clickedSchedudleId
+        })
+        break
       default:
         return schedules
     }
+    setSchedules(newSchedules)
   }
 
   function onPublishScheduleClicked(e) {
@@ -92,10 +89,6 @@ export function SchedulePanel() {
     )
     setOpenPublishDialog(true)
     setClickedScheduleId(getClickedScheduleId(e))
-  }
-
-  function onCloseActionStatusDiv(e) {
-    setActionStatus({ action: null, isActionSuccess: null })
   }
 
   useEffect(() => {
@@ -108,21 +101,18 @@ export function SchedulePanel() {
       setIsFetchSuccess(false)
     }
     fetchSchedules()
-  }, [])
+  }, [setIsFetchSuccess])
 
   const classes = useStyles()
 
   return (
     <>
-      <ActionNotificationDiv
-        actionStatus={actionStatus}
-        onCloseActionStatusDiv={onCloseActionStatusDiv}
-      />
+      <DeleteSnackbar />
       <AddScheduleFloatingButton />
       <Grid container className={classes.container}>
         {!schedules ? (
-          <FetchScheduleNotificationDiv
-            isFetchSuccess={isFetchSucccess}
+          <FetchNotificationDiv
+            isFetchSuccess={isFetchSuccess}
             style={{ margin: "0 auto" }}
           />
         ) : (
