@@ -63,11 +63,14 @@ export function PublishScheduleDialog({
       }
       setIsFetchSuccess(false)
     }
-    getAvailableProgrammesToPublish(scheduleId)
-  }, [scheduleId])
+
+    if (open) {
+      getAvailableProgrammesToPublish(scheduleId)
+    }
+  }, [scheduleId, open])
 
   return (
-    <Grid item xs={10} sm={8} md={4}>
+    <Grid item xs={10} sm={8} md={6}>
       <Dialog
         open={open}
         onClose={onDialogCloseClicked}

@@ -818,9 +818,21 @@ label.Mui-focused {
   height: 60vw;
   background: #02c39a;
   padding: var(--pd-sm);
+  
 }
 
 .publish-schedule-dialog {
   margin: 0 auto;
-  width: 30vw;
+  width: 100%;
+}
+
+.MuiDialog-paper {
+  overflow: hidden;
+  width: 100%;
+}
+
+@media only screen and (min-width: 350px) {
+  .MuiDialog-paper {
+    width: 40vw;
+  }
 }

@@ -79,7 +79,12 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
   }
 
   //TODO: can use req.params as well no need to serialize
-  async publishSchedule(scheduelId, programmeId) {}
+  async publishSchedule(scheduleId, programmeIds) {
+    const res = await ProgrammeServiceSingleton._fetchPostFactory(
+      `programmes/schedules/${scheduleId}/publish`
+    )(programmeIds)
+    return res ? res : false
+  }
 
   async unpublishSchedule(scheduelId, programmeId) {}
 
