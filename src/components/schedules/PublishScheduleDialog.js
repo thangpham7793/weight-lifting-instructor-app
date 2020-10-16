@@ -14,11 +14,9 @@ export function PublishScheduleDialog({
   const [selectedProgrammeIds, setSelectedProgrammeIds] = useState([])
   const [programmes, setProgrammes] = useState(null)
 
-  const [
-    isFetchSuccess,
-    setIsFetchSuccess,
-    FetchNotificationDiv,
-  ] = useFetchSnackbar("available programmes")
+  const [setIsFetchSuccess, FetchNotificationDiv] = useFetchSnackbar(
+    "available programmes"
+  )
 
   const {
     publishActionStatus,
@@ -85,7 +83,7 @@ export function PublishScheduleDialog({
               label="Publish to Team"
             />
           ) : (
-            <FetchNotificationDiv isFetchSuccess={isFetchSuccess} />
+            <FetchNotificationDiv />
           )}
           {publishActionStatus.action ? <PublishSnackbar /> : null}
         </div>

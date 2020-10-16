@@ -3,7 +3,7 @@ import React, { useState } from "react"
 export function useFetchSnackbar(resourceName = null, postFetchAction = null) {
   const [isFetchSuccess, setIsFetchSuccess] = useState(null)
 
-  function FetchNotificationDiv({ isFetchSuccess, ...props }) {
+  function Component({ isFetchSuccess, ...props }) {
     //NOTE: a factory function for customizing a notification div based on the kind of payload
     switch (isFetchSuccess) {
       default:
@@ -25,6 +25,10 @@ export function useFetchSnackbar(resourceName = null, postFetchAction = null) {
           </div>
         )
     }
+  }
+
+  function FetchNotificationDiv({ ...props }) {
+    return <Component isFetchSuccess={isFetchSuccess} {...props} />
   }
 
   return [isFetchSuccess, setIsFetchSuccess, FetchNotificationDiv]

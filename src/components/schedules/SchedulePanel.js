@@ -7,7 +7,6 @@ import {
 } from "./register"
 import { Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import { ActionNotificationDiv } from "../ActionNotificationDiv"
 import { useActionSnackbar, useFetchSnackbar } from "../../hooks/register"
 import httpService from "../../services/ProgrammeServiceSingleton"
 
@@ -27,6 +26,7 @@ export function SchedulePanel() {
   const [openReuploadDialog, setOpenReuploadDialog] = useState(false)
   const [openPublishDialog, setOpenPublishDialog] = useState(false)
 
+  //FIXME: remove this broke the programme
   const [
     isFetchSuccess,
     setIsFetchSuccess,
@@ -111,10 +111,7 @@ export function SchedulePanel() {
       <AddScheduleFloatingButton />
       <Grid container className={classes.container}>
         {!schedules ? (
-          <FetchNotificationDiv
-            isFetchSuccess={isFetchSuccess}
-            style={{ margin: "0 auto" }}
-          />
+          <FetchNotificationDiv style={{ margin: "0 auto" }} />
         ) : (
           <>
             <ScheduleCards
