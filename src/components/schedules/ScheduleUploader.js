@@ -5,7 +5,7 @@ import {
   makeSchedulePayload,
   findIndexAndDelete,
 } from "../../services/register"
-import { FileUploader, ProgrammeOptions } from "./register"
+import { FileUploader, ProgrammeOptions, ScheduleNameInput } from "./register"
 import { FetchNotificationDivFactory } from "../factoryComponent"
 import { TextField, makeStyles, Grid, FormHelperText } from "@material-ui/core"
 import httpService from "../../services/ProgrammeServiceSingleton"
@@ -151,15 +151,10 @@ export function ScheduleUploader({ onActionSuccess }) {
     >
       {programmes ? (
         <>
-          <TextField
+          <ScheduleNameInput
             label="Cycle Name"
-            className={classes.scheduleName}
-            onChange={onScheduleNameChanged}
-            value={scheduleName}
-            InputProps={{ className: classes.input }}
-            InputLabelProps={{
-              className: classes.formLabelRoot,
-            }}
+            onScheduleNameChanged={onScheduleNameChanged}
+            scheduleName={scheduleName}
           />
           <ProgrammeOptions
             programmes={programmes}

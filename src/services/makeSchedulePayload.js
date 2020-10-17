@@ -76,9 +76,10 @@ export function makeSchedulePayload(
     }
   } else {
     payload = {
-      timetable,
-      weekCount,
       scheduleId,
+      scheduleName,
+      weekCount,
+      timetable,
     }
   }
   return payload

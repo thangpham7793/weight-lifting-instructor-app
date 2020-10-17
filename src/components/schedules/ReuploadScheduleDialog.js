@@ -9,9 +9,9 @@ import {
 } from "@material-ui/core"
 
 export function ReuploadScheduleDialog({
-  scheduleId,
   onDialogCloseClicked,
   open,
+  ...props
 }) {
   return (
     <Dialog
@@ -29,7 +29,7 @@ export function ReuploadScheduleDialog({
         </Typography>
       </DialogTitle>
       <DialogContent className="add-new-schedule-dialog">
-        <ScheduleReuploader scheduleId={scheduleId} />
+        <ScheduleReuploader {...props} />
       </DialogContent>
       <DialogActions
         style={{

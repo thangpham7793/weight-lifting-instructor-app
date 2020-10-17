@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 export function SchedulePanel() {
   const [schedules, setSchedules] = useState(null)
   const [clickedScheduleId, setClickedScheduleId] = useState(null)
+  const [clickedSchedule, setClickedSchedule] = useState(null)
   const [openReuploadDialog, setOpenReuploadDialog] = useState(false)
   const [openPublishDialog, setOpenPublishDialog] = useState(false)
 
@@ -45,6 +46,9 @@ export function SchedulePanel() {
     console.log(e.currentTarget.getAttribute("scheduleId"))
     setOpenReuploadDialog(true)
     setClickedScheduleId(getClickedScheduleId(e))
+    setClickedSchedule(
+      schedules.find((s) => s.scheduleId === getClickedScheduleId(e))
+    )
   }
 
   //shared by all dialogs since only one can be opened at the same time
@@ -81,31 +85,47 @@ export function SchedulePanel() {
         break
       //should be just this as the child component has all the information needed to return a new schedule info object
       case "publish":
-        const { scheduleId, programmes } = payload
-
-        console.log(scheduleId, programmes)
-
-        newSchedules = [...schedules]
-        //this returns a reference to the item in the array
-        const updatedSchedule = newSchedules.find(
-          (s) => s.scheduleId === scheduleId
-        )
-        //does this modify the wrapper array?
-        updatedSchedule.programmes = [
-          ...updatedSchedule.programmes,
-          ...programmes,
-        ]
+        newSchedules = addPublishedProgramme(payload, schedules)
         break
       case "unpublish":
         newSchedules = removeProgrammeFromSchedule(payload, schedules)
         break
       case "repost":
-        newSchedules = [...schedules, payload]
-        return
+        //reposting may update the name as well as the weekCount (UI-wise)
+        newSchedules = updateScheduleDetails(payload, schedules)
+        console.log(payload)
+        break
       default:
         return schedules
     }
     setSchedules(newSchedules)
+  }
+
+  function updateScheduleDetails(
+    { scheduleId, scheduleName, weekCount },
+    prevSchedules
+  ) {
+    const newSchedules = [...prevSchedules]
+    const targetIndex = newSchedules.findIndex(
+      (s) => s.scheduleId === scheduleId
+    )
+    newSchedules[targetIndex] = {
+      ...newSchedules[targetIndex],
+      scheduleName,
+      weekCount,
+    }
+    return newSchedules
+  }
+
+  function addPublishedProgramme({ scheduleId, programmes }, prevSchedules) {
+    const newSchedules = [...prevSchedules]
+    //this returns a reference to the item in the array
+    const updatedSchedule = newSchedules.find(
+      (s) => s.scheduleId === scheduleId
+    )
+
+    updatedSchedule.programmes = [...updatedSchedule.programmes, ...programmes]
+    return newSchedules
   }
 
   function removeProgrammeFromSchedule(
@@ -167,6 +187,7 @@ export function SchedulePanel() {
         open={openReuploadDialog}
         onDialogCloseClicked={onDialogCloseClicked}
         scheduleId={clickedScheduleId}
+        clickedSchedule={clickedSchedule}
         onActionSuccess={updateSchedulesList}
       />
       <PublishScheduleDialog
