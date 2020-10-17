@@ -11,6 +11,14 @@ import {
 } from "./components/schedules/register"
 import { HomePanel } from "./components/home/register"
 
+import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles"
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: ["Montserrat", "sans-serif"],
+  },
+})
+
 function App() {
   const links = [
     {
@@ -40,13 +48,15 @@ function App() {
   ]
 
   return (
-    <Router>
-      <Navbar links={links} />
-      <div className="App main">
-        <PageRoutes links={links} />
-      </div>
-      <Footer />
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Navbar links={links} />
+        <div className="App main">
+          <PageRoutes links={links} />
+        </div>
+        <Footer />
+      </Router>
+    </ThemeProvider>
   )
 }
 
