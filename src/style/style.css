@@ -836,3 +836,33 @@ label.Mui-focused {
     width: 40vw;
   }
 }
+
+.team-list h6 {
+  margin-bottom: 1rem;
+}
+
+.team-list li:nth-child(n) {
+  margin-bottom: 1rem;
+}
+
+.team-list-item {
+  border: 1px solid black;
+  display: block;
+}
+
+.team-list-item-text {
+  margin: 0 auto;
+  padding-top: 0.2rem;
+}
+
+.unpublish-schedule-icon {
+/*   font-size: 10px; */
+  padding: 0.125rem;
+}
+
+.unpublish-schedule-icon:hover,
+.unpublish-schedule-icon:focus {
+  background: var(--secondary-cl);
+  color: #333;
+  border-radius: 50%;
+}

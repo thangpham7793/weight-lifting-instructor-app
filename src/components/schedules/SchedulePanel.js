@@ -113,6 +113,14 @@ export function SchedulePanel() {
     setClickedScheduleId(getClickedScheduleId(e))
   }
 
+  function onUnpublishScheduleClicked(e) {
+    console.log(
+      `Remove schedule ${e.currentTarget.getAttribute(
+        "scheduleId"
+      )} from programmeId ${e.currentTarget.getAttribute("programmeId")}`
+    )
+  }
+
   useEffect(() => {
     async function fetchSchedules() {
       const { ok, payload } = await httpService.fetchScheduleInfo()
@@ -141,6 +149,7 @@ export function SchedulePanel() {
               onEditScheduleClicked={onEditScheduleClicked}
               onPublishScheduleClicked={onPublishScheduleClicked}
               onDeleteScheduleClicked={onDeleteScheduleClicked}
+              onUnpublishScheduleClicked={onUnpublishScheduleClicked}
             />
           </>
         )}

@@ -11,10 +11,11 @@ import {
   ListItem,
   Typography,
   ListItemText,
+  ListItemIcon,
 } from "@material-ui/core"
 
 import { red } from "@material-ui/core/colors"
-import { Delete, Edit, Share } from "@material-ui/icons"
+import { Delete, Edit, Share, Close } from "@material-ui/icons"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,6 +61,7 @@ export function ScheduleCard({
   scheduleName,
   scheduleId,
   programmes,
+  onUnpublishScheduleClicked,
 }) {
   const classes = useStyles()
 
@@ -73,13 +75,26 @@ export function ScheduleCard({
       />
       <CardContent>
         {programmes.length === 0 ? null : (
-          <List style={{ textAlign: "left" }}>
+          <List style={{ textAlign: "left" }} className="team-list">
             <Typography variant="subtitle1">
               Currently Used by Team(s):{" "}
             </Typography>
             {programmes.map((p) => (
-              <ListItem key={p.programmeId}>
-                <ListItemText primary={p.programmeName} />
+              <ListItem
+                button
+                key={p.programmeId}
+                onClick={onUnpublishScheduleClicked}
+                programmeid={p.programmeId}
+                scheduleid={scheduleId}
+                className="team-list-item"
+              >
+                <ListItemText
+                  className="team-list-item-text"
+                  primary={p.programmeName}
+                />
+                <ListItemIcon>
+                  <Close className="unpublish-schedule-icon" />
+                </ListItemIcon>
               </ListItem>
             ))}
           </List>
