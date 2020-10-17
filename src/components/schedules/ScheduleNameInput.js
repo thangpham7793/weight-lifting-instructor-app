@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export function ScheduleNameInput({
-  onScheduleNameChanged,
+  onClickedScheduleNameChanged,
   scheduleName,
   label,
 }) {
@@ -34,7 +34,7 @@ export function ScheduleNameInput({
     <TextField
       label={label}
       className={classes.scheduleName}
-      onChange={onScheduleNameChanged}
+      onChange={onClickedScheduleNameChanged}
       value={scheduleName}
       InputProps={{ className: classes.input }}
       InputLabelProps={{

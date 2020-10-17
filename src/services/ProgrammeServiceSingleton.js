@@ -5,14 +5,14 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
   constructor() {
     super()
     console.log("I was created!")
-    //this can probably be accomplished with a loop
+    //TODO: have all components use hooks to move wrapper there
     this.fetchProgrammes = safeSpinnerWrapper(this.fetchProgrammes)
     this.fetchSchedules = safeSpinnerWrapper(this.fetchSchedules)
     this.fetchScheduleInfo = safeSpinnerWrapper(this.fetchScheduleInfo)
     this.deleteSchedule = safeSpinnerWrapper(this.deleteSchedule)
     this.publishSchedule = safeSpinnerWrapper(this.publishSchedule)
     this.unpublishSchedule = safeSpinnerWrapper(this.unpublishSchedule)
-    this.repostSchedule = safeSpinnerWrapper(this.repostSchedule)
+    // this.repostSchedule = safeSpinnerWrapper(this.repostSchedule)
     this.postNewSchedule = safeSpinnerWrapper(this.postNewSchedule)
     this.getAvailableProgrammesToPublish = safeSpinnerWrapper(
       this.getAvailableProgrammesToPublish

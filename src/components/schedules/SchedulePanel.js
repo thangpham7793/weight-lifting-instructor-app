@@ -9,6 +9,7 @@ import { Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { useActionSnackbar, useFetchSnackbar } from "../../hooks/register"
 import httpService from "../../services/ProgrammeServiceSingleton"
+import { fileReaderPromise } from "../../services/register"
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -60,9 +61,29 @@ export function SchedulePanel() {
   const [schedules, setSchedules] = useState(null)
   const [clickedScheduleId, setClickedScheduleId] = useState(null)
   const [clickedSchedule, setClickedSchedule] = useState(null)
+  const [currentScheduleName, setCurrentScheduleName] = useState(null)
   const [openReuploadDialog, setOpenReuploadDialog] = useState(false)
   const [openPublishDialog, setOpenPublishDialog] = useState(false)
+  const [canUpdate, setCanUpdate] = useState(false)
 
+  function checkCanUpdate(newName, currentName, isFileUploaded) {
+    const isValidLength = newName.length > 0
+    const isNewName = newName !== currentName
+    const caseOne = !isFileUploaded && isValidLength && isNewName
+    const caseTwo = isFileUploaded && isValidLength
+
+    return caseOne || caseTwo
+  }
+
+  const [buffer, setBuffer] = useState(null)
+  const [isFileUploaded, setIsFileUploaded] = useState(false)
+  async function onFileUploaded(e) {
+    const selectedFile = e.target.files[0]
+    const buffer = await fileReaderPromise(selectedFile)
+    setBuffer(buffer)
+    setIsFileUploaded(true)
+    setCanUpdate(true)
+  }
   // ATTENTION: use object as API rather than array since we can pick and choose what to destructure. Downside is the prop name is fixed.
   const { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
     "schedules"
@@ -82,9 +103,13 @@ export function SchedulePanel() {
     console.log(e.currentTarget.getAttribute("scheduleId"))
     setOpenReuploadDialog(true)
     setClickedScheduleId(getClickedScheduleId(e))
-    setClickedSchedule(
-      schedules.find((s) => s.scheduleId === getClickedScheduleId(e))
+
+    const clicked = schedules.find(
+      (s) => s.scheduleId === getClickedScheduleId(e)
     )
+
+    setClickedSchedule(clicked)
+    setCurrentScheduleName(clicked.scheduleName)
   }
 
   //shared by all dialogs since only one can be opened at the same time
@@ -145,6 +170,14 @@ export function SchedulePanel() {
     setClickedScheduleId(getClickedScheduleId(e))
   }
 
+  function onClickedScheduleNameChanged(e) {
+    const scheduleName = e.target.value
+    setClickedSchedule({ ...clickedSchedule, scheduleName })
+    setCanUpdate(
+      checkCanUpdate(scheduleName, currentScheduleName, isFileUploaded)
+    )
+  }
+
   useEffect(() => {
     async function fetchSchedules() {
       const { ok, payload } = await httpService.fetchScheduleInfo()
@@ -182,9 +215,13 @@ export function SchedulePanel() {
       <ReuploadScheduleDialog
         open={openReuploadDialog}
         onDialogCloseClicked={onDialogCloseClicked}
-        scheduleId={clickedScheduleId}
         clickedSchedule={clickedSchedule}
         onActionSuccess={updateSchedulesList}
+        onClickedScheduleNameChanged={onClickedScheduleNameChanged}
+        canUpdate={canUpdate}
+        buffer={buffer}
+        isFileUploaded={isFileUploaded}
+        onFileUploaded={onFileUploaded}
       />
       <PublishScheduleDialog
         open={openPublishDialog}

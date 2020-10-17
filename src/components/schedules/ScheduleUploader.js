@@ -6,52 +6,27 @@ import {
   findIndexAndDelete,
 } from "../../services/register"
 import { FileUploader, ProgrammeOptions, ScheduleNameInput } from "./register"
-import { FetchNotificationDivFactory } from "../factoryComponent"
-import { TextField, makeStyles, Grid, FormHelperText } from "@material-ui/core"
+import { Grid, FormHelperText } from "@material-ui/core"
+import { useFetchSnackbar, useActionSnackbar } from "../../hooks/register"
 import httpService from "../../services/ProgrammeServiceSingleton"
-import { ActionNotificationDiv } from "../ActionNotificationDiv"
-
-const useStyles = makeStyles((theme) => ({
-  scheduleName: {
-    marginBottom: "var(--mg-sm)",
-  },
-  input: {
-    fontFamily: "var(--ff)",
-    color: "#001e18",
-    marginBottom: "var(--mg-sm)",
-  },
-  formLabelRoot: {
-    fontFamily: "var(--ff)",
-    color: "var(--txt-cl)",
-  },
-  formLabelFocused: {
-    fontFamily: "var(--ff)",
-    color: "var(--txt-cl)",
-    "'& label.Mui-focused'": {
-      fontFamily: "var(--ff)",
-      color: "var(--txt-cl)",
-    },
-  },
-}))
 
 //a good candidate for Redux, since needed by many components, lets just do useState for now
 export function ScheduleUploader({ onActionSuccess }) {
-  const classes = useStyles()
   const [programmes, setProgrammes] = useState(null)
   const [selectedProgrammeIds, setSelectedProgrammeIds] = useState([])
   const [scheduleName, setScheduleName] = useState("")
-  const [isFetchSuccess, setIsFetchSuccess] = useState(null)
-  const FetchProgrammesNotificationDiv = FetchNotificationDivFactory(
-    "programmes"
-  )
-  const [actionStatus, setActionStatus] = useState({
-    action: null,
-    isActionSuccess: true,
-  })
+  // const [isFetchSuccess, setIsFetchSuccess] = useState(null)
 
-  function onCloseActionStatusDiv(e) {
-    setActionStatus({ action: null, isActionSuccess: null })
-  }
+  const {
+    isFetchSuccess,
+    setIsFetchSuccess,
+    FetchNotificationDiv,
+  } = useFetchSnackbar("programmes")
+
+  const { callDecoratedUploadService, UploadSnackbar } = useActionSnackbar(
+    "upload",
+    httpService.postNewSchedule
+  )
 
   function onProgrammeChecked(e) {
     const checkedProgrammeId = parseInt(e.target.value)
@@ -67,7 +42,7 @@ export function ScheduleUploader({ onActionSuccess }) {
     }
   }
 
-  function onScheduleNameChanged(e) {
+  function onClickedScheduleNameChanged(e) {
     setScheduleName(e.target.value)
   }
 
@@ -87,7 +62,7 @@ export function ScheduleUploader({ onActionSuccess }) {
       }
     }
     fetchProgrammes()
-  }, [])
+  }, [setIsFetchSuccess])
 
   async function onFileUploaded(e) {
     const selectedFile = e.target.files[0]
@@ -104,28 +79,16 @@ export function ScheduleUploader({ onActionSuccess }) {
       true
     )
 
-    setActionStatus({ action: "upload", isActionSuccess: null })
-
-    const { ok, payload } = await httpService.postNewSchedule(newSchedule)
+    const { ok, payload } = await callDecoratedUploadService([newSchedule])
     if (ok) {
-      setActionStatus({ action: "upload", isActionSuccess: true })
-      //update schedule list
-      //actually need the newly created id as well!
-      //so need to pull out the programmes that have been addded + id returned from the server
-      //TODO: need to change the hook api to always return status and payload
-
       const newScheduleInfoObject = makeNewScheduleInfoObject(
         payload,
         programmes
       )
-
       onActionSuccess("upload", newScheduleInfoObject)
       console.log("Upload Successful!")
       return
     }
-
-    setActionStatus({ action: "upload", isActionSuccess: false })
-    console.log("Upload failed!")
   }
 
   function makeNewScheduleInfoObject(payload, programmes) {
@@ -153,7 +116,7 @@ export function ScheduleUploader({ onActionSuccess }) {
         <>
           <ScheduleNameInput
             label="Cycle Name"
-            onScheduleNameChanged={onScheduleNameChanged}
+            onClickedScheduleNameChanged={onClickedScheduleNameChanged}
             scheduleName={scheduleName}
           />
           <ProgrammeOptions
@@ -162,12 +125,7 @@ export function ScheduleUploader({ onActionSuccess }) {
             onProgrammeChecked={onProgrammeChecked}
             label="Publish to Team: "
           />
-          {actionStatus.action ? (
-            <ActionNotificationDiv
-              actionStatus={actionStatus}
-              onCloseActionStatusDiv={onCloseActionStatusDiv}
-            />
-          ) : null}
+          <UploadSnackbar />
           {scheduleName.length > 5 ? (
             <FileUploader onFileUploaded={onFileUploaded} />
           ) : (
@@ -177,7 +135,8 @@ export function ScheduleUploader({ onActionSuccess }) {
           )}
         </>
       ) : (
-        <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
+        // <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
+        <FetchNotificationDiv />
       )}
     </Grid>
   )

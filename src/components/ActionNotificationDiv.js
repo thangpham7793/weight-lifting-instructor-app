@@ -21,7 +21,7 @@ export function ActionNotificationDiv({
     switch (isActionSuccess) {
       default:
         message = `Applying ${action.toUpperCase()} ...`
-        background = "#fff"
+        background = "yellow"
         break
       case true:
         message = `${action.toUpperCase()} Successful!`
@@ -35,6 +35,14 @@ export function ActionNotificationDiv({
         break
     }
   }
+
+  setTimeout(
+    () =>
+      (document.getElementsByClassName(
+        "action-status-div"
+      )[0].style.visibility = "hidden"),
+    3000
+  )
 
   return (
     <div
