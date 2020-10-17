@@ -20,6 +20,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+function updateScheduleDetails(
+  { scheduleId, scheduleName, weekCount },
+  prevSchedules
+) {
+  const newSchedules = [...prevSchedules]
+  const targetIndex = newSchedules.findIndex((s) => s.scheduleId === scheduleId)
+  newSchedules[targetIndex] = {
+    ...newSchedules[targetIndex],
+    scheduleName,
+    weekCount,
+  }
+  return newSchedules
+}
+
+function addPublishedProgramme({ scheduleId, programmes }, prevSchedules) {
+  const newSchedules = [...prevSchedules]
+  //this returns a reference to the item in the array
+  const updatedSchedule = newSchedules.find((s) => s.scheduleId === scheduleId)
+
+  updatedSchedule.programmes = [...updatedSchedule.programmes, ...programmes]
+  return newSchedules
+}
+
+function removeProgrammeFromSchedule(
+  { scheduleId, targetProgramme },
+  prevSchedules
+) {
+  let newSchedules = [...prevSchedules]
+  let targetSchedule = newSchedules.find((s) => s.scheduleId === scheduleId)
+  let removedProgrammeIndex = targetSchedule.programmes.findIndex(
+    (p) => p.programmeId === targetProgramme.programmeId
+  )
+  targetSchedule.programmes.splice(removedProgrammeIndex, 1)
+  return newSchedules
+}
+
 export function SchedulePanel() {
   const [schedules, setSchedules] = useState(null)
   const [clickedScheduleId, setClickedScheduleId] = useState(null)
@@ -99,46 +135,6 @@ export function SchedulePanel() {
         return schedules
     }
     setSchedules(newSchedules)
-  }
-
-  function updateScheduleDetails(
-    { scheduleId, scheduleName, weekCount },
-    prevSchedules
-  ) {
-    const newSchedules = [...prevSchedules]
-    const targetIndex = newSchedules.findIndex(
-      (s) => s.scheduleId === scheduleId
-    )
-    newSchedules[targetIndex] = {
-      ...newSchedules[targetIndex],
-      scheduleName,
-      weekCount,
-    }
-    return newSchedules
-  }
-
-  function addPublishedProgramme({ scheduleId, programmes }, prevSchedules) {
-    const newSchedules = [...prevSchedules]
-    //this returns a reference to the item in the array
-    const updatedSchedule = newSchedules.find(
-      (s) => s.scheduleId === scheduleId
-    )
-
-    updatedSchedule.programmes = [...updatedSchedule.programmes, ...programmes]
-    return newSchedules
-  }
-
-  function removeProgrammeFromSchedule(
-    { scheduleId, targetProgramme },
-    prevSchedules
-  ) {
-    let newSchedules = [...prevSchedules]
-    let targetSchedule = newSchedules.find((s) => s.scheduleId === scheduleId)
-    let removedProgrammeIndex = targetSchedule.programmes.findIndex(
-      (p) => p.programmeId === targetProgramme.programmeId
-    )
-    targetSchedule.programmes.splice(removedProgrammeIndex, 1)
-    return newSchedules
   }
 
   function onPublishScheduleClicked(e) {

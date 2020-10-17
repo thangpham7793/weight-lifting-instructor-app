@@ -3,8 +3,6 @@ import { capitalise } from "../utils"
 import { ActionNotificationDiv } from "../components/ActionNotificationDiv"
 
 export function useActionSnackbar(action, serviceMethod) {
-  console.log("ActionSnackbar created!")
-
   const [actionStatus, setActionStatus] = useState({
     action: null,
     isActionSuccess: true,

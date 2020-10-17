@@ -39,10 +39,10 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
     )()
   }
 
-  async deleteSchedule(id) {
+  async deleteSchedule(scheduleId) {
     return await ProgrammeServiceSingleton._fetchDeleteFactory(
-      "programmes/schedules"
-    )(id)
+      `programmes/schedules/${scheduleId}`
+    )()
   }
 
   async postNewSchedule(payload) {
@@ -76,9 +76,11 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
     )({ programmeIds })
   }
 
-  async unpublishSchedule(scheduelId, programmeId) {
-    console.log(scheduelId, programmeId)
-    return { ok: true }
+  async unpublishSchedule(scheduleId, programmeId) {
+    console.log(programmeId)
+    return await ProgrammeServiceSingleton._fetchDeleteFactory(
+      `programmes/schedules/${scheduleId}/unpublish/${programmeId}`
+    )()
   }
 
   static getProgrammeInstance() {

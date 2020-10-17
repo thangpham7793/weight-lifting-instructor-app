@@ -28,9 +28,9 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
 
   async deleteLearner(learnerId) {
     console.log("Delete learner id ", learnerId)
-    return await LearnerServiceSingleton._fetchDeleteFactory("learners")(
-      learnerId
-    )
+    return await LearnerServiceSingleton._fetchDeleteFactory(
+      `learners/${learnerId}`
+    )()
   }
 
   async createLearner(learner) {

@@ -50,7 +50,7 @@ export class HttpServiceSingleton {
 
   static _fetchPutFactory(resourceUrl) {
     const url = HttpServiceSingleton._makeUrl(resourceUrl)
-    return catchAsync(async function (payload) {
+    return catchAsync(async function (payload = null) {
       const options = {
         method: "PUT",
         mode: "cors",
@@ -58,8 +58,12 @@ export class HttpServiceSingleton {
           "Content-Type": "application/json",
           Authorization: `Bearer ${UserAuth.getToken()}`,
         },
-        body: JSON.stringify(payload),
       }
+
+      if (payload) {
+        options.body = JSON.stringify(payload)
+      }
+
       return HttpServiceSingleton._makePayload(await fetch(url, options))
     })
   }
@@ -76,9 +80,9 @@ export class HttpServiceSingleton {
     })
   }
 
-  static _fetchDeleteFactory(resourceUrl) {
-    const url = HttpServiceSingleton._makeUrl(resourceUrl)
-    return catchAsync(async function (resourceId) {
+  static _fetchDeleteFactory(resourceUrlAndId) {
+    const url = HttpServiceSingleton._makeUrl(resourceUrlAndId)
+    return catchAsync(async function () {
       const options = {
         method: "DELETE",
         mode: "cors",
@@ -86,8 +90,8 @@ export class HttpServiceSingleton {
           Authorization: `Bearer ${UserAuth.getToken()}`,
         },
       }
-      const response = await fetch(`${url}/${resourceId}`, options)
-      return HttpServiceSingleton._makePayload(response)
+
+      return HttpServiceSingleton._makePayload(await fetch(url, options))
     })
   }
 
