@@ -9,9 +9,9 @@ export function useActionSnackbar(action, serviceMethod) {
   })
 
   // basically like a middleware that intercepts the response
-  async function callDecoratedService(payload = []) {
+  async function callDecoratedService() {
     setActionStatus({ action: action, isActionSuccess: null })
-    const res = await serviceMethod(...payload)
+    const res = await serviceMethod(...arguments)
     if (res.ok) {
       setActionStatus({ action: action, isActionSuccess: true })
       console.log(`${capitalise(action)} Successful!`)

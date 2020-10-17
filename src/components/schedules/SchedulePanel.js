@@ -85,7 +85,7 @@ export function SchedulePanel() {
     setCanUpdate(true)
   }
   // ATTENTION: use object as API rather than array since we can pick and choose what to destructure. Downside is the prop name is fixed.
-  const { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
+  let { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
     "schedules"
   )
 
@@ -125,7 +125,7 @@ export function SchedulePanel() {
     if (
       window.confirm(`Are you sure you want to delete schedule id ${clickedId}`)
     ) {
-      const isSuccessful = await callDecoratedDeleteService([clickedId])
+      const isSuccessful = await callDecoratedDeleteService(clickedId)
       if (isSuccessful) {
         updateSchedulesList("delete", clickedId)
       }

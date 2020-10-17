@@ -90,10 +90,10 @@ export function ScheduleCard({
       )
     ) {
       //FIXME:
-      const { ok } = await callDecoratedUnpublishService([
+      const { ok } = await callDecoratedUnpublishService(
         scheduleId,
-        targetProgramme.programmeId,
-      ])
+        targetProgramme.programmeId
+      )
       if (ok) {
         onActionSuccess("unpublish", { scheduleId, targetProgramme })
       }

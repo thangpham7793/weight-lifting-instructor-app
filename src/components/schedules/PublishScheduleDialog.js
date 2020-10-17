@@ -39,10 +39,10 @@ export function PublishScheduleDialog({
   }
 
   async function onPublishScheduleClicked() {
-    const { ok } = await callDecoratedPublishService([
+    const { ok } = await callDecoratedPublishService(
       scheduleId,
-      selectedProgrammeIds,
-    ])
+      selectedProgrammeIds
+    )
 
     if (ok) {
       onActionSuccess("publish", {

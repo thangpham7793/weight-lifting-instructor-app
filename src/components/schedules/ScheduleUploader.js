@@ -79,7 +79,7 @@ export function ScheduleUploader({ onActionSuccess }) {
       true
     )
 
-    const { ok, payload } = await callDecoratedUploadService([newSchedule])
+    const { ok, payload } = await callDecoratedUploadService(newSchedule)
     if (ok) {
       const newScheduleInfoObject = makeNewScheduleInfoObject(
         payload,
