@@ -29,7 +29,7 @@ function CustomScheduleCard(props) {
   return GridItemWrapper(ScheduleCard, useStyles)(props)
 }
 
-export function ScheduleCards({ schedules, ...props }) {
+export function ScheduleCards({ schedules, unPublishSnackbar, ...props }) {
   const cards = schedules
     ? schedules.map(({ scheduleId, scheduleName, weekCount, programmes }) => {
         return (

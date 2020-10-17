@@ -96,6 +96,9 @@ export function SchedulePanel() {
           ...programmes,
         ]
         break
+      case "unpublish":
+        newSchedules = removeProgrammeFromSchedule(payload, schedules)
+        break
       case "repost":
         newSchedules = [...schedules, payload]
         return
@@ -105,20 +108,25 @@ export function SchedulePanel() {
     setSchedules(newSchedules)
   }
 
+  function removeProgrammeFromSchedule(
+    { scheduleId, targetProgramme },
+    prevSchedules
+  ) {
+    let newSchedules = [...prevSchedules]
+    let targetSchedule = newSchedules.find((s) => s.scheduleId === scheduleId)
+    let removedProgrammeIndex = targetSchedule.programmes.findIndex(
+      (p) => p.programmeId === targetProgramme.programmeId
+    )
+    targetSchedule.programmes.splice(removedProgrammeIndex, 1)
+    return newSchedules
+  }
+
   function onPublishScheduleClicked(e) {
     console.log(
       `Publish schedule id ${e.currentTarget.getAttribute("scheduleId")}`
     )
     setOpenPublishDialog(true)
     setClickedScheduleId(getClickedScheduleId(e))
-  }
-
-  function onUnpublishScheduleClicked(e) {
-    console.log(
-      `Remove schedule ${e.currentTarget.getAttribute(
-        "scheduleId"
-      )} from programmeId ${e.currentTarget.getAttribute("programmeId")}`
-    )
   }
 
   useEffect(() => {
@@ -149,7 +157,8 @@ export function SchedulePanel() {
               onEditScheduleClicked={onEditScheduleClicked}
               onPublishScheduleClicked={onPublishScheduleClicked}
               onDeleteScheduleClicked={onDeleteScheduleClicked}
-              onUnpublishScheduleClicked={onUnpublishScheduleClicked}
+              onActionSuccess={updateSchedulesList}
+              // something about closer/scope that prevents passing references here
             />
           </>
         )}

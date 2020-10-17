@@ -1,5 +1,7 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
+import { useActionSnackbar } from "../../hooks/register"
+import httpService from "../../services/ProgrammeServiceSingleton"
 
 import {
   Card,
@@ -52,6 +54,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+function getAttribute(e, attr, isNumber = false) {
+  return isNumber
+    ? parseInt(e.currentTarget.getAttribute(attr))
+    : e.currentTarget.getAttribute(attr)
+}
+
 export function ScheduleCard({
   onEditScheduleClicked,
   onPublishScheduleClicked,
@@ -61,9 +69,36 @@ export function ScheduleCard({
   scheduleName,
   scheduleId,
   programmes,
-  onUnpublishScheduleClicked,
+  onActionSuccess,
 }) {
   const classes = useStyles()
+
+  //think of a way to lazy load the hooks!
+  const {
+    callDecoratedUnpublishService,
+    UnpublishSnackbar,
+  } = useActionSnackbar("unpublish", httpService.unpublishSchedule)
+
+  async function onUnpublishScheduleClicked(e) {
+    const targetProgramme = programmes.find(
+      ({ programmeId }) => programmeId === getAttribute(e, "programmeId", true)
+    )
+
+    if (
+      window.confirm(
+        `Are you sure you want to remove cycle ${scheduleName} from team ${targetProgramme.programmeName}`
+      )
+    ) {
+      //FIXME:
+      const { ok } = await callDecoratedUnpublishService([
+        scheduleId,
+        [targetProgramme.programmeId],
+      ])
+      if (ok) {
+        onActionSuccess("unpublish", { scheduleId, targetProgramme })
+      }
+    }
+  }
 
   return (
     <Card className={classes.root}>
@@ -86,6 +121,7 @@ export function ScheduleCard({
                 onClick={onUnpublishScheduleClicked}
                 programmeid={p.programmeId}
                 scheduleid={scheduleId}
+                programmename={p.programmeName}
                 className="team-list-item"
               >
                 <ListItemText
@@ -93,12 +129,13 @@ export function ScheduleCard({
                   primary={p.programmeName}
                 />
                 <ListItemIcon>
-                  <Close className="unpublish-schedule-icon" />
+                  <Close className="unpublish-schedule-icon" fontSize="small" />
                 </ListItemIcon>
               </ListItem>
             ))}
           </List>
         )}
+        <UnpublishSnackbar />
       </CardContent>
       <CardActions disableSpacing className={classes.actionBtnWrapper}>
         <IconButton

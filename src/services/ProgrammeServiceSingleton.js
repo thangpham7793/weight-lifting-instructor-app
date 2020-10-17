@@ -76,7 +76,10 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
     )({ programmeIds })
   }
 
-  async unpublishSchedule(scheduelId, programmeId) {}
+  async unpublishSchedule(scheduelId, programmeId) {
+    console.log(scheduelId, programmeId)
+    return { ok: true }
+  }
 
   static getProgrammeInstance() {
     return (
