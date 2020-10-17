@@ -25,7 +25,7 @@ export function FileUploader({ onFileUploaded }) {
           style={{
             color: "var(--bg-cl)",
             fontSize: "var(--fs-lg)",
-            margin: "0 calc(1.5 * var(--mg-lg))",
+            margin: "0 calc(1 * var(--mg-lg))",
           }}
         />
       </InputLabel>

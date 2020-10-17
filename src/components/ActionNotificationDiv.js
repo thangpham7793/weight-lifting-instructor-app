@@ -36,14 +36,6 @@ export function ActionNotificationDiv({
     }
   }
 
-  setTimeout(
-    () =>
-      (document.getElementsByClassName(
-        "action-status-div"
-      )[0].style.visibility = "hidden"),
-    3000
-  )
-
   return (
     <div
       className="action-status-div"
