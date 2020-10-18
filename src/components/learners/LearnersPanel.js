@@ -8,9 +8,9 @@ import httpService from "../../services/LearnerServiceSingleton"
 import { shallowEqual } from "../../utils"
 import { NavHelpers } from "../../services/register"
 
-NavHelpers.setCurrentPage()
-
 export function LearnersPanel() {
+  NavHelpers.setCurrentPage()
+
   const [learners, setLearners] = useState([])
   const [displayedLearners, setDisplayedLearners] = useState([])
   const [searchPhrase, setSearchPhrase] = useState("")

@@ -9,8 +9,23 @@ function NavLink({ to, label }) {
   )
 }
 
+function setPageTitle(isInstructorLoggedIn, isLearnerLoggedIn) {
+  if (isInstructorLoggedIn) {
+    return "Otago Weightlifting Instructor Space"
+  }
+  if (isLearnerLoggedIn) {
+    return "Otago Weightlifting Learner Space"
+  }
+  return "Otago Weightlifting"
+}
+
 //https://reactrouter.com/web/api/Redirect
-export const Navbar = ({ links, onLogOut }) => {
+export const Navbar = ({
+  links,
+  onLogOut,
+  isInstructorLoggedIn,
+  isLearnerLoggedIn,
+}) => {
   let navLinks = links
     ? links.map(({ to, label }) => {
         return to !== "/logout" ? (
@@ -29,7 +44,9 @@ export const Navbar = ({ links, onLogOut }) => {
       <section>
         <div className="navContent">
           <header>
-            <h1 className="main-title">Otago Weightlifting Instructor Space</h1>
+            <h1 className="main-title">
+              {setPageTitle(isInstructorLoggedIn, isLearnerLoggedIn)}
+            </h1>
           </header>
           <div className="navLinks">{navLinks}</div>
         </div>

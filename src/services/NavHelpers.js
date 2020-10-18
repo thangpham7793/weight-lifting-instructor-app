@@ -1,11 +1,17 @@
 export class NavHelpers {
   static setCurrentPage() {
-    const currentPage = window.location.href.split("/").splice(-1)
+    let currentPage = window.location.href.split("/").splice(-1)
+
+    currentPage = currentPage === "/instructor" ? "schedules" : currentPage
+
     sessionStorage.setItem("currentPage", `/instructor/${currentPage}`)
   }
 
   static getCurrentPage() {
-    return sessionStorage.getItem("currentPage")
+    let currentPage = sessionStorage.getItem("currentPage")
+    return currentPage === "/instructor/"
+      ? "/instructor/schedules"
+      : currentPage
   }
 
   static clearCurrentPage() {

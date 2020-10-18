@@ -26,15 +26,15 @@ const allLinks = {
     //   isProtected: false,
     // },
     {
-      to: "/instructor/learners",
-      label: "Learners Panel",
-      component: LearnersPanel,
-      isProtected: true,
-    },
-    {
       to: "/instructor/schedules",
       label: "Schedules",
       component: SchedulePanel,
+      isProtected: true,
+    },
+    {
+      to: "/instructor/learners",
+      label: "Learners Panel",
+      component: LearnersPanel,
       isProtected: true,
     },
     {
@@ -51,6 +51,9 @@ function App() {
   const [isInstructorLoggedIn, setIsInstructorLoggedIn] = useState(
     UserAuth.isAuthenticated()
   )
+
+  const [isLearnerLoggedIn, setIsLearnerLoggedIn] = useState(false)
+
   const [links, setLinks] = useState(
     UserAuth.isAuthenticated() ? allLinks.instructor : []
   )
@@ -66,6 +69,7 @@ function App() {
     NavHelpers.clearCurrentPage()
     setLinks([])
     setIsInstructorLoggedIn(false)
+    setIsLearnerLoggedIn(false)
   }
 
   return (
@@ -74,6 +78,7 @@ function App() {
         <Navbar
           links={links}
           isInstructorLoggedIn={isInstructorLoggedIn}
+          isLearnerLoggedIn={isLearnerLoggedIn}
           onLogOut={onLogOut}
         />
         <div className="App main">
