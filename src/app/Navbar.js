@@ -9,49 +9,40 @@ function NavLink({ to, label }) {
   )
 }
 
-function setPageTitle(isInstructorLoggedIn, isLearnerLoggedIn) {
-  if (isInstructorLoggedIn) {
-    return "Otago Weightlifting Instructor Space"
-  }
-  if (isLearnerLoggedIn) {
-    return "Otago Weightlifting Learner Space"
-  }
-  return "Otago Weightlifting"
-}
-
 //https://reactrouter.com/web/api/Redirect
-export const Navbar = ({
-  links,
-  onInstructorLogOut,
-  isInstructorLoggedIn,
-  isLearnerLoggedIn,
-}) => {
-  let navLinks = links
-    ? links.map(({ to, label }) => {
-        return to !== "/logout" ? (
-          <NavLink key={to} to={to} label={label} />
-        ) : (
-          //basically need to make a fake link here!
-          <span
-            class="nav-item"
-            key={to}
-            label={label}
-            onClick={onInstructorLogOut}
-          >
-            {label}
-          </span>
-        )
-      })
-    : null
+export const Navbar = ({ links, onLogOut, onAppChange, pageTitle }) => {
+  let navLinks
+
+  if (links.length === 1) {
+    navLinks = [
+      <span
+        className="nav-item"
+        key={links[0].to}
+        onClick={onAppChange}
+        to={links[0].to}
+      >
+        {links[0].label}
+      </span>,
+    ]
+  } else {
+    navLinks = links.map(({ to, label }) => {
+      return to !== "/logout" ? (
+        <NavLink key={to} to={to} label={label} />
+      ) : (
+        //basically need to make a fake link here!
+        <span className="nav-item" key={to} label={label} onClick={onLogOut}>
+          {label}
+        </span>
+      )
+    })
+  }
 
   return (
     <nav className="header index">
       <section>
         <div className="navContent">
           <header>
-            <h1 className="main-title">
-              {setPageTitle(isInstructorLoggedIn, isLearnerLoggedIn)}
-            </h1>
+            <h1 className="main-title">{pageTitle}</h1>
           </header>
           <div className="navLinks">{navLinks}</div>
         </div>

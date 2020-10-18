@@ -66,6 +66,7 @@ export function InstructorHomePanel({
         <>
           <Logo />
           <LoginForm
+            title="Instructor Login"
             onFormSubmitted={onFormSubmitted}
             fields={fields}
             errorMessage={errorMessage}

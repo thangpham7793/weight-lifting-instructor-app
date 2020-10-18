@@ -14,10 +14,10 @@ function ErrorMessageDiv({ errorMessage }) {
   )
 }
 
-export function LoginForm({ onFormSubmitted, fields, errorMessage }) {
+export function LoginForm({ title, onFormSubmitted, fields, errorMessage }) {
   return (
     <>
-      <h1 className="login-form-title">Login</h1>
+      <h1 className="login-form-title">{title}</h1>
       <form className="login-form" onSubmit={onFormSubmitted}>
         {fields}
         {<ErrorMessageDiv errorMessage={errorMessage} />}
