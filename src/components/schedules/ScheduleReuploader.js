@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { FileUploader, ScheduleNameInput } from "./register"
 import { Grid } from "@material-ui/core"
 import { ActionNotificationDiv } from "../ActionNotificationDiv"
@@ -11,6 +11,15 @@ export function ScheduleReuploader({
   scheduleName,
   isFileUploaded,
 }) {
+  const [actionStatus, setActionStatus] = useState({
+    action: "File Upload",
+    isActionSuccess: isFileUploaded,
+  })
+
+  function onCloseActionStatusDiv() {
+    setActionStatus({ action: null, isActionSuccess: null })
+  }
+
   return (
     <Grid
       container
@@ -28,11 +37,12 @@ export function ScheduleReuploader({
         onClickedScheduleNameChanged={onClickedScheduleNameChanged}
         scheduleName={scheduleName}
       />
-      {isFileUploaded && (
-        <ActionNotificationDiv
-          actionStatus={{ action: "File Upload", isActionSuccess: true }}
-        />
-      )}
+
+      <ActionNotificationDiv
+        actionStatus={actionStatus}
+        onCloseActionStatusDiv={onCloseActionStatusDiv}
+      />
+
       {scheduleName.length > 0 ? (
         <FileUploader onFileUploaded={onFileUploaded} />
       ) : (

@@ -85,7 +85,7 @@ export function ScheduleUploader({ onActionSuccess }) {
         payload,
         programmes
       )
-      onActionSuccess("upload", newScheduleInfoObject)
+      onActionSuccess("upload", { newScheduleInfoObject })
       console.log("Upload Successful!")
       return
     }

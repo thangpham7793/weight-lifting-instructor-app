@@ -5,6 +5,8 @@ import {
   ReuploadScheduleDialog,
   PublishScheduleDialog,
 } from "./register"
+import reducers from "./ScheduleReducers"
+
 import { Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { useActionSnackbar, useFetchSnackbar } from "../../hooks/register"
@@ -21,40 +23,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function updateScheduleDetails(
-  { scheduleId, scheduleName, weekCount },
-  prevSchedules
-) {
-  const newSchedules = [...prevSchedules]
-  const targetIndex = newSchedules.findIndex((s) => s.scheduleId === scheduleId)
-  newSchedules[targetIndex] = {
-    ...newSchedules[targetIndex],
-    scheduleName,
-    weekCount,
+function resetState(currentState, initialState, setStateFunc) {
+  if (currentState !== initialState) {
+    setStateFunc(initialState)
   }
-  return newSchedules
-}
-
-function addPublishedProgramme({ scheduleId, programmes }, prevSchedules) {
-  const newSchedules = [...prevSchedules]
-  //this returns a reference to the item in the array
-  const updatedSchedule = newSchedules.find((s) => s.scheduleId === scheduleId)
-
-  updatedSchedule.programmes = [...updatedSchedule.programmes, ...programmes]
-  return newSchedules
-}
-
-function removeProgrammeFromSchedule(
-  { scheduleId, targetProgramme },
-  prevSchedules
-) {
-  let newSchedules = [...prevSchedules]
-  let targetSchedule = newSchedules.find((s) => s.scheduleId === scheduleId)
-  let removedProgrammeIndex = targetSchedule.programmes.findIndex(
-    (p) => p.programmeId === targetProgramme.programmeId
-  )
-  targetSchedule.programmes.splice(removedProgrammeIndex, 1)
-  return newSchedules
 }
 
 export function SchedulePanel() {
@@ -103,7 +75,6 @@ export function SchedulePanel() {
     console.log(e.currentTarget.getAttribute("scheduleId"))
     setOpenReuploadDialog(true)
     setClickedScheduleId(getClickedScheduleId(e))
-
     const clicked = schedules.find(
       (s) => s.scheduleId === getClickedScheduleId(e)
     )
@@ -114,52 +85,52 @@ export function SchedulePanel() {
 
   //shared by all dialogs since only one can be opened at the same time
   function onDialogCloseClicked(e) {
-    setOpenReuploadDialog(false)
-    setOpenPublishDialog(false)
-    // window.reload()
+    resetState(openReuploadDialog, false, setOpenReuploadDialog)
+    resetState(openPublishDialog, false, setOpenPublishDialog)
+    resetState(isFileUploaded, false, setIsFileUploaded)
+    resetState(canUpdate, false, setCanUpdate)
+
+    resetState(buffer, null, setBuffer)
+    resetState(clickedSchedule, null, setClickedSchedule)
+    resetState(currentScheduleName, null, setCurrentScheduleName)
   }
 
   async function onDeleteScheduleClicked(e) {
-    const clickedId = getClickedScheduleId(e)
+    const scheduleId = getClickedScheduleId(e)
     setClickedScheduleId(getClickedScheduleId(e))
     if (
-      window.confirm(`Are you sure you want to delete schedule id ${clickedId}`)
+      window.confirm(
+        `Are you sure you want to delete schedule id ${scheduleId}`
+      )
     ) {
-      const isSuccessful = await callDecoratedDeleteService(clickedId)
+      const isSuccessful = await callDecoratedDeleteService(scheduleId)
       if (isSuccessful) {
-        updateSchedulesList("delete", clickedId)
+        updateSchedulesList("delete", { scheduleId })
       }
     }
   }
 
-  //similar to Redux (maybe use React.Context?)
+  //command pattern
   function updateSchedulesList(action, payload) {
-    let newSchedules
     switch (action) {
       case "delete":
-        newSchedules = schedules.filter(({ scheduleId }) => {
-          return scheduleId !== payload
-        })
-        break
+        setSchedules(reducers.deleteOneScheduleById(payload, schedules))
+        return
       case "upload":
-        newSchedules = [...schedules, payload]
-        break
-      //should be just this as the child component has all the information needed to return a new schedule info object
+        setSchedules(reducers.addNewSchedule(payload, schedules))
+        return
       case "publish":
-        newSchedules = addPublishedProgramme(payload, schedules)
-        break
+        setSchedules(reducers.addPublishedProgramme(payload, schedules))
+        return
       case "unpublish":
-        newSchedules = removeProgrammeFromSchedule(payload, schedules)
-        break
+        setSchedules(reducers.removeProgrammeFromSchedule(payload, schedules))
+        return
       case "repost":
-        //reposting may update the name as well as the weekCount (UI-wise)
-        newSchedules = updateScheduleDetails(payload, schedules)
-        console.log(payload)
-        break
+        setSchedules(reducers.updateScheduleDetails(payload, schedules))
+        return
       default:
-        return schedules
+        return
     }
-    setSchedules(newSchedules)
   }
 
   function onPublishScheduleClicked(e) {

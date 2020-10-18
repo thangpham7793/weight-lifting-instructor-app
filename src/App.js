@@ -5,10 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom"
 import { Navbar, Footer, PageRoutes } from "./app/register"
 
 import { LearnersPanel } from "./components/learners/register"
-import {
-  ScheduleUploader,
-  SchedulePanel,
-} from "./components/schedules/register"
+import { SchedulePanel } from "./components/schedules/register"
 import { HomePanel } from "./components/home/register"
 
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles"
@@ -37,12 +34,6 @@ function App() {
       to: "/instructor/schedules",
       label: "Schedules",
       component: SchedulePanel,
-      isProtected: true,
-    },
-    {
-      to: "/instructor/schedules/new",
-      label: "Upload Schedule",
-      component: ScheduleUploader,
       isProtected: true,
     },
   ]
