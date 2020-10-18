@@ -1,4 +1,5 @@
-export * from "./HomePanel"
+export * from "./InstructorHomePanel"
+export * from "./LearnerHomePanel"
 export * from "./WelcomePanel"
 export * from "./Logo"
 export * from "./LoginFormTextInput"

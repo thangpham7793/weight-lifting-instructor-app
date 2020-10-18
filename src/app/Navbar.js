@@ -22,7 +22,7 @@ function setPageTitle(isInstructorLoggedIn, isLearnerLoggedIn) {
 //https://reactrouter.com/web/api/Redirect
 export const Navbar = ({
   links,
-  onLogOut,
+  onInstructorLogOut,
   isInstructorLoggedIn,
   isLearnerLoggedIn,
 }) => {
@@ -32,7 +32,12 @@ export const Navbar = ({
           <NavLink key={to} to={to} label={label} />
         ) : (
           //basically need to make a fake link here!
-          <span class="nav-item" key={to} label={label} onClick={onLogOut}>
+          <span
+            class="nav-item"
+            key={to}
+            label={label}
+            onClick={onInstructorLogOut}
+          >
             {label}
           </span>
         )

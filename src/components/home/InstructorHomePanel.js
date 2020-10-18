@@ -1,11 +1,14 @@
 import React, { useState } from "react"
 import { Redirect } from "react-router"
-import { Logo, WelcomePanel, LoginForm, LoginFormTextInput } from "./register"
+import { Logo, LoginForm, LoginFormTextInput } from "./register"
 import { UserAuth, validateCredentials } from "../../services/register"
 
 import httpService from "../../services/InstructorServiceSingleton"
 
-export function HomePanel({ onLogIn, isInstructorLoggedIn }) {
+export function InstructorHomePanel({
+  onInstructorLogIn,
+  isInstructorLoggedIn,
+}) {
   const [credentials, setCredentials] = useState({ email: "", password: "" })
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -35,7 +38,7 @@ export function HomePanel({ onLogIn, isInstructorLoggedIn }) {
       return
     } else {
       UserAuth.saveToken(payload.token)
-      onLogIn()
+      onInstructorLogIn()
     }
   }
 

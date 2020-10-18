@@ -40,6 +40,12 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     })
   }
 
+  async learnerLogin(credentials) {
+    return await LearnerServiceSingleton._fetchPostFactory("learners/login")(
+      credentials
+    )
+  }
+
   static getLearnerInstance() {
     return LearnerServiceSingleton._instance || new LearnerServiceSingleton()
   }

@@ -4,9 +4,15 @@ import { BrowserRouter as Router, Redirect } from "react-router-dom"
 
 import { Navbar, Footer, PageRoutes } from "./app/register"
 
-import { LearnersPanel } from "./components/learners/register"
+import {
+  LearnersPanel,
+  LearnerSchedulePanel,
+} from "./components/learners/register"
 import { SchedulePanel } from "./components/schedules/register"
-import { HomePanel } from "./components/home/register"
+import {
+  InstructorHomePanel,
+  LearnerHomePanel,
+} from "./components/home/register"
 
 import { UserAuth, NavHelpers } from "./services/register"
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles"
@@ -19,12 +25,6 @@ const theme = createMuiTheme({
 
 const allLinks = {
   instructor: [
-    // {
-    //   to: "/instructor",
-    //   label: "Home Panel",
-    //   component: HomePanel,
-    //   isProtected: false,
-    // },
     {
       to: "/instructor/schedules",
       label: "Schedules",
@@ -41,10 +41,33 @@ const allLinks = {
       to: "/logout",
       label: "Log Out",
       component: null,
+      isProtected: true,
+    },
+  ],
+  learner: [
+    {
+      to: "/learner/schedules",
+      label: "Schedules",
+      component: LearnerSchedulePanel,
+      isProtected: true,
+    },
+  ],
+  learnerLogIn: [
+    {
+      to: "/learner",
+      label: "Learner Login",
+      component: LearnerHomePanel,
       isProtected: false,
     },
   ],
-  learner: [],
+  instructorLogin: [
+    {
+      to: "/instructor",
+      label: "Instructor Login",
+      component: InstructorHomePanel,
+      isProtected: false,
+    },
+  ],
 }
 
 function App() {
@@ -58,12 +81,26 @@ function App() {
     UserAuth.isAuthenticated() ? allLinks.instructor : []
   )
 
-  function onLogIn() {
+  function onInstructorLogIn() {
     setLinks(allLinks.instructor)
     setIsInstructorLoggedIn(true)
   }
 
-  function onLogOut(e) {
+  function resetStatesOnLogOut() {
+    setLinks([])
+    setIsInstructorLoggedIn(false)
+    setIsLearnerLoggedIn(false)
+  }
+
+  //lets see if there's any difference
+  function onInstructorLogOut(e) {
+    console.log("log me out!")
+    UserAuth.clearToken()
+    NavHelpers.clearCurrentPage()
+    resetStatesOnLogOut()
+  }
+
+  function onLearnerLogOut(e) {
     console.log("log me out!")
     UserAuth.clearToken()
     NavHelpers.clearCurrentPage()
@@ -78,8 +115,8 @@ function App() {
         <Navbar
           links={links}
           isInstructorLoggedIn={isInstructorLoggedIn}
+          onInstructorLogOut={onInstructorLogOut}
           isLearnerLoggedIn={isLearnerLoggedIn}
-          onLogOut={onLogOut}
         />
         <div className="App main">
           {isInstructorLoggedIn ? (
@@ -92,8 +129,8 @@ function App() {
               }
             />
           ) : (
-            <HomePanel
-              onLogIn={onLogIn}
+            <InstructorHomePanel
+              onInstructorLogIn={onInstructorLogIn}
               isInstructorLoggedIn={isInstructorLoggedIn}
             />
           )}
