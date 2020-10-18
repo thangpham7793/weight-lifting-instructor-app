@@ -1,7 +1,7 @@
 import XLSX from "xlsx"
 
-function parseRows(data) {
-  const workbook = XLSX.read(data, {
+function parseRows(buffer) {
+  const workbook = XLSX.read(buffer, {
     type: "buffer",
   })
 
@@ -58,29 +58,38 @@ function makeTimeTable(exercisesArr) {
 }
 
 export function makeSchedulePayload(
-  data,
+  buffer,
   programmeIds,
   scheduleName,
   isNew = true,
   scheduleId = null
 ) {
-  const { rows, weekCount } = parseRows(data)
-  const timetable = makeTimeTable(rows)
-  let payload
-  if (isNew) {
-    payload = {
-      timetable,
-      weekCount,
-      scheduleName,
-      programmeIds,
+  //if a file is uploaded
+  if (buffer) {
+    const { rows, weekCount } = parseRows(buffer)
+    const timetable = makeTimeTable(rows)
+    //a new schedule
+    if (isNew) {
+      return {
+        timetable,
+        weekCount,
+        scheduleName,
+        programmeIds,
+      }
+      //reposting the schedule
+    } else {
+      return {
+        scheduleId,
+        scheduleName,
+        weekCount,
+        timetable,
+      }
     }
+    //if no file is uploaded, meaning there's a name change
   } else {
-    payload = {
+    return {
       scheduleId,
       scheduleName,
-      weekCount,
-      timetable,
     }
   }
-  return payload
 }
