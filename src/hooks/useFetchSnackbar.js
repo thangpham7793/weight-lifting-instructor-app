@@ -21,7 +21,8 @@ export function useFetchSnackbar(resourceName = null, postFetchAction = null) {
       case false:
         return (
           <div {...props} style={{ color: "red" }}>
-            Failed to load {resourceName ? resourceName : "data"}
+            Failed to load {resourceName ? resourceName : "data"}. Please retry
+            later.
           </div>
         )
     }

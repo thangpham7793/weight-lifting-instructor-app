@@ -20,6 +20,12 @@ export function catchAsync(asyncFunc, errorHandler = null) {
       return await asyncFunc(...args)
     } catch (error) {
       errorHandler?.(error) ?? console.log(`Something went wrong: ${error}`)
+
+      if (error.toString().search(/AbortError/) !== -1) {
+        return { ok: false, payload: { message: `Server timeouts!` } }
+      } else {
+        return { ok: false, payload: null }
+      }
     }
   }
 }

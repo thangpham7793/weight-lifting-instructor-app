@@ -28,7 +28,7 @@ export class HttpServiceSingleton {
   }
 
   //factory functions that makes use of closure
-  static _fetchPostFactory(resourceUrl) {
+  static _fetchPostFactory(resourceUrl, timeout = 10) {
     const url = HttpServiceSingleton._makeUrl(resourceUrl)
     return catchAsync(async function (payload) {
       const options = {
@@ -44,11 +44,12 @@ export class HttpServiceSingleton {
         options.headers.Authorization = `Bearer ${UserAuth.getToken()}`
       }
 
+      HttpServiceSingleton._setFetchTimeout(timeout, options)
       return HttpServiceSingleton._makePayload(await fetch(url, options))
     })
   }
 
-  static _fetchPutFactory(resourceUrl) {
+  static _fetchPutFactory(resourceUrl, timeout = 10) {
     const url = HttpServiceSingleton._makeUrl(resourceUrl)
     return catchAsync(async function (payload = null) {
       const options = {
@@ -64,23 +65,28 @@ export class HttpServiceSingleton {
         options.body = JSON.stringify(payload)
       }
 
+      HttpServiceSingleton._setFetchTimeout(timeout, options)
+
       return HttpServiceSingleton._makePayload(await fetch(url, options))
     })
   }
 
-  static _fetchJsonFactory(resourceUrl) {
+  static _fetchJsonFactory(resourceUrl, timeout = 10) {
     const url = HttpServiceSingleton._makeUrl(resourceUrl)
     return catchAsync(async function () {
-      const response = await fetch(url, {
+      const options = {
         headers: {
           Authorization: `Bearer ${UserAuth.getToken()}`,
         },
-      })
-      return HttpServiceSingleton._makePayload(response)
+      }
+
+      HttpServiceSingleton._setFetchTimeout(timeout, options)
+
+      return HttpServiceSingleton._makePayload(await fetch(url, options))
     })
   }
 
-  static _fetchDeleteFactory(resourceUrlAndId) {
+  static _fetchDeleteFactory(resourceUrlAndId, timeout = 10) {
     const url = HttpServiceSingleton._makeUrl(resourceUrlAndId)
     return catchAsync(async function () {
       const options = {
@@ -91,12 +97,25 @@ export class HttpServiceSingleton {
         },
       }
 
+      HttpServiceSingleton._setFetchTimeout(timeout, options)
+
       return HttpServiceSingleton._makePayload(await fetch(url, options))
     })
   }
 
+  static _setFetchTimeout(timeout, options) {
+    const ctl = new AbortController()
+    setTimeout(() => ctl.abort(), timeout * 1000)
+    options.signal = ctl.signal
+  }
+
   static async _makePayload(response) {
+    if (!response) {
+      return { ok: false, payload: null }
+    }
+
     const ok = response.ok
+
     //FIXME: may need to switch based on status code!
     switch (response.status) {
       case 204:
