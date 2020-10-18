@@ -5,7 +5,7 @@ import { UserAuth, validateLearnerCredentials } from "../../services/register"
 
 import httpService from "../../services/LearnerServiceSingleton"
 
-export function LearnerHomePanel({ onLogIn, isLearnerLoggedIn }) {
+export function LearnerHomePanel({ onLearnerLogIn, isLearnerLoggedIn }) {
   const [credentials, setCredentials] = useState({ username: "", password: "" })
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -35,7 +35,7 @@ export function LearnerHomePanel({ onLogIn, isLearnerLoggedIn }) {
       return
     } else {
       UserAuth.saveToken(payload.token)
-      onLogIn()
+      onLearnerLogIn(payload)
     }
   }
 
@@ -56,6 +56,7 @@ export function LearnerHomePanel({ onLogIn, isLearnerLoggedIn }) {
         <>
           <Logo />
           <LoginForm
+            title="Learner Login"
             onFormSubmitted={onFormSubmitted}
             fields={fields}
             errorMessage={errorMessage}

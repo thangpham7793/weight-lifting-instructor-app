@@ -13,7 +13,7 @@ function NavLink({ to, label }) {
 export const Navbar = ({ links, onLogOut, onAppChange, pageTitle }) => {
   let navLinks
 
-  if (links.length === 1) {
+  if (links.length === 1 && !links[0].component) {
     navLinks = [
       <span
         className="nav-item"

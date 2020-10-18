@@ -43,8 +43,8 @@ export function LearnerApp({ onAppChange }) {
     UserAuth.isAuthenticated() ? allLinks.learner : allLinks.instructorApp
   )
 
-  function onLearnerLogIn() {
-    setLinks(allLinks.instructor)
+  function onLearnerLogIn(afterLoginPayload) {
+    setLinks(allLinks.learner)
     setIsLearnerLoggedIn(true)
   }
 
