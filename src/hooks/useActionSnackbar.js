@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { capitalise, safeSpinnerWrapper } from "../utils"
+import { capitalise } from "../utils"
 import { ActionNotificationDiv } from "../components/ActionNotificationDiv"
 
 export function useActionSnackbar(action, serviceMethod) {
@@ -43,7 +43,7 @@ export function useActionSnackbar(action, serviceMethod) {
     returnedObj[`set${capitalise(action)}ActionStatus`] = setActionStatus
     returnedObj[
       `callDecorated${capitalise(action)}Service`
-    ] = safeSpinnerWrapper(callDecoratedService)
+    ] = callDecoratedService
     returnedObj[
       `onClose${capitalise(action)}StatusDiv`
     ] = onCloseActionStatusDiv

@@ -12,7 +12,7 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
     this.deleteSchedule = safeSpinnerWrapper(this.deleteSchedule)
     this.publishSchedule = safeSpinnerWrapper(this.publishSchedule)
     this.unpublishSchedule = safeSpinnerWrapper(this.unpublishSchedule)
-    // this.repostSchedule = safeSpinnerWrapper(this.repostSchedule)
+    this.repostSchedule = safeSpinnerWrapper(this.repostSchedule)
     this.postNewSchedule = safeSpinnerWrapper(this.postNewSchedule)
     this.getAvailableProgrammesToPublish = safeSpinnerWrapper(
       this.getAvailableProgrammesToPublish
