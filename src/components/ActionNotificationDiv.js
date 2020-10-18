@@ -20,6 +20,7 @@ export const ActionNotificationDiv = React.memo(
         default:
           message = `Applying ${action.toUpperCase()} ...`
           background = "yellow"
+          color = "#111"
           break
         case true:
           message = `${action.toUpperCase()} Successful!`

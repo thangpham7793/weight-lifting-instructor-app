@@ -1,5 +1,5 @@
 class ScheduleReducers {
-  static updateScheduleDetails(
+  static _updateScheduleDetails(
     { scheduleId, scheduleName, weekCount },
     prevSchedules
   ) {
@@ -15,7 +15,7 @@ class ScheduleReducers {
     return newSchedules
   }
 
-  static addPublishedProgramme({ scheduleId, programmes }, prevSchedules) {
+  static _addPublishedProgramme({ scheduleId, programmes }, prevSchedules) {
     const newSchedules = [...prevSchedules]
     //this returns a reference to the item in the array
     const updatedSchedule = newSchedules.find(
@@ -26,7 +26,7 @@ class ScheduleReducers {
     return newSchedules
   }
 
-  static removeProgrammeFromSchedule(
+  static _removeProgrammeFromSchedule(
     { scheduleId, targetProgramme },
     prevSchedules
   ) {
@@ -39,12 +39,45 @@ class ScheduleReducers {
     return newSchedules
   }
 
-  static deleteOneScheduleById({ scheduleId }, prevSchedules) {
+  static _deleteOneScheduleById({ scheduleId }, prevSchedules) {
     return prevSchedules.filter((s) => s.scheduleId !== scheduleId)
   }
 
-  static addNewSchedule({ newScheduleInfoObject }, prevSchedules) {
+  static _addNewSchedule({ newScheduleInfoObject }, prevSchedules) {
     return [...prevSchedules, newScheduleInfoObject]
+  }
+
+  //command & factory pattern
+  static factory(schedules, setSchedules) {
+    return function (action, payload) {
+      switch (action) {
+        case "delete":
+          setSchedules(
+            ScheduleReducers._deleteOneScheduleById(payload, schedules)
+          )
+          return
+        case "upload":
+          setSchedules(ScheduleReducers._addNewSchedule(payload, schedules))
+          return
+        case "publish":
+          setSchedules(
+            ScheduleReducers._addPublishedProgramme(payload, schedules)
+          )
+          return
+        case "unpublish":
+          setSchedules(
+            ScheduleReducers._removeProgrammeFromSchedule(payload, schedules)
+          )
+          return
+        case "repost":
+          setSchedules(
+            ScheduleReducers._updateScheduleDetails(payload, schedules)
+          )
+          return
+        default:
+          return
+      }
+    }
   }
 }
 

@@ -5,7 +5,7 @@ import {
   ReuploadScheduleDialog,
   PublishScheduleDialog,
 } from "./register"
-import reducers from "./ScheduleReducers"
+import ScheduleReducers from "./ScheduleReducers"
 
 import { Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
@@ -29,6 +29,14 @@ function resetState(currentState, initialState, setStateFunc) {
   }
 }
 
+function checkCanUpdate(newName, currentName, isFileUploaded) {
+  const isValidLength = newName.length > 0
+  const isNewName = newName !== currentName
+  const caseOne = !isFileUploaded && isValidLength && isNewName
+  const caseTwo = isFileUploaded && isValidLength
+  return caseOne || caseTwo
+}
+
 export function SchedulePanel() {
   const [schedules, setSchedules] = useState(null)
   const [clickedScheduleId, setClickedScheduleId] = useState(null)
@@ -37,27 +45,11 @@ export function SchedulePanel() {
   const [openReuploadDialog, setOpenReuploadDialog] = useState(false)
   const [openPublishDialog, setOpenPublishDialog] = useState(false)
   const [canUpdate, setCanUpdate] = useState(false)
-
-  function checkCanUpdate(newName, currentName, isFileUploaded) {
-    const isValidLength = newName.length > 0
-    const isNewName = newName !== currentName
-    const caseOne = !isFileUploaded && isValidLength && isNewName
-    const caseTwo = isFileUploaded && isValidLength
-
-    return caseOne || caseTwo
-  }
-
   const [buffer, setBuffer] = useState(null)
   const [isFileUploaded, setIsFileUploaded] = useState(false)
-  async function onFileUploaded(e) {
-    const selectedFile = e.target.files[0]
-    const buffer = await fileReaderPromise(selectedFile)
-    setBuffer(buffer)
-    setIsFileUploaded(true)
-    setCanUpdate(true)
-  }
-  // ATTENTION: use object as API rather than array since we can pick and choose what to destructure. Downside is the prop name is fixed.
-  let { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
+
+  // ATTENTION: use object as API rather than array since we can pick and choose what to destructure. Downside is the prop name is fixed. That's why useState is [state, setState] rather than {state, setState}
+  const { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
     "schedules"
   )
 
@@ -65,6 +57,16 @@ export function SchedulePanel() {
     "delete",
     httpService.deleteSchedule
   )
+
+  const updateSchedulesList = ScheduleReducers.factory(schedules, setSchedules)
+
+  async function onFileUploaded(e) {
+    const selectedFile = e.target.files[0]
+    const buffer = await fileReaderPromise(selectedFile)
+    setBuffer(buffer)
+    setIsFileUploaded(true)
+    setCanUpdate(true)
+  }
 
   function getClickedScheduleId(e) {
     return parseInt(e.currentTarget.getAttribute("scheduleId"))
@@ -103,33 +105,10 @@ export function SchedulePanel() {
         `Are you sure you want to delete schedule id ${scheduleId}`
       )
     ) {
-      const isSuccessful = await callDecoratedDeleteService(scheduleId)
-      if (isSuccessful) {
+      const { ok, payload } = await callDecoratedDeleteService(scheduleId)
+      if (ok) {
         updateSchedulesList("delete", { scheduleId })
       }
-    }
-  }
-
-  //command pattern
-  function updateSchedulesList(action, payload) {
-    switch (action) {
-      case "delete":
-        setSchedules(reducers.deleteOneScheduleById(payload, schedules))
-        return
-      case "upload":
-        setSchedules(reducers.addNewSchedule(payload, schedules))
-        return
-      case "publish":
-        setSchedules(reducers.addPublishedProgramme(payload, schedules))
-        return
-      case "unpublish":
-        setSchedules(reducers.removeProgrammeFromSchedule(payload, schedules))
-        return
-      case "repost":
-        setSchedules(reducers.updateScheduleDetails(payload, schedules))
-        return
-      default:
-        return
     }
   }
 
