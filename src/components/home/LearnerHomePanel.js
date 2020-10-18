@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Redirect } from "react-router"
 import { Logo, LoginForm, LoginFormTextInput } from "./register"
-import { UserAuth, validateCredentials } from "../../services/register"
+import { UserAuth, validateLearnerCredentials } from "../../services/register"
 
 import httpService from "../../services/LearnerServiceSingleton"
 
@@ -20,7 +20,7 @@ export function LearnerHomePanel({ onLogIn, isLearnerLoggedIn }) {
 
   async function onFormSubmitted(e) {
     e.preventDefault()
-    const error = validateCredentials(credentials)
+    const error = validateLearnerCredentials(credentials)
     if (error) {
       setErrorMessage(error)
       return

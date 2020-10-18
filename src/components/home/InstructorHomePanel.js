@@ -1,7 +1,10 @@
 import React, { useState } from "react"
 import { Redirect } from "react-router"
 import { Logo, LoginForm, LoginFormTextInput } from "./register"
-import { UserAuth, validateCredentials } from "../../services/register"
+import {
+  UserAuth,
+  validateInstructorCredentials,
+} from "../../services/register"
 
 import httpService from "../../services/InstructorServiceSingleton"
 
@@ -23,7 +26,7 @@ export function InstructorHomePanel({
 
   async function onFormSubmitted(e) {
     e.preventDefault()
-    const error = validateCredentials(credentials)
+    const error = validateInstructorCredentials(credentials)
     if (error) {
       setErrorMessage(error)
       return
