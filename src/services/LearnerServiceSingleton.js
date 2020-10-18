@@ -8,6 +8,7 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     this.updateLearner = safeSpinnerWrapper(this.updateLearner)
     this.deleteLearner = safeSpinnerWrapper(this.deleteLearner)
     this.createLearner = safeSpinnerWrapper(this.createLearner)
+    this.learnerLogin = safeSpinnerWrapper(this.learnerLogin)
     this._instance = this
     if (LearnerServiceSingleton._instance) {
       return this._instance

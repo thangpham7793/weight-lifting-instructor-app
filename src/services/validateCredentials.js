@@ -17,6 +17,6 @@ export function validateInstructorCredentials({ email, password }) {
 
 export function validateLearnerCredentials({ username, password }) {
   return isNotEmpty(username) && isNotEmpty(password)
-    ? true
+    ? null
     : "Missing Email or Password"
 }
