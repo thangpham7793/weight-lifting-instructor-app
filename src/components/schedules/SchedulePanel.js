@@ -12,6 +12,9 @@ import { makeStyles } from "@material-ui/core/styles"
 import { useActionSnackbar, useFetchSnackbar } from "../../hooks/register"
 import httpService from "../../services/ProgrammeServiceSingleton"
 import { fileReaderPromise } from "../../services/register"
+import { NavHelpers } from "../../services/register"
+
+NavHelpers.setCurrentPage()
 
 const useStyles = makeStyles((theme) => ({
   container: {

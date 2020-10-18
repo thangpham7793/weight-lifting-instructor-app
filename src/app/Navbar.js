@@ -10,10 +10,19 @@ function NavLink({ to, label }) {
 }
 
 //https://reactrouter.com/web/api/Redirect
-export const Navbar = ({ links }) => {
-  let navLinks = links.map(({ to, label }) => (
-    <NavLink key={to} to={to} label={label} />
-  ))
+export const Navbar = ({ links, onLogOut }) => {
+  let navLinks = links
+    ? links.map(({ to, label }) => {
+        return to !== "/logout" ? (
+          <NavLink key={to} to={to} label={label} />
+        ) : (
+          //basically need to make a fake link here!
+          <span class="nav-item" key={to} label={label} onClick={onLogOut}>
+            {label}
+          </span>
+        )
+      })
+    : null
 
   return (
     <nav className="header index">

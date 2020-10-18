@@ -1,14 +1,13 @@
 import React, { useState } from "react"
-
+import { Redirect } from "react-router"
 import { Logo, WelcomePanel, LoginForm, LoginFormTextInput } from "./register"
 import { UserAuth, validateCredentials } from "../../services/register"
 
 import httpService from "../../services/InstructorServiceSingleton"
 
-export function HomePanel() {
+export function HomePanel({ onLogIn, isInstructorLoggedIn }) {
   const [credentials, setCredentials] = useState({ email: "", password: "" })
   const [errorMessage, setErrorMessage] = useState(null)
-  const [isLoggedIn, setIsLoggedIn] = useState(UserAuth.isAuthenticated())
 
   function onInputChanged(e) {
     const changedField = e.target.getAttribute("name")
@@ -36,7 +35,7 @@ export function HomePanel() {
       return
     } else {
       UserAuth.saveToken(payload.token)
-      setIsLoggedIn(true)
+      onLogIn()
     }
   }
 
@@ -49,24 +48,26 @@ export function HomePanel() {
     />
   ))
 
-  function onLogOutClicked(e) {
-    console.log("log me out!")
-    UserAuth.clearToken()
-    setIsLoggedIn(false)
-  }
+  // function onLogOutClicked(e) {
+  //   console.log("log me out!")
+  //   UserAuth.clearToken()
+  //   setisInstructorLoggedIn(false)
+  // }
 
   return (
     <div>
-      <Logo />
-      {isLoggedIn ? (
-        // <Redirect to="/instructor/schedules" />
-        <WelcomePanel onLogOutClicked={onLogOutClicked} />
+      {isInstructorLoggedIn ? (
+        <Redirect to="/instructor/schedules" />
       ) : (
-        <LoginForm
-          onFormSubmitted={onFormSubmitted}
-          fields={fields}
-          errorMessage={errorMessage}
-        />
+        // <WelcomePanel onLogOutClicked={onLogOutClicked} />
+        <>
+          <Logo />
+          <LoginForm
+            onFormSubmitted={onFormSubmitted}
+            fields={fields}
+            errorMessage={errorMessage}
+          />
+        </>
       )}
     </div>
   )

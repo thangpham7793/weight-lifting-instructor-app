@@ -22,7 +22,7 @@ export function PageRoutes({ links }) {
   return (
     <Switch>
       {routes}
-      <Redirect to="/instructor" />
+      <Redirect to="/" />
     </Switch>
   )
 }

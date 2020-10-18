@@ -6,6 +6,9 @@ import { ActionNotificationDiv } from "../ActionNotificationDiv"
 
 import httpService from "../../services/LearnerServiceSingleton"
 import { shallowEqual } from "../../utils"
+import { NavHelpers } from "../../services/register"
+
+NavHelpers.setCurrentPage()
 
 export function LearnersPanel() {
   const [learners, setLearners] = useState([])

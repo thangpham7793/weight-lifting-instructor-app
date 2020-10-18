@@ -23,6 +23,8 @@ export function catchAsync(asyncFunc, errorHandler = null) {
 
       if (error.toString().search(/AbortError/) !== -1) {
         return { ok: false, payload: { message: `Server timeouts!` } }
+      } else if (error.toString().search(/NetworkError/) !== -1) {
+        return { ok: false, payload: { message: `Can't connect to Server!` } }
       } else {
         return { ok: false, payload: null }
       }
