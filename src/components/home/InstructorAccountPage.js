@@ -1,15 +1,12 @@
 import React from "react"
+import { NavHelpers } from "../../services/register"
 import { LoginFormButton } from "./register"
 
 export function InstructorAccountPage({ onLogOutClicked }) {
+  NavHelpers.setCurrentPage("/instructor/account")
   return (
     <>
-      <h1>Welcome to the Instructor Space</h1>
-      <LoginFormButton
-        customClassName="logout"
-        label="Log Out"
-        onClick={onLogOutClicked}
-      />
+      <h1>Under Construction</h1>
     </>
   )
 }
