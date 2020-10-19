@@ -12,13 +12,6 @@ import {
 } from "./components/home/register"
 
 import { UserAuth, NavHelpers } from "./services/register"
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles"
-
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: ["Montserrat", "sans-serif"],
-  },
-})
 
 const allLinks = {
   instructor: [
@@ -80,31 +73,29 @@ export function InstructorApp({ onAppChange }) {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Navbar
-          links={links}
-          pageTitle="Otago Weightlifting Instructor Space"
-          onLogOut={onInstructorLogOut}
-          onAppChange={onAppChange}
-        />
-        <div className="App main">
-          {isInstructorLoggedIn ? (
-            <Redirect
-              to={
-                NavHelpers.getCurrentPage() !== "/instructor/login"
-                  ? NavHelpers.getCurrentPage()
-                  : "/instructor/schedules"
-              }
-            />
-          ) : (
-            <InstructorLoginPage onInstructorLogIn={onInstructorLogIn} />
-          )}
-          <PageRoutes links={links} />
-        </div>
-        <Footer />
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <Navbar
+        links={links}
+        pageTitle="Otago Weightlifting Instructor Space"
+        onLogOut={onInstructorLogOut}
+        onAppChange={onAppChange}
+      />
+      <div className="App main">
+        {isInstructorLoggedIn ? (
+          <Redirect
+            to={
+              NavHelpers.getCurrentPage() !== "/instructor/login"
+                ? NavHelpers.getCurrentPage()
+                : "/instructor/schedules"
+            }
+          />
+        ) : (
+          <InstructorLoginPage onInstructorLogIn={onInstructorLogIn} />
+        )}
+        <PageRoutes links={links} />
+      </div>
+      <Footer />
+    </Router>
   )
 }
 

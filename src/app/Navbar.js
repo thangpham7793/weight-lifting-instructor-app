@@ -42,7 +42,14 @@ export const Navbar = ({ links, onLogOut, onAppChange, pageTitle }) => {
       <section>
         <div className="navContent">
           <header>
-            <h1 className="main-title">{pageTitle}</h1>
+            <h1
+              style={{
+                fontWeight: "var(--fw-lg)",
+                fontSize: "calc(0.35 * var(--fs-md))",
+              }}
+            >
+              {pageTitle}
+            </h1>
           </header>
           <div className="navLinks">{navLinks}</div>
         </div>

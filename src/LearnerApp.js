@@ -8,13 +8,6 @@ import { LearnerSchedulePage } from "./components/learners/register"
 import { LearnerLoginPage } from "./components/home/register"
 
 import { UserAuth, NavHelpers } from "./services/register"
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles"
-
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: ["Montserrat", "sans-serif"],
-  },
-})
 
 const allLinks = {
   learner: [
@@ -63,34 +56,32 @@ export function LearnerApp({ onAppChange }) {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Navbar
-          links={links}
-          onLogOut={onLearnerLogOut}
-          pageTitle="Otago WeightLifting Learner Space"
-          onAppChange={onAppChange}
-        />
-        <div className="App main">
-          {isLearnerLoggedIn ? (
-            <Redirect
-              to={
-                NavHelpers.getCurrentPage() !== "/learner/login"
-                  ? NavHelpers.getCurrentPage()
-                  : "/learner/schedules"
-              }
-            />
-          ) : (
-            <LearnerLoginPage
-              onLearnerLogIn={onLearnerLogIn}
-              isLearnerLoggedIn={isLearnerLoggedIn}
-            />
-          )}
-          <PageRoutes links={links} />
-        </div>
-        <Footer />
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <Navbar
+        links={links}
+        onLogOut={onLearnerLogOut}
+        pageTitle="Otago WeightLifting Learner Space"
+        onAppChange={onAppChange}
+      />
+      <div className="App main">
+        {isLearnerLoggedIn ? (
+          <Redirect
+            to={
+              NavHelpers.getCurrentPage() !== "/learner/login"
+                ? NavHelpers.getCurrentPage()
+                : "/learner/schedules"
+            }
+          />
+        ) : (
+          <LearnerLoginPage
+            onLearnerLogIn={onLearnerLogIn}
+            isLearnerLoggedIn={isLearnerLoggedIn}
+          />
+        )}
+        <PageRoutes links={links} />
+      </div>
+      <Footer />
+    </Router>
   )
 }
 

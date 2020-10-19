@@ -5,6 +5,7 @@ import {
   validateInstructorCredentials,
 } from "../../services/register"
 import httpService from "../../services/InstructorServiceSingleton"
+import { TextField, Grid } from "@material-ui/core"
 
 export function InstructorLoginPage({ onInstructorLogIn }) {
   const [credentials, setCredentials] = useState({ email: "", password: "" })
@@ -50,14 +51,24 @@ export function InstructorLoginPage({ onInstructorLogIn }) {
   ))
 
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+        minHeight: "100%",
+        margin: "0 auto",
+      }}
+    >
+      s
       <Logo />
       <LoginForm
         title="Instructor Login"
         onFormSubmitted={onFormSubmitted}
         fields={fields}
         errorMessage={errorMessage}
+        type="instructor"
       />
-    </>
+    </div>
   )
 }

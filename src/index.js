@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import "./style/resetBrowserStyle.css"
 import "./style/style.css"
+
 // import App from "./App"
 import AppControl from "./AppControl"
 import store from "./app/store"
