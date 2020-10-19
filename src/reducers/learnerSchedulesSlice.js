@@ -21,7 +21,7 @@ export const learnerSchedulesSlice = createSlice({
   name: "learnerschedules",
   initialState,
   reducers: {
-    init: (state, action) => {
+    initSchedules: (state, action) => {
       state.schedules = [...action.payload]
     },
   },
@@ -32,7 +32,7 @@ export const selectLearnerSchedules = (state) =>
   state.learnerSchedules.schedules
 
 //action type
-export const { init } = learnerSchedulesSlice.actions
+export const { initSchedules } = learnerSchedulesSlice.actions
 
 //reducer to register with global store
 export default learnerSchedulesSlice.reducer

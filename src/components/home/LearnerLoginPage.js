@@ -7,7 +7,8 @@ import {
   validateLearnerCredentials,
 } from "../../services/register"
 import httpService from "../../services/LearnerServiceSingleton"
-import { init } from "../../reducers/learnerSchedulesSlice"
+import { initSchedules } from "../../reducers/learnerSchedulesSlice"
+import { initPbs } from "../../reducers/learnerPbsSlice"
 import { useDispatch } from "react-redux"
 
 export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
@@ -47,7 +48,8 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
       delete payload.token
       //redux?
       //hard-code for now
-      dispatch(init(payload.schedules))
+      dispatch(initSchedules(payload.schedules))
+      dispatch(initPbs(payload.pbs))
       onLearnerLogIn()
     }
   }

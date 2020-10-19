@@ -9,19 +9,19 @@ export function useFetchSnackbar(resourceName = null, postFetchAction = null) {
       default:
         return (
           <div {...props} style={{ color: "var(--bg-cl)" }}>
-            Loading {resourceName ? resourceName : "data"} ...
+            Fetching {resourceName ? resourceName : "data"} ...
           </div>
         )
       case true:
         return (
           <div {...props} style={{ color: "green" }}>
-            {postFetchAction ? postFetchAction : "Finished loading data!"}
+            {postFetchAction ? postFetchAction : "Finished Fetching Data!"}
           </div>
         )
       case false:
         return (
           <div {...props} style={{ color: "red" }}>
-            Failed to load {resourceName ? resourceName : "data"}. Please retry
+            Failed to Fetch {resourceName ? resourceName : "data"}. Please retry
             later.
           </div>
         )

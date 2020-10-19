@@ -4,7 +4,6 @@ import { selectLearnerSchedules } from "../../reducers/learnerSchedulesSlice"
 import { ScheduleSelect } from "./register"
 import { NavHelpers } from "../../services/register"
 import { Redirect } from "react-router-dom"
-import httpService from "../../services/ProgrammeServiceSingleton"
 
 export function LearnerSchedulePage() {
   NavHelpers.setCurrentPage("/learner/schedules")
@@ -28,9 +27,6 @@ export function LearnerSchedulePage() {
   }
 
   function onScheduleSubmitted(e) {
-    console.log(
-      `Get weekly schedule ${selectedWeek} from schedule ${selectedSchedule.scheduleId}`
-    )
     setIsSchedulePicked(true)
   }
 

@@ -7,18 +7,18 @@ export function ExercisesTable() {
   const { scheduleId, week } = useParams()
   const [exercises, setExercises] = useState(null)
 
-  const { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
-    "exercises"
-  )
+  const {
+    isFetchSuccess,
+    setIsFetchSuccess,
+    FetchNotificationDiv,
+  } = useFetchSnackbar("exercises")
 
   useEffect(() => {
     async function fetchExercises(scheduleId, week) {
       const { ok, payload } = await httpService.fetchExercises(scheduleId, week)
-
       if (ok) {
-        console.log(payload)
         setIsFetchSuccess(true)
-        setExercises(payload)
+        setExercises(JSON.parse(payload))
       } else {
         setIsFetchSuccess(false)
       }
@@ -26,5 +26,9 @@ export function ExercisesTable() {
     fetchExercises(scheduleId, week)
   }, [scheduleId, week, setIsFetchSuccess])
 
-  return <FetchNotificationDiv />
+  return isFetchSuccess === true ? (
+    <div>Show Tables</div>
+  ) : (
+    <FetchNotificationDiv />
+  )
 }
