@@ -80,10 +80,20 @@ export function InstructorApp({ onAppChange }) {
           onAppChange={onAppChange}
         />
         <div className="App main">
-          <InstructorLoginPage
-            onInstructorLogIn={onInstructorLogIn}
-            isInstructorLoggedIn={isInstructorLoggedIn}
-          />
+          {isInstructorLoggedIn ? (
+            <Redirect
+              to={
+                NavHelpers.getCurrentPage() !== "/instructor/login"
+                  ? NavHelpers.getCurrentPage()
+                  : "/instructor/schedules"
+              }
+            />
+          ) : (
+            <InstructorLoginPage
+              onInstructorLogIn={onInstructorLogIn}
+              isInstructorLoggedIn={isInstructorLoggedIn}
+            />
+          )}
           <PageRoutes links={links} />
         </div>
         <Footer />

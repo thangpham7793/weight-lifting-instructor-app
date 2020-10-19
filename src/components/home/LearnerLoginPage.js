@@ -36,11 +36,6 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
       UserAuth.saveToken(payload.token)
       delete payload.token
       //redux?
-      sessionStorage.setItem("learnerPbs", JSON.stringify({ pbs: payload.pbs }))
-      sessionStorage.setItem(
-        "schedules",
-        JSON.stringify({ schedules: payload.schedules })
-      )
       onLearnerLogIn()
     }
   }

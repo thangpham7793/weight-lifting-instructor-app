@@ -9,6 +9,7 @@ import { shallowEqual } from "../../utils"
 import { NavHelpers } from "../../services/register"
 
 export function LearnersPanel() {
+  NavHelpers.setCurrentPage("/instructor/learners")
   const [learners, setLearners] = useState([])
   const [displayedLearners, setDisplayedLearners] = useState([])
   const [searchPhrase, setSearchPhrase] = useState("")
