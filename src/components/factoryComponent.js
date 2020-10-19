@@ -1,4 +1,5 @@
 import React from "react"
+import { Grid } from "@material-ui/core"
 
 export function FetchNotificationDivFactory(
   resourceName = null,
@@ -27,4 +28,12 @@ export function FetchNotificationDivFactory(
         )
     }
   }
+}
+
+export function CustomGridFactory({ sizes, ...rest }) {
+  return (
+    <Grid item {...sizes}>
+      {rest}
+    </Grid>
+  )
 }

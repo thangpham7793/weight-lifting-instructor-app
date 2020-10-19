@@ -61,3 +61,10 @@ export function safeSpinnerWrapper(func) {
 export function capitalise(string) {
   return string.substring(0, 1).toUpperCase() + string.substring(1)
 }
+
+//starting from 1!
+export function range(length, gap = 1) {
+  return Array(length)
+    .fill()
+    .map((element, index) => index + gap)
+}

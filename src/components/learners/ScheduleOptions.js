@@ -1,53 +1,58 @@
 import React from "react"
 import {
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
   FormControl,
-  Checkbox,
   Typography,
-  RadioGroup,
-  Radio,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@material-ui/core"
+import { makeStyles } from "@material-ui/core/styles"
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    maxWidth: "100%",
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  label: {
+    fontWeight: "var(--fw-md)",
+  },
+}))
 
 export function ScheduleOptions({
   schedules,
   onScheduleChecked,
   label,
-  selectedScheduleId,
+  selectedSchedule,
 }) {
-  let content
-  if (schedules.length > 0) {
-    const radioButtons = schedules.map(({ scheduleName, scheduleId }) => {
-      return (
-        <FormControlLabel
-          value={scheduleId}
-          key={scheduleId}
-          control={<Radio name={scheduleName} color="primary" />}
-          label={scheduleName}
-        />
-      )
-    })
-    content = (
-      <>
-        <FormLabel component="legend">{label}</FormLabel>
-        <RadioGroup
-          aria-label="available-schedules"
-          name="schedules"
-          value={selectedScheduleId}
-          onChange={onScheduleChecked}
-        >
-          {radioButtons}
-        </RadioGroup>
-      </>
+  const classes = useStyles()
+
+  if (!schedules)
+    return <Typography component="p">No Cycle Available</Typography>
+
+  const items = schedules.map(({ scheduleName, scheduleId }) => {
+    return (
+      <MenuItem value={scheduleId} key={scheduleId}>
+        {scheduleName}
+      </MenuItem>
     )
-  } else {
-    content = <Typography component="p">No schedule Available</Typography>
-  }
+  })
 
   return (
-    <FormControl component="fieldset" style={{ marginBottom: "var(--mg-sm)" }}>
-      {content}
+    <FormControl component="fieldset" className={classes.formControl}>
+      <InputLabel id="cycle" className={classes.label}>
+        {label}
+      </InputLabel>
+      <Select
+        labelId="cycle"
+        id="cycle"
+        value={selectedSchedule.scheduleId}
+        onChange={onScheduleChecked}
+      >
+        {items}
+      </Select>
     </FormControl>
   )
 }

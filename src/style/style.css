@@ -194,7 +194,7 @@ a.disabled {
 
 .main {
  grid-area: main; 
- background-image: linear-gradient(#00a896, #f0f3bd);
+ background-image: linear-gradient(to left top, #00a896, #00a896, #00a896, #f0f3bd);
 }
 
 .footer {
