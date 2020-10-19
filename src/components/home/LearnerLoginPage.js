@@ -1,11 +1,10 @@
 import React, { useState } from "react"
 import { Redirect } from "react-router-dom"
-import { Logo, LoginForm, LoginFormTextInput } from "./register"
+import { Logo, LoginForm } from "./register"
 import { UserAuth, validateLearnerCredentials } from "../../services/register"
 import httpService from "../../services/LearnerServiceSingleton"
 import { init } from "../../reducers/learnerSchedulesSlice"
 import { useDispatch } from "react-redux"
-import { TextField, Grid } from "@material-ui/core"
 
 export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
   const dispatch = useDispatch()
@@ -47,29 +46,6 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
     }
   }
 
-  const fields = Object.keys(credentials).map((fieldName, index) => (
-    <Grid
-      item
-      xs={10}
-      md={6}
-      lg={4}
-      style={{ margin: "0 auto" }}
-      key={fieldName}
-    >
-      <TextField
-        style={{ marginBottom: "1rem" }}
-        variant="outlined"
-        label={fieldName}
-        InputProps={{
-          // value: credentials[fieldName],
-          name: fieldName,
-          type: fieldName === "password" ? "password" : "text",
-        }}
-        onChange={onInputChanged}
-      />
-    </Grid>
-  ))
-
   return isLearnerLoggedIn ? (
     <Redirect to="learner/schedules" />
   ) : (
@@ -86,7 +62,8 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
       <LoginForm
         title="Learner Login"
         onFormSubmitted={onFormSubmitted}
-        fields={fields}
+        credentials={credentials}
+        onInputChanged={onInputChanged}
         errorMessage={errorMessage}
       />
     </div>

@@ -1,11 +1,10 @@
 import React, { useState } from "react"
-import { Logo, LoginForm, LoginFormTextInput } from "./register"
+import { Logo, LoginForm } from "./register"
 import {
   UserAuth,
   validateInstructorCredentials,
 } from "../../services/register"
 import httpService from "../../services/InstructorServiceSingleton"
-import { TextField, Grid } from "@material-ui/core"
 
 export function InstructorLoginPage({ onInstructorLogIn }) {
   const [credentials, setCredentials] = useState({ email: "", password: "" })
@@ -41,15 +40,6 @@ export function InstructorLoginPage({ onInstructorLogIn }) {
     }
   }
 
-  const fields = Object.keys(credentials).map((fieldName) => (
-    <LoginFormTextInput
-      key={fieldName}
-      label={fieldName}
-      onInputChanged={onInputChanged}
-      value={credentials[fieldName]}
-    />
-  ))
-
   return (
     <div
       style={{
@@ -60,12 +50,12 @@ export function InstructorLoginPage({ onInstructorLogIn }) {
         margin: "0 auto",
       }}
     >
-      s
       <Logo />
       <LoginForm
         title="Instructor Login"
         onFormSubmitted={onFormSubmitted}
-        fields={fields}
+        credentials={credentials}
+        onInputChanged={onInputChanged}
         errorMessage={errorMessage}
         type="instructor"
       />

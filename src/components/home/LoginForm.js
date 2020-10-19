@@ -1,6 +1,5 @@
 import React from "react"
-import { LoginFormButton } from "./register"
-import { Grid } from "@material-ui/core"
+import { LoginFormButtonPanel, LoginFields } from "./register"
 
 function ErrorMessageDiv({ errorMessage }) {
   return (
@@ -15,52 +14,29 @@ function ErrorMessageDiv({ errorMessage }) {
   )
 }
 
-function LoginFormButtonPanel({ type }) {
-  let btns
-
-  if (type === "instructor") {
-    btns = <LoginFormButton customClassName="login right" label="Log In" />
-  } else {
-    btns = (
-      <>
-        <LoginFormButton customClassName="login left" label="Sign Up" />
-        <LoginFormButton customClassName="login right" label="Log In" />
-      </>
-    )
-  }
-  return (
-    <Grid
-      item
-      xs={10}
-      md={8}
-      lg={4}
-      style={{ margin: "0 auto", display: "flex" }}
-      // className="submit-btn-container"
-    >
-      {btns}
-    </Grid>
-  )
-}
-
 export function LoginForm({
   title,
   onFormSubmitted,
-  fields,
   errorMessage,
   type,
+  credentials,
+  onInputChanged,
 }) {
   return (
     <>
       <h1
         style={{
           fontSize: "calc(var(--fs-md) * 0.75)",
-          marginBottom: "var(--mg-md)",
+          marginBottom: "3rem",
         }}
       >
         {title}
       </h1>
       <form className="login-form" onSubmit={onFormSubmitted}>
-        {fields}
+        <LoginFields
+          credentials={credentials}
+          onInputChanged={onInputChanged}
+        />
         {<ErrorMessageDiv errorMessage={errorMessage} />}
         <LoginFormButtonPanel type={type} />
       </form>
