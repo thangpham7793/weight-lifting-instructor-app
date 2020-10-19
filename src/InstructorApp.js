@@ -6,7 +6,7 @@ import { Navbar, Footer, PageRoutes } from "./app/register"
 
 import { LearnersPanel } from "./components/learners/register"
 import { SchedulePanel } from "./components/schedules/register"
-import { InstructorHomePanel } from "./components/home/register"
+import { InstructorLoginPage } from "./components/home/register"
 
 import { UserAuth, NavHelpers } from "./services/register"
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles"
@@ -40,7 +40,7 @@ const allLinks = {
   ],
   learnerApp: [
     {
-      to: "/learner",
+      to: "/learner/login",
       label: "Learner Space",
       isProtected: false,
     },
@@ -65,7 +65,7 @@ export function InstructorApp({ onAppChange }) {
   function onInstructorLogOut(e) {
     console.log("log me out!")
     UserAuth.clearToken()
-    NavHelpers.clearCurrentPage()
+    NavHelpers.setCurrentPage("/instructor/login")
     setLinks(allLinks.learnerApp)
     setIsInstructorLoggedIn(false)
   }
@@ -80,21 +80,10 @@ export function InstructorApp({ onAppChange }) {
           onAppChange={onAppChange}
         />
         <div className="App main">
-          {isInstructorLoggedIn ? (
-            //need to redirect user to where they currently are or schedules after login
-            <Redirect
-              to={
-                NavHelpers.getCurrentPage()
-                  ? NavHelpers.getCurrentPage()
-                  : "/instructor/schedules"
-              }
-            />
-          ) : (
-            <InstructorHomePanel
-              onInstructorLogIn={onInstructorLogIn}
-              isInstructorLoggedIn={isInstructorLoggedIn}
-            />
-          )}
+          <InstructorLoginPage
+            onInstructorLogIn={onInstructorLogIn}
+            isInstructorLoggedIn={isInstructorLoggedIn}
+          />
           <PageRoutes links={links} />
         </div>
         <Footer />

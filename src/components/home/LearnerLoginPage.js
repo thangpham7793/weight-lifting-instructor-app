@@ -1,11 +1,10 @@
 import React, { useState } from "react"
-import { Redirect } from "react-router"
+import { Redirect } from "react-router-dom"
 import { Logo, LoginForm, LoginFormTextInput } from "./register"
 import { UserAuth, validateLearnerCredentials } from "../../services/register"
-
 import httpService from "../../services/LearnerServiceSingleton"
 
-export function LearnerHomePanel({ onLearnerLogIn, isLearnerLoggedIn }) {
+export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
   const [credentials, setCredentials] = useState({ username: "", password: "" })
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -35,7 +34,14 @@ export function LearnerHomePanel({ onLearnerLogIn, isLearnerLoggedIn }) {
       return
     } else {
       UserAuth.saveToken(payload.token)
-      onLearnerLogIn(payload)
+      delete payload.token
+      //redux?
+      sessionStorage.setItem("learnerPbs", JSON.stringify({ pbs: payload.pbs }))
+      sessionStorage.setItem(
+        "schedules",
+        JSON.stringify({ schedules: payload.schedules })
+      )
+      onLearnerLogIn()
     }
   }
 
@@ -48,21 +54,17 @@ export function LearnerHomePanel({ onLearnerLogIn, isLearnerLoggedIn }) {
     />
   ))
 
-  return (
+  return isLearnerLoggedIn ? (
+    <Redirect to="learner/schedules" />
+  ) : (
     <div>
-      {isLearnerLoggedIn ? (
-        <Redirect to="/learner/schedules" />
-      ) : (
-        <>
-          <Logo />
-          <LoginForm
-            title="Learner Login"
-            onFormSubmitted={onFormSubmitted}
-            fields={fields}
-            errorMessage={errorMessage}
-          />
-        </>
-      )}
+      <Logo />
+      <LoginForm
+        title="Learner Login"
+        onFormSubmitted={onFormSubmitted}
+        fields={fields}
+        errorMessage={errorMessage}
+      />
     </div>
   )
 }

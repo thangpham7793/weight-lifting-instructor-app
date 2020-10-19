@@ -1,14 +1,13 @@
 import React, { useState } from "react"
-import { Redirect } from "react-router"
 import { Logo, LoginForm, LoginFormTextInput } from "./register"
 import {
   UserAuth,
   validateInstructorCredentials,
 } from "../../services/register"
-
+import { InstructorAccountPage } from "./register"
 import httpService from "../../services/InstructorServiceSingleton"
 
-export function InstructorHomePanel({
+export function InstructorLoginPage({
   onInstructorLogIn,
   isInstructorLoggedIn,
 }) {
@@ -54,27 +53,23 @@ export function InstructorHomePanel({
     />
   ))
 
-  // function onLogOutClicked(e) {
-  //   console.log("log me out!")
-  //   UserAuth.clearToken()
-  //   setisInstructorLoggedIn(false)
-  // }
+  function onLogOutClicked(e) {
+    console.log("log me out!")
+    UserAuth.clearToken()
+  }
 
   return (
     <div>
+      <Logo />
       {isInstructorLoggedIn ? (
-        <Redirect to="/instructor/schedules" />
+        <InstructorAccountPage onLogOutClicked={onLogOutClicked} />
       ) : (
-        // <WelcomePanel onLogOutClicked={onLogOutClicked} />
-        <>
-          <Logo />
-          <LoginForm
-            title="Instructor Login"
-            onFormSubmitted={onFormSubmitted}
-            fields={fields}
-            errorMessage={errorMessage}
-          />
-        </>
+        <LoginForm
+          title="Instructor Login"
+          onFormSubmitted={onFormSubmitted}
+          fields={fields}
+          errorMessage={errorMessage}
+        />
       )}
     </div>
   )

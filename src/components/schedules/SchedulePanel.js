@@ -39,8 +39,6 @@ function checkCanUpdate(newName, currentName, isFileUploaded) {
 }
 
 export function SchedulePanel() {
-  NavHelpers.setCurrentPage()
-
   const [schedules, setSchedules] = useState(null)
   const [clickedScheduleId, setClickedScheduleId] = useState(null)
   const [clickedSchedule, setClickedSchedule] = useState(null)

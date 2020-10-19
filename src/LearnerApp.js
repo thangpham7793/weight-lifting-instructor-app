@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Redirect } from "react-router-dom"
 
 import { Navbar, Footer, PageRoutes } from "./app/register"
 
-import { LearnerSchedulePanel } from "./components/learners/register"
-import { LearnerHomePanel } from "./components/home/register"
+import { LearnerSchedulePage } from "./components/learners/register"
+import { LearnerLoginPage } from "./components/home/register"
 
 import { UserAuth, NavHelpers } from "./services/register"
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles"
@@ -21,13 +21,19 @@ const allLinks = {
     {
       to: "/learner/schedules",
       label: "Schedules",
-      component: LearnerSchedulePanel,
+      component: LearnerSchedulePage,
+      isProtected: true,
+    },
+    {
+      to: "/logout",
+      label: "Log Out",
+      component: null,
       isProtected: true,
     },
   ],
   instructorApp: [
     {
-      to: "/instructor",
+      to: "/instructor/login",
       label: "Instructor Space",
       isProtected: false,
     },
@@ -43,7 +49,7 @@ export function LearnerApp({ onAppChange }) {
     UserAuth.isAuthenticated() ? allLinks.learner : allLinks.instructorApp
   )
 
-  function onLearnerLogIn(afterLoginPayload) {
+  function onLearnerLogIn() {
     setLinks(allLinks.learner)
     setIsLearnerLoggedIn(true)
   }
@@ -51,7 +57,7 @@ export function LearnerApp({ onAppChange }) {
   function onLearnerLogOut(e) {
     console.log("log me out!")
     UserAuth.clearToken()
-    NavHelpers.clearCurrentPage()
+    NavHelpers.setCurrentPage("/learner/login")
     setLinks(allLinks.instructorApp)
     setIsLearnerLoggedIn(false)
   }
@@ -67,16 +73,15 @@ export function LearnerApp({ onAppChange }) {
         />
         <div className="App main">
           {isLearnerLoggedIn ? (
-            //need to redirect user to where they currently are or schedules after login
             <Redirect
               to={
-                NavHelpers.getCurrentPage()
+                NavHelpers.getCurrentPage() !== "/learner/login"
                   ? NavHelpers.getCurrentPage()
                   : "/learner/schedules"
               }
             />
           ) : (
-            <LearnerHomePanel
+            <LearnerLoginPage
               onLearnerLogIn={onLearnerLogIn}
               isLearnerLoggedIn={isLearnerLoggedIn}
             />

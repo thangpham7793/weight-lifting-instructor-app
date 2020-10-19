@@ -1,7 +1,7 @@
 import React from "react"
 import { LoginFormButton } from "./register"
 
-export function WelcomePanel({ onLogOutClicked }) {
+export function InstructorAccountPage({ onLogOutClicked }) {
   return (
     <>
       <h1>Welcome to the Instructor Space</h1>

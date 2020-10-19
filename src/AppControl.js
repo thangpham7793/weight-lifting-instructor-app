@@ -4,14 +4,21 @@ import { NavHelpers } from "./services/register"
 
 export default function AppControl() {
   //FIXME: this will always get back to instructor app and log the user in! Should have separate auth for different user. It could also be the routing as well, since refreshing instructor app pages work fine
-  const [currentApp, setCurrentApp] = useState("/instructor")
+  const [currentPage, setCurrentPage] = useState(
+    NavHelpers.getCurrentPage() ? NavHelpers.getCurrentPage() : "/learner/login"
+  )
 
   function onAppChange(e) {
-    console.log(e.target.getAttribute("to"))
-    NavHelpers.clearCurrentPage()
-    NavHelpers.currentApp = e.target.getAttribute("to")
-    setCurrentApp(e.target.getAttribute("to"))
+    const targetPage = e.target.getAttribute("to")
+    console.log(targetPage)
+    NavHelpers.currentApp = targetPage
+    NavHelpers.setCurrentPage(targetPage)
+    setCurrentPage(targetPage)
   }
 
-  return <App currentApp={currentApp} onAppChange={onAppChange} />
+  return <App currentPage={currentPage} onAppChange={onAppChange} />
 }
+
+//if there is no current page, redirects to learner's login
+//learners should be redirect to schedule page after login
+//refreshing should reload the current page

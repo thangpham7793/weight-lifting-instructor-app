@@ -1,24 +1,19 @@
 export class NavHelpers {
-  static currentApp = ""
-
-  static setCurrentPage() {
-    let currentPage = window.location.href.split("/").splice(-1)
-
-    currentPage = currentPage === "/instructor" ? "schedules" : currentPage
-
-    sessionStorage.setItem(
-      "currentPage",
-      `${NavHelpers.currentApp}/${currentPage}`
-    )
+  static setCurrentPage(page) {
+    if (page) {
+      sessionStorage.setItem("currentPage", page)
+      return
+    }
   }
 
   static getCurrentPage() {
     let currentPage = sessionStorage.getItem("currentPage")
-    if (currentPage === "/instructor/") {
+    //redirects from login page if authenticated
+    if (currentPage === "/instructor") {
       return "/instructor/schedules"
     }
-    if (currentPage === "/learner/") {
-      return "/learnerr/schedules"
+    if (currentPage === "/learner") {
+      return "/learner/schedules"
     } else {
       return currentPage
     }
