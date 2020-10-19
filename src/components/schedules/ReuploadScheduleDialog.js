@@ -38,7 +38,7 @@ export function ReuploadScheduleDialog({
       clickedSchedule.scheduleId
     )
 
-    const { ok, payload } = await callDecoratedRepostService(data)
+    const { ok } = await callDecoratedRepostService(data)
     if (ok) {
       //don't need timetable to update UI
       delete data.timetable

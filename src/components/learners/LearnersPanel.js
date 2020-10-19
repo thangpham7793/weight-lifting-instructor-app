@@ -132,7 +132,7 @@ export function LearnersPanel() {
 
       setActionStatus({ action: "update", isActionSuccess: null })
 
-      const { ok, payload } = await httpService.updateLearner(selectedLearner)
+      const { ok } = await httpService.updateLearner(selectedLearner)
 
       if (ok) {
         //...when should you update?
@@ -166,9 +166,7 @@ export function LearnersPanel() {
 
     setActionStatus({ action: "delete", isActionSuccess: null })
 
-    const { ok, payload } = await httpService.deleteLearner(
-      selectedLearner.learnerId
-    )
+    const { ok } = await httpService.deleteLearner(selectedLearner.learnerId)
 
     if (ok) {
       setActionStatus({ action: "delete", isActionSuccess: true })

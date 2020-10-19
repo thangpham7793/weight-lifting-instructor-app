@@ -107,7 +107,7 @@ export function SchedulePanel() {
         `Are you sure you want to delete schedule id ${scheduleId}`
       )
     ) {
-      const { ok, payload } = await callDecoratedDeleteService(scheduleId)
+      const { ok } = await callDecoratedDeleteService(scheduleId)
       if (ok) {
         updateSchedulesList("delete", { scheduleId })
       }
