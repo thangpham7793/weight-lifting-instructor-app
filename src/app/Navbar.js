@@ -1,9 +1,9 @@
 import React from "react"
 import { Link } from "react-router-dom"
 
-function NavLink({ to, label, onClick }) {
+function NavLink({ to, label }) {
   return (
-    <Link to={to} className="nav-item" onClick={onClick}>
+    <Link to={to} className="nav-item">
       {label}
     </Link>
   )
@@ -27,12 +27,7 @@ export const Navbar = ({ links, onLogOut, onAppChange, pageTitle }) => {
   } else {
     navLinks = links.map(({ to, label }) => {
       return to !== "/logout" ? (
-        <NavLink
-          key={to}
-          to={to}
-          label={label}
-          onClick={() => console.log(`Take me to ${to}`)}
-        />
+        <NavLink key={to} to={to} label={label} />
       ) : (
         //basically need to make a fake link here!
         <span className="nav-item" key={to} label={label} onClick={onLogOut}>

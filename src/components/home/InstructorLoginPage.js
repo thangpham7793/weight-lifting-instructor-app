@@ -4,13 +4,9 @@ import {
   UserAuth,
   validateInstructorCredentials,
 } from "../../services/register"
-import { InstructorAccountPage } from "./register"
 import httpService from "../../services/InstructorServiceSingleton"
 
-export function InstructorLoginPage({
-  onInstructorLogIn,
-  isInstructorLoggedIn,
-}) {
+export function InstructorLoginPage({ onInstructorLogIn }) {
   const [credentials, setCredentials] = useState({ email: "", password: "" })
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -53,24 +49,15 @@ export function InstructorLoginPage({
     />
   ))
 
-  function onLogOutClicked(e) {
-    console.log("log me out!")
-    UserAuth.clearToken()
-  }
-
   return (
-    <div>
+    <>
       <Logo />
-      {isInstructorLoggedIn ? (
-        <InstructorAccountPage onLogOutClicked={onLogOutClicked} />
-      ) : (
-        <LoginForm
-          title="Instructor Login"
-          onFormSubmitted={onFormSubmitted}
-          fields={fields}
-          errorMessage={errorMessage}
-        />
-      )}
-    </div>
+      <LoginForm
+        title="Instructor Login"
+        onFormSubmitted={onFormSubmitted}
+        fields={fields}
+        errorMessage={errorMessage}
+      />
+    </>
   )
 }

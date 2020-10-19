@@ -6,7 +6,10 @@ import { Navbar, Footer, PageRoutes } from "./app/register"
 
 import { LearnersPanel } from "./components/learners/register"
 import { SchedulePanel } from "./components/schedules/register"
-import { InstructorLoginPage } from "./components/home/register"
+import {
+  InstructorLoginPage,
+  InstructorAccountPage,
+} from "./components/home/register"
 
 import { UserAuth, NavHelpers } from "./services/register"
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles"
@@ -29,6 +32,12 @@ const allLinks = {
       to: "/instructor/learners",
       label: "Learners Panel",
       component: LearnersPanel,
+      isProtected: true,
+    },
+    {
+      to: "/instructor/account",
+      label: "Account",
+      component: InstructorAccountPage,
       isProtected: true,
     },
     {
@@ -89,10 +98,7 @@ export function InstructorApp({ onAppChange }) {
               }
             />
           ) : (
-            <InstructorLoginPage
-              onInstructorLogIn={onInstructorLogIn}
-              isInstructorLoggedIn={isInstructorLoggedIn}
-            />
+            <InstructorLoginPage onInstructorLogIn={onInstructorLogIn} />
           )}
           <PageRoutes links={links} />
         </div>
