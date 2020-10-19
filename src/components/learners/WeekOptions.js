@@ -34,12 +34,7 @@ export function WeekOptions({
   return (
     <FormControl component="fieldset" className={classes.formControl}>
       <InputLabel id="week">{label}</InputLabel>
-      <Select
-        labelId="week"
-        id="week"
-        value={selectedWeek}
-        onChange={onWeekSelected}
-      >
+      <Select value={selectedWeek} onChange={onWeekSelected}>
         {items}
       </Select>
     </FormControl>

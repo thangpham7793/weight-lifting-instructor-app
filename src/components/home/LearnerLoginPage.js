@@ -1,12 +1,18 @@
 import React, { useState } from "react"
 import { Redirect } from "react-router-dom"
 import { Logo, LoginForm } from "./register"
-import { UserAuth, validateLearnerCredentials } from "../../services/register"
+import {
+  NavHelpers,
+  UserAuth,
+  validateLearnerCredentials,
+} from "../../services/register"
 import httpService from "../../services/LearnerServiceSingleton"
 import { init } from "../../reducers/learnerSchedulesSlice"
 import { useDispatch } from "react-redux"
 
 export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
+  NavHelpers.setCurrentPage("/learner/login")
+
   const dispatch = useDispatch()
 
   const [credentials, setCredentials] = useState({ username: "", password: "" })

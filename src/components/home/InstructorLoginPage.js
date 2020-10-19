@@ -3,10 +3,13 @@ import { Logo, LoginForm } from "./register"
 import {
   UserAuth,
   validateInstructorCredentials,
+  NavHelpers,
 } from "../../services/register"
 import httpService from "../../services/InstructorServiceSingleton"
 
 export function InstructorLoginPage({ onInstructorLogIn }) {
+  NavHelpers.setCurrentPage("/instructor/login")
+
   const [credentials, setCredentials] = useState({ email: "", password: "" })
   const [errorMessage, setErrorMessage] = useState(null)
 

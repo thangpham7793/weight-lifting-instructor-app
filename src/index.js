@@ -16,3 +16,31 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 )
+
+//Use it to access match.params of the current <Route>.
+
+// import React from "react"
+// import ReactDOM from "react-dom"
+// import {
+//   BrowserRouter as Router,
+//   Switch,
+//   Route,
+//   useParams,
+// } from "react-router-dom"
+
+// function BlogPost() {
+//   let { slug } = useParams()
+//   return <div>Now showing post {slug}</div>
+// }
+
+// ReactDOM.render(
+//   <Router>
+//     <Switch>
+//       <Route exact path="/">
+//         {() => <div>Home</div>}
+//       </Route>
+//       <Route path="/blog/:slug" component={BlogPost} />
+//     </Switch>
+//   </Router>,
+//   document.getElementById("root")
+// )

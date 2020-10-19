@@ -1,23 +1,17 @@
 import React from "react"
-import { ProtectedRoute } from "./register"
+// import { ProtectedRoute } from "./register"
 import { Route, Redirect, Switch } from "react-router-dom"
 import { NavHelpers } from "../services/register"
 
-function PageRoute({ isProtected, ...props }) {
-  return isProtected ? <ProtectedRoute {...props} /> : <Route {...props} />
-}
+//isProtected ? <ProtectedRoute {...props} /> :
+
+// function PageRoute({ isProtected, ...props }) {
+//   return <Route {...props} />
+// }
 
 export function PageRoutes({ links }) {
-  const routes = links.map(({ to, component, isProtected }) => {
-    return (
-      <PageRoute
-        key={to}
-        exact
-        path={to}
-        component={component}
-        isProtected={isProtected}
-      />
-    )
+  const routes = links.map(({ to, component }) => {
+    return <Route key={to} exact path={to} component={component} />
   })
 
   return (

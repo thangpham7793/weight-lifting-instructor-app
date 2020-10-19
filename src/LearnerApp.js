@@ -4,7 +4,10 @@ import { BrowserRouter as Router, Redirect } from "react-router-dom"
 
 import { Navbar, Footer, PageRoutes } from "./app/register"
 
-import { LearnerSchedulePage } from "./components/learners/register"
+import {
+  ExercisesTable,
+  LearnerSchedulePage,
+} from "./components/learners/register"
 import { LearnerLoginPage } from "./components/home/register"
 
 import { UserAuth, NavHelpers } from "./services/register"
@@ -16,12 +19,21 @@ const allLinks = {
       label: "Schedules",
       component: LearnerSchedulePage,
       isProtected: true,
+      display: true,
     },
     {
       to: "/logout",
       label: "Log Out",
       component: null,
       isProtected: true,
+      display: true,
+    },
+    {
+      to: "/learner/:scheduleId/:week",
+      label: "Exercises",
+      component: ExercisesTable,
+      isProtected: true,
+      display: false,
     },
   ],
   instructorApp: [
@@ -51,7 +63,7 @@ export function LearnerApp({ onAppChange }) {
     console.log("log me out!")
     UserAuth.clearToken()
     NavHelpers.setCurrentPage("/learner/login")
-    setLinks(allLinks.instructorApp)
+    setLinks(allLinks.instructorApp) //this also makes sure that only the login page is registered as a route when user's logged out
     setIsLearnerLoggedIn(false)
   }
 
@@ -67,7 +79,8 @@ export function LearnerApp({ onAppChange }) {
         {isLearnerLoggedIn ? (
           <Redirect
             to={
-              NavHelpers.getCurrentPage() !== "/learner/login"
+              NavHelpers.getCurrentPage() !== "/learner/login" &&
+              NavHelpers.getCurrentPage() !== null
                 ? NavHelpers.getCurrentPage()
                 : "/learner/schedules"
             }

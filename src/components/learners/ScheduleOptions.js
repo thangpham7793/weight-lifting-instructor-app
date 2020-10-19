@@ -45,12 +45,7 @@ export function ScheduleOptions({
       <InputLabel id="cycle" className={classes.label}>
         {label}
       </InputLabel>
-      <Select
-        labelId="cycle"
-        id="cycle"
-        value={selectedSchedule.scheduleId}
-        onChange={onScheduleChecked}
-      >
+      <Select value={selectedSchedule.scheduleId} onChange={onScheduleChecked}>
         {items}
       </Select>
     </FormControl>

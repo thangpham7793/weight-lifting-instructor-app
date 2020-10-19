@@ -5,9 +5,5 @@ import { UserAuth } from "../services/auth"
 export function ProtectedRoute({ component }) {
   const Component = component
   console.log("Checking", UserAuth.isAuthenticated())
-  return UserAuth.isAuthenticated() ? (
-    <Component />
-  ) : (
-    <Redirect to={{ pathname: "/" }} />
-  )
+  return UserAuth.isAuthenticated() ? <Component /> : <Redirect to="/" />
 }
