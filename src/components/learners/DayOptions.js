@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  select: {
+    paddingRight: theme.spacing(4),
+  },
 }))
 
 export function DayOptions({ exercises, onDaySelected, selectedDay, label }) {
@@ -34,8 +37,11 @@ export function DayOptions({ exercises, onDaySelected, selectedDay, label }) {
 
   return (
     <FormControl component="fieldset" className={classes.formControl}>
-      <InputLabel id="days">{label}</InputLabel>
-      <Select value={selectedDay} onChange={onDaySelected}>
+      <Select
+        value={selectedDay}
+        onChange={onDaySelected}
+        className={classes.select}
+      >
         {items}
       </Select>
     </FormControl>

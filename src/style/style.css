@@ -394,10 +394,12 @@ a.logo {
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
+  max-height: 80%;
 }
 
 .learner-table-cell {
-  background: #333;
+  background: var(--txt-cl);
+  font-size: 0.75rem !important;
   text-align: center;
   border: 1px solid var(--secondary-cl);
   padding: var(--pd-sm);
