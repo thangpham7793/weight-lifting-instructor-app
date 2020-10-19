@@ -24,7 +24,7 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
     }
   }
 
-  //programmes
+  //programmes (for signup)
   async fetchProgrammes() {
     return await ProgrammeServiceSingleton._fetchJsonFactory("programmes")()
   }
@@ -80,6 +80,13 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
     console.log(programmeId)
     return await ProgrammeServiceSingleton._fetchDeleteFactory(
       `programmes/schedules/${scheduleId}/unpublish/${programmeId}`
+    )()
+  }
+
+  //fetch weekly schedules {scheduleId, week}
+  async fetchWeeklySchedule(scheduleId, week) {
+    return await ProgrammeServiceSingleton._fetchJsonFactory(
+      `programmes/schedules/${scheduleId}/weeks/${week}`
     )()
   }
 

@@ -47,6 +47,20 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     )
   }
 
+  //expected payload: {firstName, lastName, email, programmeId}
+  async learnerSignup(signupInfo) {
+    return await LearnerServiceSingleton._fetchPostFactory("learners/signup")(
+      signupInfo
+    )
+  }
+
+  //pbs => {exerciseName: number, ...}
+  async updateLearnerPbs(pbs) {
+    return await LearnerServiceSingleton._fetchPutFactory("learners/pbs")({
+      newPbs: pbs,
+    })
+  }
+
   static getLearnerInstance() {
     return LearnerServiceSingleton._instance || new LearnerServiceSingleton()
   }
