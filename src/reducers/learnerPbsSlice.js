@@ -2,13 +2,13 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
   pbs: {
-    backSquat: 0,
-    clean: 0,
-    cleanAndJerk: 0,
-    frontSquat: 0,
-    jerk: 0,
-    pushPress: 0,
-    snatch: 0,
+    backSquat: 100,
+    clean: 100,
+    cleanAndJerk: 100,
+    frontSquat: 100,
+    jerk: 100,
+    pushPress: 100,
+    snatch: 100,
   },
 }
 

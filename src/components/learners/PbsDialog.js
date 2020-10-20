@@ -1,5 +1,6 @@
 import React from "react"
-import { Dialog, DialogActions, DialogContent } from "@material-ui/core"
+import { LearnerPbsForm } from "./register"
+import { Dialog, DialogContent } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(() => ({
@@ -18,7 +19,12 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-export function PbsDialog({ onDialogCloseClicked, open }) {
+export function PbsDialog({
+  onDialogCloseClicked,
+  onPersonalBestsInputChange,
+  pbs,
+  open,
+}) {
   const classes = useStyles()
 
   return (
@@ -29,18 +35,13 @@ export function PbsDialog({ onDialogCloseClicked, open }) {
       aria-labelledby="form-dialog-title"
       className={classes.dialog}
     >
-      <DialogContent className={classes.content}></DialogContent>
-      <DialogActions
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          backgroundColor: "var(--txt-cl)",
-        }}
-      >
-        <button onClick={onDialogCloseClicked} style={{ width: "max-content" }}>
-          Close
-        </button>
-      </DialogActions>
+      <DialogContent className={classes.content}>
+        <LearnerPbsForm
+          pbs={pbs}
+          onPersonalBestsInputChange={onPersonalBestsInputChange}
+          onDialogCloseClicked={onDialogCloseClicked}
+        />
+      </DialogContent>
     </Dialog>
   )
 }

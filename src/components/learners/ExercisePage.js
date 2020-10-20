@@ -108,7 +108,8 @@ export function ExercisePage() {
   const [selectedDay, setSelectedDay] = useState("day 1")
   const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false)
   const [openPbsDialog, setOpenPbsDialog] = useState(false)
-  const [pbs, setPbs] = useState(useSelector(selectLearnerPbs))
+  // const [pbs, setPbs] = useState(useSelector(selectLearnerPbs))
+  const pbs = useSelector(selectLearnerPbs)
   const [tempPbs, setTempPbs] = useState(useSelector(selectLearnerPbs))
 
   const { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
@@ -125,9 +126,11 @@ export function ExercisePage() {
 
   function onPbsDialogCloseClicked() {
     setOpenPbsDialog(false)
-    if (!shallowEqual(pbs, setOpenPbsDialog)) {
-      //does this auto update UI ? like setState?
+    if (!shallowEqual(pbs, tempPbs)) {
+      //does this auto update UI ? like setState? (yes it does)
       dispatch(initPbs(tempPbs))
+    } else {
+      console.log("Same shit no update!")
     }
   }
 
@@ -135,7 +138,18 @@ export function ExercisePage() {
     setOpenPbsDialog(true)
   }
 
-  function onPbChanged(e) {}
+  function onPersonalBestsInputChange(e) {
+    const changedField = e.target.getAttribute("name")
+    const newValue = e.target.value
+    console.log(changedField)
+    setTempPbs((tempPbs) => {
+      let newTempPbs = { ...tempPbs }
+      newTempPbs[`${changedField}`] = parseFloat(newValue)
+        ? parseFloat(newValue)
+        : 0
+      return newTempPbs
+    })
+  }
 
   useEffect(() => {
     async function fetchExercises(scheduleId, week) {
@@ -180,7 +194,6 @@ export function ExercisePage() {
             <LinkButton
               className="submit-btn"
               style={{ fontSize: "0.75rem" }}
-              // onClick={onBackToSchedulesClicked}
               to="/learner/schedules"
               label="Schedules"
             >
@@ -214,8 +227,8 @@ export function ExercisePage() {
       <PbsDialog
         onDialogCloseClicked={onPbsDialogCloseClicked}
         open={openPbsDialog}
-        pbs={pbs}
-        onPbChanged={onPbChanged}
+        pbs={tempPbs}
+        onPersonalBestsInputChange={onPersonalBestsInputChange}
       />
     </>
   ) : (
