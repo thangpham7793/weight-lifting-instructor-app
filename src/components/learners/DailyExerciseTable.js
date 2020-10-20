@@ -22,7 +22,11 @@ export function DailyExerciseTable({ dailyExercises, pbs }) {
           <TableRow>
             {Object.keys(dailyExercises[0]).map((k) => {
               return (
-                <TableCell className="learner-table-cell head" align="center">
+                <TableCell
+                  key={k}
+                  className="learner-table-cell head"
+                  align="center"
+                >
                   {camelCaseToNormal(k)}
                 </TableCell>
               )
@@ -31,7 +35,7 @@ export function DailyExerciseTable({ dailyExercises, pbs }) {
         </TableHead>
         <TableBody>
           {dailyExercises.map((e) => (
-            <TableRow className="timetable-row">
+            <TableRow key={e.exerciseName} className="timetable-row">
               <TableCell className="learner-table-cell" align="center">
                 {e.exerciseName}
               </TableCell>

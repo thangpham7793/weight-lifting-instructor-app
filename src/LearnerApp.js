@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Redirect } from "react-router-dom"
 import { Navbar, Footer, PageRoutes } from "./app/register"
 
 import {
-  ExercisesTable,
+  ExercisePage,
   LearnerSchedulePage,
 } from "./components/learners/register"
 import { LearnerLoginPage } from "./components/home/register"
@@ -31,7 +31,7 @@ const allLinks = {
     {
       to: "/learner/:scheduleId/:week",
       label: "Exercises",
-      component: ExercisesTable,
+      component: ExercisePage,
       isProtected: true,
       display: false,
     },

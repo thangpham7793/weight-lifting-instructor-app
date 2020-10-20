@@ -138,7 +138,6 @@ function calculateRealWeight(str, pb) {
     })
     .join(" ")
 
-  console.log(result)
   return result
 }
 
