@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
     height: "100vh",
   },
   content: {
-    background: "var(--secondary-cl)",
+    background: "var(--txt-cl)",
     paddingTop: "0",
   },
   form: {

@@ -14,7 +14,7 @@ import {
   FeedBackDialog,
   PbsDialog,
 } from "./register"
-import { Grid } from "@material-ui/core"
+import { Grid, Typography } from "@material-ui/core"
 import { shallowEqual } from "../../utils"
 import programmeHttpService from "../../services/ProgrammeServiceSingleton"
 import learnerHttpService from "../../services/LearnerServiceSingleton"
@@ -106,6 +106,9 @@ export function ExercisePage() {
         style={{ height: "100%" }}
       >
         <Grid item>
+          <Typography variant="h6" component="div">
+            Week {week}
+          </Typography>
           <DayOptions
             exercises={exercises}
             onDaySelected={onDaySelected}

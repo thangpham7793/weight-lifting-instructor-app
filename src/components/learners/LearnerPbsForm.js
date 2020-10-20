@@ -1,13 +1,17 @@
 import React from "react"
 import { Save } from "@material-ui/icons"
 import { camelCaseToNormal } from "../../utils"
+import { TextField, Grid } from "@material-ui/core"
 
 function PersonalBestInput({ label, ...props }) {
   return (
-    <div className="pbs-field">
-      <label htmlFor={props.id || props.name}>{camelCaseToNormal(label)}</label>
-      <input className="text-input" {...props} />
-    </div>
+    <Grid item>
+      <TextField
+        label={camelCaseToNormal(label)}
+        className="text-input"
+        {...props}
+      />
+    </Grid>
   )
 }
 
@@ -37,11 +41,23 @@ export function LearnerPbsForm({
   return (
     <div className="pbs-form-wrapper">
       <h3 style={{ textTransform: "capitalize" }}>Personal Bests</h3>
-      <form>{inputs}</form>
-      <div className="pbs-form-btn-wrapper">
+      <form>
+        <Grid
+          container
+          direction="column"
+          justify="space-around"
+          style={{ height: "80vh" }}
+        >
+          {inputs}
+        </Grid>
+      </form>
+      <div
+        className="pbs-form-btn-wrapper"
+        style={{ justifyContent: "center" }}
+      >
         <button className="pbs-btn" onClick={onDialogCloseClicked}>
           <Save className="pbs-btn-icon" />
-          {"Save & Close"}
+          {"Save"}
         </button>
       </div>
     </div>
