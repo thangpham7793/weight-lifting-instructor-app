@@ -18,10 +18,13 @@ export function LoginFormButtonPanel({ type }) {
   return (
     <Grid
       item
+      container
       xs={10}
       md={8}
       lg={4}
-      style={{ margin: "0 auto", display: "flex" }}
+      justify="space-evenly"
+      wrap="nowrap"
+      style={{ margin: "0 auto", width: "100%" }}
       // className="submit-btn-container"
     >
       {btns}
