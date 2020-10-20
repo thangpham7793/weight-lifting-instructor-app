@@ -27,7 +27,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "jest": "npx jest src/tests/",
-    "deploy": "npm run build && mv build/ instructor/ && rm -r ../otago_weight_lifting_club_schedule_app/src/backend/public/instructor/ && mv instructor/ ../otago_weight_lifting_club_schedule_app/src/backend/public/"
+    "deploy": "npm run build && mv build/ instructor/ && rm -r ../otago_weight_lifting_club_schedule_app/src/backend/public/instructor/ && mv instructor/ ../otago_weight_lifting_club_schedule_app/src/backend/public/",
+    "commit": "cd ../otago_weight_lifting_club_schedule_app && git add . && git commit -am 'new frontend update' && git push",
+    "deploy-heroku": "npm run deploy && commit"
   },
   "eslintConfig": {
     "extends": "react-app"

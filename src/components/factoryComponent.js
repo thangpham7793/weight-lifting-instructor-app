@@ -1,5 +1,5 @@
 import React from "react"
-import { Grid } from "@material-ui/core"
+import { Grid, Button } from "@material-ui/core"
 import { useHistory } from "react-router-dom"
 
 export function FetchNotificationDivFactory(
@@ -42,8 +42,8 @@ export function CustomGridFactory({ sizes, ...rest }) {
 export function LinkButton({ to, label, ...rest }) {
   const history = useHistory()
   return (
-    <button onClick={() => history.push(to)} {...rest}>
+    <Button onClick={() => history.push(to)} {...rest}>
       {label}
-    </button>
+    </Button>
   )
 }

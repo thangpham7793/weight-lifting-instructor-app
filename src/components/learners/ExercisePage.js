@@ -14,10 +14,20 @@ import {
   FeedBackDialog,
   PbsDialog,
 } from "./register"
-import { Grid, Typography } from "@material-ui/core"
+import { Grid, Typography, Button } from "@material-ui/core"
+import { makeStyles } from "@material-ui/core/styles"
 import { shallowEqual } from "../../utils"
 import programmeHttpService from "../../services/ProgrammeServiceSingleton"
 import learnerHttpService from "../../services/LearnerServiceSingleton"
+
+const useStyles = makeStyles(() => ({
+  btn: {
+    fontSize: "0.5rem",
+    minWidth: "max-content",
+    color: "var(--txt-cl)",
+    padding: "0.5rem",
+  },
+}))
 
 export function ExercisePage() {
   const dispatch = useDispatch()
@@ -97,6 +107,8 @@ export function ExercisePage() {
     setSelectedDay(e.target.value)
   }
 
+  const classes = useStyles()
+
   return exercises ? (
     <>
       <Grid
@@ -120,11 +132,18 @@ export function ExercisePage() {
             pbs={pbs}
           />
         </Grid>
-        <Grid container justify="space-evenly" item>
+        <Grid
+          item
+          container
+          justify="space-between"
+          wrap="nowrap"
+          style={{ margin: "1rem auto", width: "100%", padding: "0 0.25rem" }}
+        >
           <Grid item>
             <LinkButton
-              className="submit-btn"
-              style={{ fontSize: "0.75rem" }}
+              variant="contained"
+              color="primary"
+              className={classes.btn}
               to="/learner/schedules"
               label="Schedules"
             >
@@ -132,22 +151,24 @@ export function ExercisePage() {
             </LinkButton>
           </Grid>
           <Grid item>
-            <button
-              className="submit-btn"
-              style={{ fontSize: "0.75rem" }}
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.btn}
               onClick={onPbsDialogOpenClicked}
             >
               Edit PBs
-            </button>
+            </Button>
           </Grid>
           <Grid item>
-            <button
-              className="submit-btn"
-              style={{ fontSize: "0.75rem" }}
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.btn}
               onClick={onFeedbackDialogOpenClicked}
             >
               Feedback
-            </button>
+            </Button>
           </Grid>
         </Grid>
       </Grid>
@@ -163,6 +184,13 @@ export function ExercisePage() {
       />
     </>
   ) : (
-    <FetchNotificationDiv />
+    <Grid
+      container
+      direction="column"
+      justify="space-around"
+      style={{ height: "100%" }}
+    >
+      <FetchNotificationDiv />
+    </Grid>
   )
 }

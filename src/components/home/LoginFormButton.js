@@ -1,11 +1,10 @@
 import React from "react"
 import { Button } from "@material-ui/core"
 
-export function LoginFormButton({ customClassName, label, onClick }) {
+export function LoginFormButton({ label, onClick }) {
   return (
     <Button
       type="submit"
-      //className={`${customClassName}`}
       onClick={onClick}
       variant="contained"
       color="secondary"
