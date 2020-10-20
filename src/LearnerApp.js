@@ -41,6 +41,7 @@ const allLinks = {
       to: "/instructor/login",
       label: "Instructor Space",
       isProtected: false,
+      display: true,
     },
   ],
 }

@@ -20,24 +20,28 @@ const allLinks = {
       label: "Schedules",
       component: SchedulePanel,
       isProtected: true,
+      display: true,
     },
     {
       to: "/instructor/learners",
       label: "Learners Panel",
       component: LearnersPanel,
       isProtected: true,
+      display: true,
     },
     {
       to: "/instructor/account",
       label: "Account",
       component: InstructorAccountPage,
       isProtected: true,
+      display: true,
     },
     {
       to: "/logout",
       label: "Log Out",
       component: null,
       isProtected: true,
+      display: true,
     },
   ],
   learnerApp: [
@@ -45,6 +49,7 @@ const allLinks = {
       to: "/learner/login",
       label: "Learner Space",
       isProtected: false,
+      display: true,
     },
   ],
 }
