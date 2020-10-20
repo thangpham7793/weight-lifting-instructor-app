@@ -19,7 +19,6 @@ function PersonalBestInput({ label, ...props }) {
 export function LearnerPbsForm({
   pbs,
   onPersonalBestsInputChange,
-  onUpdatePersonalBests,
   onDialogCloseClicked,
 }) {
   //it does changes, but doesn't show on the UI
@@ -46,20 +45,26 @@ export function LearnerPbsForm({
           container
           direction="column"
           justify="space-around"
+          align="center"
           style={{ height: "80vh" }}
         >
           {inputs}
         </Grid>
       </form>
-      <div
+      <Grid
+        item
         className="pbs-form-btn-wrapper"
         style={{ justifyContent: "center" }}
       >
-        <button className="pbs-btn" onClick={onDialogCloseClicked}>
+        <button
+          className="pbs-btn"
+          onClick={onDialogCloseClicked}
+          style={{ width: "30%" }}
+        >
           <Save className="pbs-btn-icon" />
           {"Save"}
         </button>
-      </div>
+      </Grid>
     </div>
   )
 }
