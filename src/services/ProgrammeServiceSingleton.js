@@ -15,6 +15,7 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
     this.repostSchedule = safeSpinnerWrapper(this.repostSchedule)
     this.postNewSchedule = safeSpinnerWrapper(this.postNewSchedule)
     this.fetchExercises = safeSpinnerWrapper(this.fetchExercises)
+    this.fetchExerciseNames = safeSpinnerWrapper(this.fetchExerciseNames)
     this.getAvailableProgrammesToPublish = safeSpinnerWrapper(
       this.getAvailableProgrammesToPublish
     )
@@ -88,6 +89,13 @@ export class ProgrammeServiceSingleton extends HttpServiceSingleton {
   async fetchExercises(scheduleId, week) {
     return await ProgrammeServiceSingleton._fetchJsonFactory(
       `programmes/schedules/${scheduleId}/weeks/${week}`
+    )()
+  }
+
+  //fetch weekly schedules {scheduleId, week}
+  async fetchExerciseNames() {
+    return await ProgrammeServiceSingleton._fetchJsonFactory(
+      `programmes/exercises`
     )()
   }
 
