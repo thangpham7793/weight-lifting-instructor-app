@@ -1,5 +1,6 @@
 import React from "react"
 import { Grid } from "@material-ui/core"
+import { useHistory } from "react-router-dom"
 
 export function FetchNotificationDivFactory(
   resourceName = null,
@@ -35,5 +36,14 @@ export function CustomGridFactory({ sizes, ...rest }) {
     <Grid item {...sizes}>
       {rest}
     </Grid>
+  )
+}
+
+export function LinkButton({ to, label, ...rest }) {
+  const history = useHistory()
+  return (
+    <button onClick={() => history.push(to)} {...rest}>
+      {label}
+    </button>
   )
 }

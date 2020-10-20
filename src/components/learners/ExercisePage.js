@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { selectLearnerPbs } from "../../reducers/learnerPbsSlice"
-import { useParams, useHistory } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import { LinkButton } from "../factoryComponent"
 import { useFetchSnackbar } from "../../hooks/useFetchSnackbar"
 import { DayOptions, DailyExerciseTable } from "./register"
 import { Grid } from "@material-ui/core"
@@ -95,7 +96,6 @@ const testExercises = {
 }
 
 export function ExercisePage() {
-  const history = useHistory()
   const { scheduleId, week } = useParams()
   const [exercises, setExercises] = useState(null)
   const [selectedDay, setSelectedDay] = useState("day 1")
@@ -123,10 +123,6 @@ export function ExercisePage() {
     setSelectedDay(e.target.value)
   }
 
-  function onBackToSchedulesClicked() {
-    history.push("/learner/schedules")
-  }
-
   return exercises ? (
     <Grid
       container
@@ -145,13 +141,15 @@ export function ExercisePage() {
       </Grid>
       <Grid container justify="space-evenly" item>
         <Grid item>
-          <button
+          <LinkButton
             className="submit-btn"
             style={{ fontSize: "0.75rem" }}
-            onClick={onBackToSchedulesClicked}
+            // onClick={onBackToSchedulesClicked}
+            to="/learner/schedules"
+            label="Schedules"
           >
             Schedules
-          </button>
+          </LinkButton>
         </Grid>
         <Grid item>
           <button className="submit-btn" style={{ fontSize: "0.75rem" }}>
