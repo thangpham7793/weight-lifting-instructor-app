@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { initPbs, selectLearnerPbs } from "../../reducers/learnerPbsSlice"
+import {
+  initDailyExercises,
+  selectDailyExercises,
+} from "../../reducers/dailyExercisesSlice"
 import { useParams } from "react-router-dom"
 import { LinkButton } from "../factoryComponent"
 import { useFetchSnackbar } from "../../hooks/useFetchSnackbar"
@@ -15,97 +19,13 @@ import { shallowEqual } from "../../utils"
 import programmeHttpService from "../../services/ProgrammeServiceSingleton"
 import learnerHttpService from "../../services/LearnerServiceSingleton"
 
-const testExercises = {
-  "day 1": [
-    {
-      exerciseName: "Snatch + Overhead Squat",
-      instruction: "75% 1r4s",
-    },
-    {
-      exerciseName: "Power Clean + Push Press",
-      instruction: "65% 2+3r3s",
-    },
-    {
-      exerciseName: "Snatch Panda Pull",
-      instruction: "90% 2r3s",
-    },
-    {
-      exerciseName: "Back Squat",
-      instruction: "77% 3r3s",
-    },
-    {
-      exerciseName: "Situps on Roman Chair or Hanging knee/leg raise",
-      instruction: "RPE6 10r3s",
-    },
-  ],
-  "day 2.5": [
-    {
-      exerciseName: "Muscle Snatch",
-      instruction: "65% 2r3s",
-    },
-    {
-      exerciseName: "Pullups",
-      instruction: "4RIR3s or RPE6 6r2s",
-    },
-    {
-      exerciseName: "Clean Romanian Deadlift",
-      instruction: "RPE6 10r2s",
-    },
-  ],
-  "day 2": [
-    {
-      exerciseName: "Clean + Jerk",
-      instruction: "75% 1+2r3s",
-    },
-    {
-      exerciseName: "Power Snatch",
-      instruction: "65% 2r3s",
-    },
-    {
-      exerciseName: "Front Squat",
-      instruction: "80% 2r3s",
-    },
-    {
-      exerciseName: "Dips",
-      instruction: "RPE6 8r2s or 4RIR2s",
-    },
-    {
-      exerciseName: "Back Extension",
-      instruction: "RPE6 10r2s or 4RIR2s",
-    },
-  ],
-  "day 3": [
-    {
-      exerciseName: "Snatch",
-      instruction: "80% 1r4s",
-    },
-    {
-      exerciseName: "Clean + Front Squat + Jerk",
-      instruction: "77% 1r3s",
-    },
-    {
-      exerciseName: "OPTIONAL: Clean Pull",
-      instruction: "90% 3r3s",
-    },
-    {
-      exerciseName: "Back Squat",
-      instruction: "83% 2r1s, 78% 2r1s",
-    },
-    {
-      exerciseName: "Bench Press OR Strict Press",
-      instruction: "RPE6 4r3s",
-    },
-    {
-      exerciseName: "OPTIONAL: Clean Deadlift",
-      instruction: "110% 3r3s",
-    },
-  ],
-}
-
 export function ExercisePage() {
   const dispatch = useDispatch()
   const { scheduleId, week } = useParams()
-  const [exercises, setExercises] = useState(null)
+  const { prevWeek, prevScheduleId, exercises } = useSelector(
+    selectDailyExercises
+  )
+
   const [selectedDay, setSelectedDay] = useState("day 1")
   const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false)
   const [openPbsDialog, setOpenPbsDialog] = useState(false)
@@ -155,20 +75,23 @@ export function ExercisePage() {
 
   useEffect(() => {
     async function fetchExercises(scheduleId, week) {
+      //if it's the same week, don't fetch (this logic can be hidden away in asyncThunk)
+      if (prevWeek === week && prevScheduleId === scheduleId) {
+        return
+      }
       const { ok, payload } = await programmeHttpService.fetchExercises(
         scheduleId,
         week
       )
       if (ok) {
         setIsFetchSuccess(true)
-        // setExercises(testExercises)
-        setExercises(JSON.parse(payload))
+        dispatch(initDailyExercises({ exercises: payload, scheduleId, week }))
       } else {
         setIsFetchSuccess(false)
       }
     }
     fetchExercises(scheduleId, week)
-  }, [scheduleId, week, setIsFetchSuccess])
+  }, [scheduleId, week, setIsFetchSuccess, prevScheduleId, prevWeek, dispatch])
 
   function onDaySelected(e) {
     setSelectedDay(e.target.value)
