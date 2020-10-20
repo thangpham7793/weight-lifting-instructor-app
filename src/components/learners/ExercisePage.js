@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react"
-import { useSelector } from "react-redux"
-import { selectLearnerPbs } from "../../reducers/learnerPbsSlice"
+import { useSelector, useDispatch } from "react-redux"
+import { initPbs, selectLearnerPbs } from "../../reducers/learnerPbsSlice"
 import { useParams } from "react-router-dom"
 import { LinkButton } from "../factoryComponent"
 import { useFetchSnackbar } from "../../hooks/useFetchSnackbar"
-import { DayOptions, DailyExerciseTable } from "./register"
+import {
+  DayOptions,
+  DailyExerciseTable,
+  FeedBackDialog,
+  PbsDialog,
+} from "./register"
 import { Grid } from "@material-ui/core"
+import { shallowEqual } from "../../utils"
 import httpService from "../../services/ProgrammeServiceSingleton"
 
 const testExercises = {
@@ -96,14 +102,40 @@ const testExercises = {
 }
 
 export function ExercisePage() {
+  const dispatch = useDispatch()
   const { scheduleId, week } = useParams()
   const [exercises, setExercises] = useState(null)
   const [selectedDay, setSelectedDay] = useState("day 1")
+  const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false)
+  const [openPbsDialog, setOpenPbsDialog] = useState(false)
   const [pbs, setPbs] = useState(useSelector(selectLearnerPbs))
+  const [tempPbs, setTempPbs] = useState(useSelector(selectLearnerPbs))
 
   const { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
     "exercises"
   )
+
+  function onFeedbackDialogCloseClicked() {
+    setOpenFeedbackDialog(false)
+  }
+
+  function onFeedbackDialogOpenClicked() {
+    setOpenFeedbackDialog(true)
+  }
+
+  function onPbsDialogCloseClicked() {
+    setOpenPbsDialog(false)
+    if (!shallowEqual(pbs, setOpenPbsDialog)) {
+      //does this auto update UI ? like setState?
+      dispatch(initPbs(tempPbs))
+    }
+  }
+
+  function onPbsDialogOpenClicked() {
+    setOpenPbsDialog(true)
+  }
+
+  function onPbChanged(e) {}
 
   useEffect(() => {
     async function fetchExercises(scheduleId, week) {
@@ -124,45 +156,68 @@ export function ExercisePage() {
   }
 
   return exercises ? (
-    <Grid
-      container
-      direction="column"
-      justify="space-around"
-      style={{ height: "100%" }}
-    >
-      <Grid item>
-        <DayOptions
-          exercises={exercises}
-          onDaySelected={onDaySelected}
-          selectedDay={selectedDay}
-          label="Day"
-        />
-        <DailyExerciseTable dailyExercises={exercises[selectedDay]} pbs={pbs} />
+    <>
+      <Grid
+        container
+        direction="column"
+        justify="space-around"
+        style={{ height: "100%" }}
+      >
+        <Grid item>
+          <DayOptions
+            exercises={exercises}
+            onDaySelected={onDaySelected}
+            selectedDay={selectedDay}
+            label="Day"
+          />
+          <DailyExerciseTable
+            dailyExercises={exercises[selectedDay]}
+            pbs={pbs}
+          />
+        </Grid>
+        <Grid container justify="space-evenly" item>
+          <Grid item>
+            <LinkButton
+              className="submit-btn"
+              style={{ fontSize: "0.75rem" }}
+              // onClick={onBackToSchedulesClicked}
+              to="/learner/schedules"
+              label="Schedules"
+            >
+              Schedules
+            </LinkButton>
+          </Grid>
+          <Grid item>
+            <button
+              className="submit-btn"
+              style={{ fontSize: "0.75rem" }}
+              onClick={onPbsDialogOpenClicked}
+            >
+              Edit PBs
+            </button>
+          </Grid>
+          <Grid item>
+            <button
+              className="submit-btn"
+              style={{ fontSize: "0.75rem" }}
+              onClick={onFeedbackDialogOpenClicked}
+            >
+              Feedback
+            </button>
+          </Grid>
+        </Grid>
       </Grid>
-      <Grid container justify="space-evenly" item>
-        <Grid item>
-          <LinkButton
-            className="submit-btn"
-            style={{ fontSize: "0.75rem" }}
-            // onClick={onBackToSchedulesClicked}
-            to="/learner/schedules"
-            label="Schedules"
-          >
-            Schedules
-          </LinkButton>
-        </Grid>
-        <Grid item>
-          <button className="submit-btn" style={{ fontSize: "0.75rem" }}>
-            Edit PBs
-          </button>
-        </Grid>
-        <Grid item>
-          <button className="submit-btn" style={{ fontSize: "0.75rem" }}>
-            Feedback
-          </button>
-        </Grid>
-      </Grid>
-    </Grid>
+      <FeedBackDialog
+        onDialogCloseClicked={onFeedbackDialogCloseClicked}
+        open={openFeedbackDialog}
+      />
+      <PbsDialog
+        onDialogCloseClicked={onPbsDialogCloseClicked}
+        open={openPbsDialog}
+        pbs={pbs}
+        onPbChanged={onPbChanged}
+      />
+    </>
   ) : (
     <FetchNotificationDiv />
   )

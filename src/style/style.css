@@ -883,7 +883,6 @@ label.Mui-focused {
   height: 60vw;
   background: var(--secondary-cl);
   padding: var(--pd-sm);
-  
 }
 
 .publish-schedule-dialog {
