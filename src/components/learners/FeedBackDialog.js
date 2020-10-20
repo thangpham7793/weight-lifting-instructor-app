@@ -4,8 +4,9 @@ import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(() => ({
   dialog: {
-    width: "100vw",
-    height: "100vh",
+    width: "90vw",
+    height: "90%",
+    margin: "1rem auto",
   },
   content: {
     background: "var(--secondary-cl)",
