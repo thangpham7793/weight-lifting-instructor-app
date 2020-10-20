@@ -12,7 +12,8 @@ import {
 } from "./register"
 import { Grid } from "@material-ui/core"
 import { shallowEqual } from "../../utils"
-import httpService from "../../services/ProgrammeServiceSingleton"
+import programmeHttpService from "../../services/ProgrammeServiceSingleton"
+import learnerHttpService from "../../services/LearnerServiceSingleton"
 
 const testExercises = {
   "day 1": [
@@ -124,14 +125,15 @@ export function ExercisePage() {
     setOpenFeedbackDialog(true)
   }
 
-  function onPbsDialogCloseClicked() {
-    setOpenPbsDialog(false)
+  async function onPbsDialogCloseClicked() {
     if (!shallowEqual(pbs, tempPbs)) {
       //does this auto update UI ? like setState? (yes it does)
-      dispatch(initPbs(tempPbs))
-    } else {
-      console.log("Same shit no update!")
+      const { ok } = await learnerHttpService.updateLearnerPbs(tempPbs)
+      if (ok) {
+      }
     }
+    dispatch(initPbs(tempPbs))
+    setOpenPbsDialog(false)
   }
 
   function onPbsDialogOpenClicked() {
@@ -153,11 +155,14 @@ export function ExercisePage() {
 
   useEffect(() => {
     async function fetchExercises(scheduleId, week) {
-      // const { ok, payload } = await httpService.fetchExercises(scheduleId, week)
-      if (true) {
+      const { ok, payload } = await programmeHttpService.fetchExercises(
+        scheduleId,
+        week
+      )
+      if (ok) {
         setIsFetchSuccess(true)
-        setExercises(testExercises)
-        // setExercises(JSON.parse(payload))
+        // setExercises(testExercises)
+        setExercises(JSON.parse(payload))
       } else {
         setIsFetchSuccess(false)
       }
