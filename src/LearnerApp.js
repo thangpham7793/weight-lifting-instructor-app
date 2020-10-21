@@ -10,10 +10,14 @@ import {
   LearnerSchedulePage,
 } from "./components/learners/register"
 import { LearnerLoginPage } from "./components/home/register"
-import { LearnerPracticeBestsPage } from "./components/learners/LearnerPracticeBestsPage"
+import {
+  LearnerPracticeBestsPage,
+  SingleExerciseForm,
+} from "./components/LearnerApp/register"
 
 import { UserAuth, NavHelpers } from "./services/register"
 
+//NOTE: the desired order of navBar item does not match with that of the regex parser
 const allLinks = {
   learner: [
     {
@@ -39,6 +43,13 @@ const allLinks = {
       isProtected: true,
       display: true,
       icon: ExitToApp,
+    },
+    {
+      to: "/practice.bests/:exerciseName", //using /learner/practice.bests will match with the previous item above https://reactrouter.com/web/guides/primary-components
+      label: "Practice Best",
+      component: SingleExerciseForm,
+      isProtected: true,
+      display: false,
     },
     {
       to: "/learner/:scheduleId/:week",
@@ -95,7 +106,7 @@ export function LearnerApp({ onAppChange }) {
               NavHelpers.getCurrentPage() !== "/learner/login" &&
               NavHelpers.getCurrentPage() !== null
                 ? NavHelpers.getCurrentPage()
-                : "/learner/schedules"
+                : "/learner/practice.bests"
             }
           />
         ) : (
