@@ -10,7 +10,15 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     this.createLearner = safeSpinnerWrapper(this.createLearner)
     this.learnerLogin = safeSpinnerWrapper(this.learnerLogin)
     this.updateLearnerPbs = safeSpinnerWrapper(this.updateLearnerPbs)
+    this.createNewPracticeBest = safeSpinnerWrapper(this.createNewPracticeBest)
+    this.updatePracticeBest = safeSpinnerWrapper(this.updatePracticeBest)
+
+    this.getPracticeBestsByExerciseName = safeSpinnerWrapper(
+      this.getPracticeBestsByExerciseName
+    )
+
     this._instance = this
+
     if (LearnerServiceSingleton._instance) {
       return this._instance
     }
@@ -60,6 +68,24 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     return await LearnerServiceSingleton._fetchPutFactory("learners/pbs")({
       newPbs: pbs,
     })
+  }
+
+  async createNewPracticeBest(exerciseName, repMax, weight) {
+    return await LearnerServiceSingleton._fetchPostFactory(
+      "learners/practice.bests"
+    )({ exerciseName, repMax, weight })
+  }
+
+  async getPracticeBestsByExerciseName(learnerId, exerciseName) {
+    return await LearnerServiceSingleton._fetchJsonFactory(
+      `learners/${learnerId}/practice.bests/${encodeURI(exerciseName)}`
+    )()
+  }
+
+  async updatePracticeBest(pbId, weight) {
+    return await LearnerServiceSingleton._fetchPutFactory(
+      "learners/practice.bests"
+    )({ pbId, weight })
   }
 
   static getLearnerInstance() {

@@ -2,13 +2,15 @@ import React, { useState } from "react"
 import { BrowserRouter as Router, Redirect } from "react-router-dom"
 //https://reactrouter.com/web/api
 
-import { Navbar, Footer, PageRoutes } from "./app/register"
+import { NavBarControl, Footer, PageRoutes } from "./app/register"
 
+import { FitnessCenter, ExitToApp, TodayOutlined } from "@material-ui/icons"
 import {
   ExercisePage,
   LearnerSchedulePage,
 } from "./components/learners/register"
 import { LearnerLoginPage } from "./components/home/register"
+import { LearnerPracticeBestsPage } from "./components/learners/LearnerPracticeBestsPage"
 
 import { UserAuth, NavHelpers } from "./services/register"
 
@@ -20,6 +22,15 @@ const allLinks = {
       component: LearnerSchedulePage,
       isProtected: true,
       display: true,
+      icon: TodayOutlined,
+    },
+    {
+      to: "/learner/practice.bests",
+      label: "Practice Bests",
+      component: LearnerPracticeBestsPage,
+      isProtected: true,
+      display: true,
+      icon: FitnessCenter,
     },
     {
       to: "/logout",
@@ -27,6 +38,7 @@ const allLinks = {
       component: null,
       isProtected: true,
       display: true,
+      icon: ExitToApp,
     },
     {
       to: "/learner/:scheduleId/:week",
@@ -70,7 +82,7 @@ export function LearnerApp({ onAppChange }) {
 
   return (
     <Router>
-      <Navbar
+      <NavBarControl
         links={links}
         onLogOut={onLearnerLogOut}
         pageTitle="Otago WeightLifting Learner Space"

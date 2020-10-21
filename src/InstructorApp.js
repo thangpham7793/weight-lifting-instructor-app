@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { BrowserRouter as Router, Redirect } from "react-router-dom"
 //https://reactrouter.com/web/api
 
-import { Navbar, Footer, PageRoutes } from "./app/register"
+import { NavBarControl, Footer, PageRoutes } from "./app/register"
 
 import { LearnersPanel } from "./components/learners/register"
 import { SchedulePanel } from "./components/schedules/register"
@@ -79,7 +79,7 @@ export function InstructorApp({ onAppChange }) {
 
   return (
     <Router>
-      <Navbar
+      <NavBarControl
         links={links}
         pageTitle="Otago Weightlifting Instructor Space"
         onLogOut={onInstructorLogOut}
