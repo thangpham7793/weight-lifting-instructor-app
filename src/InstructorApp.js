@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import { BrowserRouter as Router, Redirect } from "react-router-dom"
-//https://reactrouter.com/web/api
+import { VpnKey, ExitToApp, TodayOutlined, PeopleAlt } from "@material-ui/icons"
 
+//https://reactrouter.com/web/api
 import { NavBarControl, Footer, PageRoutes } from "./app/register"
 
 import { LearnersPanel } from "./components/learners/register"
@@ -21,6 +22,7 @@ const allLinks = {
       component: SchedulePanel,
       isProtected: true,
       display: true,
+      icon: TodayOutlined,
     },
     {
       to: "/instructor/learners",
@@ -28,6 +30,7 @@ const allLinks = {
       component: LearnersPanel,
       isProtected: true,
       display: true,
+      icon: PeopleAlt,
     },
     {
       to: "/instructor/account",
@@ -35,6 +38,7 @@ const allLinks = {
       component: InstructorAccountPage,
       isProtected: true,
       display: true,
+      icon: VpnKey,
     },
     {
       to: "/logout",
@@ -42,6 +46,7 @@ const allLinks = {
       component: null,
       isProtected: true,
       display: true,
+      icon: ExitToApp,
     },
   ],
   learnerApp: [

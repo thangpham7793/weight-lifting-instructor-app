@@ -68,3 +68,10 @@ export function range(length, gap = 1) {
     .fill()
     .map((element, index) => index + gap)
 }
+
+//
+export function repMaxrange(length) {
+  return Array(length)
+    .fill()
+    .map((element, index) => `x${index + 1}`)
+}
