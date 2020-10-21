@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Redirect } from "react-router-dom"
 
 import { NavBarControl, Footer, PageRoutes } from "./app/register"
 
+import { FitnessCenter, ExitToApp, TodayOutlined } from "@material-ui/icons"
 import {
   ExercisePage,
   LearnerSchedulePage,
@@ -21,6 +22,7 @@ const allLinks = {
       component: LearnerSchedulePage,
       isProtected: true,
       display: true,
+      icon: TodayOutlined,
     },
     {
       to: "/learner/practice.bests",
@@ -28,6 +30,7 @@ const allLinks = {
       component: LearnerPracticeBestsPage,
       isProtected: true,
       display: true,
+      icon: FitnessCenter,
     },
     {
       to: "/logout",
@@ -35,6 +38,7 @@ const allLinks = {
       component: null,
       isProtected: true,
       display: true,
+      icon: ExitToApp,
     },
     {
       to: "/learner/:scheduleId/:week",

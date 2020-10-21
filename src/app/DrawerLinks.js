@@ -1,6 +1,14 @@
 import React, { useState } from "react"
-import { Drawer, IconButton, Divider } from "@material-ui/core"
-import { Menu } from "@material-ui/icons"
+import {
+  Drawer,
+  IconButton,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+} from "@material-ui/core"
+import { Menu, FitnessCenter } from "@material-ui/icons"
 import { makeStyles } from "@material-ui/core/styles"
 import { Link } from "react-router-dom"
 
@@ -18,7 +26,21 @@ const useStyles = makeStyles(() => ({
   },
   drawerPaper: {
     background: "var(--secondary-cl)",
-    width: "50vw",
+    width: "70vw",
+  },
+  navList: {
+    paddingTop: 0,
+  },
+  navItem: {
+    "& :hover": {
+      color: "var(--txt-cl)",
+    },
+    "& :focus": {
+      color: "var(--txt-cl)",
+    },
+  },
+  navItemText: {
+    fontSize: "0.75rem",
   },
 }))
 
@@ -29,32 +51,50 @@ export function DrawerLinks({ links, onLogOut }) {
     setOpen(state)
   }
 
+  const classes = useStyles()
+
   const navLinks = links
     .filter(({ display }) => display === true)
-    .map(({ to, label }) => {
+    .map(({ to, label, icon }) => {
+      const Icon = icon
       return to !== "/logout" ? (
         <React.Fragment key={to}>
+          {" "}
           <Divider />
-          <Link
+          <ListItem
+            button
+            component={Link}
             to={to}
-            className="nav-item"
             onClick={() => toggleDrawer(false)}
+            className={classes.navItem}
           >
-            {label}
-          </Link>
+            <ListItemIcon>
+              <Icon />
+            </ListItemIcon>
+            <ListItemText
+              primary={label}
+              classes={{ primary: classes.navItemText }}
+            />
+          </ListItem>
         </React.Fragment>
       ) : (
         //basically need to make a fake link here!
         <React.Fragment key={to}>
           <Divider />
-          <span className="nav-item" label={label} onClick={onLogOut}>
-            {label}
-          </span>
+          <ListItem button className={classes.navItem}>
+            <ListItemIcon>
+              <Icon />
+            </ListItemIcon>
+            <ListItemText
+              primary={label}
+              onClick={onLogOut}
+              classes={{ primary: classes.navItemText }}
+            />
+          </ListItem>
+          <Divider />
         </React.Fragment>
       )
     })
-
-  const classes = useStyles()
 
   return (
     <>
@@ -70,7 +110,7 @@ export function DrawerLinks({ links, onLogOut }) {
           paper: classes.drawerPaper,
         }}
       >
-        {navLinks}
+        <List className={classes.navList}>{navLinks}</List>
       </Drawer>
     </>
   )
