@@ -8,6 +8,7 @@ import { quickStyles } from "../../../services/register"
 export function LearnerPracticeBestsPage() {
   const classes = quickStyles({
     wrapper: { paddingTop: "0.5rem" },
+    searchBar: { padding: "1rem" },
     icon: { color: "#315c4d" },
     listWrapper: {
       maxHeight: "80vh",
@@ -23,7 +24,8 @@ export function LearnerPracticeBestsPage() {
 
   function filterExerciseNames(searchPhrase) {
     const regex = RegExp(searchPhrase, "gi")
-    return exerciseNames.filter((name) => regex.test(name))
+    const filteredList = exerciseNames.filter((name) => regex.test(name))
+    return filteredList.length > 0 ? filteredList : ["no exercise found"]
   }
 
   function onSearchPhraseChanged(e) {
@@ -50,6 +52,7 @@ export function LearnerPracticeBestsPage() {
               </InputAdornment>
             ),
           }}
+          className={classes.searchBar}
           value={searchPhrase}
           onChange={onSearchPhraseChanged}
         />

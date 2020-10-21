@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { useHistory } from "react-router-dom"
 import { List, ListItem, ListItemText, ListItemIcon } from "@material-ui/core"
-import { FitnessCenter } from "@material-ui/icons"
+import { FitnessCenter, SentimentDissatisfied } from "@material-ui/icons"
 
 export function ExerciseList({ exerciseNames }) {
   const history = useHistory()
@@ -23,14 +23,20 @@ export function ExerciseList({ exerciseNames }) {
         key={name}
         id={name}
         onClick={navigateToSingleExercisePage}
+        divider
+        className="exercise-list-item"
       >
         <ListItemIcon>
-          <FitnessCenter />
+          {name === "no exercise found" ? (
+            <SentimentDissatisfied />
+          ) : (
+            <FitnessCenter />
+          )}
         </ListItemIcon>
         <ListItemText primary={name} />
       </ListItem>
     )
   })
 
-  return <List>{exerciseList}</List>
+  return <List style={{ minWidth: "95vw" }}>{exerciseList}</List>
 }

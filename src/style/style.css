@@ -934,3 +934,7 @@ label.Mui-focused {
 .MuiPaper-root > span {
   color: var(--txt-cl);
 }
+
+.MuiListItem-button.exercise-list-item:hover {
+  background: var(--bg-cl);
+}
