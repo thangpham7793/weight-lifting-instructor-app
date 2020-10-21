@@ -253,9 +253,10 @@ a.logo {
   height: 150px;
   margin-bottom: 1.5rem;
 }
-/* 
-.navContent {
+
+/* .navContent {
   display: flex;
+  width: 100%;
 } */
 
 .navLinks {

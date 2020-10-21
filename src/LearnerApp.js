@@ -9,6 +9,7 @@ import {
   LearnerSchedulePage,
 } from "./components/learners/register"
 import { LearnerLoginPage } from "./components/home/register"
+import { LearnerPracticeBestsPage } from "./components/learners/LearnerPracticeBestsPage"
 
 import { UserAuth, NavHelpers } from "./services/register"
 
@@ -18,6 +19,13 @@ const allLinks = {
       to: "/learner/schedules",
       label: "Schedules",
       component: LearnerSchedulePage,
+      isProtected: true,
+      display: true,
+    },
+    {
+      to: "/learner/practice.bests",
+      label: "Practice Bests",
+      component: LearnerPracticeBestsPage,
       isProtected: true,
       display: true,
     },
