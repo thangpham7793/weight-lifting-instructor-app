@@ -930,3 +930,7 @@ label.Mui-focused {
   color: var(--secondary-cl);
   border-radius: 50%;
 }
+
+.MuiPaper-root > span {
+  color: var(--txt-cl);
+}

@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
+import { HorizontalNavBar, DrawerNavBar } from "./register"
 
 function NavLink({ to, label }) {
   return (
@@ -10,7 +11,7 @@ function NavLink({ to, label }) {
 }
 
 //https://reactrouter.com/web/api/Redirect
-export const Navbar = ({ links, onLogOut, onAppChange, pageTitle }) => {
+export function NavBarControl({ links, onLogOut, onAppChange, pageTitle }) {
   let navLinks
 
   const [currentWidth, setCurrentWidth] = useState(window.innerWidth)
@@ -56,25 +57,23 @@ export const Navbar = ({ links, onLogOut, onAppChange, pageTitle }) => {
   return (
     <nav className="header index">
       <section>
-        <div className="navContent">
-          <header>
-            {currentWidth >= 450 ? (
-              <>
-                <h1
-                  style={{
-                    fontWeight: "var(--fw-lg)",
-                    fontSize: "calc(0.35 * var(--fs-md))",
-                  }}
-                >
-                  {pageTitle}
-                </h1>
-                <div className="navLinks">{navLinks}</div>
-              </>
-            ) : (
-              <div>Use Drawer</div>
-            )}
-          </header>
-        </div>
+        {currentWidth <= 450 && links.length > 1 ? (
+          <DrawerNavBar
+            pageTitle={pageTitle}
+            navLinks={navLinks}
+            links={links}
+            onAppChange={onAppChange}
+            onLogOut={onLogOut}
+          />
+        ) : (
+          <HorizontalNavBar
+            pageTitle={pageTitle}
+            navLinks={navLinks}
+            links={links}
+            onAppChange={onAppChange}
+            onLogOut={onLogOut}
+          />
+        )}
       </section>
     </nav>
   )
