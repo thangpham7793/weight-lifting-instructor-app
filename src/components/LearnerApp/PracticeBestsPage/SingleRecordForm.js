@@ -64,7 +64,11 @@ export function SingleRecordForm({
             name={fieldName}
             type="text"
             key={fieldName}
-            value={record[fieldName]}
+            value={
+              fieldName === "lastEdited"
+                ? new Date(record[fieldName]).toDateString()
+                : record[fieldName]
+            }
             onChange={onRecordInputChange}
             error={!isInputValid[`${fieldName}`]}
             helperText={pickHelperText(fieldName, isInputValid[`${fieldName}`])}

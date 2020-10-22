@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { exerciseNames } from "./exerciseNames"
+// eslint-disable-next-line no-extend-native
+Date.prototype.addHours = function (h) {
+  this.setTime(this.getTime() + h * 60 * 60 * 1000)
+  return this
+}
 
 const initialState = exerciseNames.reduce((acc, k) => {
   acc[k] = null
@@ -20,6 +25,7 @@ export const practiceBestsSlice = createSlice({
       const updatedIndex = targetArr.findIndex((r) => r.pbId === pbId)
       targetArr[updatedIndex] = action.payload
       targetArr[updatedIndex].lastEdited = new Date()
+        .addHours(13)
         .toISOString()
         .substr(0, 10)
     },
