@@ -82,7 +82,7 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     )()
   }
 
-  async updatePracticeBest(pbId, weight) {
+  async updatePracticeBest({ pbId, weight }) {
     return await LearnerServiceSingleton._fetchPutFactory(
       "learners/practice.bests"
     )({ pbId, weight })

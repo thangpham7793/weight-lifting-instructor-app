@@ -947,6 +947,9 @@ label.Mui-focused {
 }
 
 .MuiIconButton-root.practice-best-btn-icon:hover,
-.MuiIconButton-root.practice-best-btn-icon:focus {
+.MuiIconButton-root.practice-best-btn-icon:focus,
+.MuiButton-containedSecondary.makeStyles-saveBtn-40:hover,
+.MuiButton-containedSecondary.makeStyles-saveBtn-40:focus
+ {
   background: var(--secondary-cl);
 }

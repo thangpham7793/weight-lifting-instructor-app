@@ -1,6 +1,4 @@
-import React, { useState } from "react"
-import { useSelector } from "react-redux"
-import { selectPracticeBestRecordsById } from "../../../reducers/practiceBestsSlice"
+import React from "react"
 import { Dialog, DialogContent } from "@material-ui/core"
 import { quickStyles } from "../../../services/register"
 import { Button, Typography } from "@material-ui/core"
@@ -26,8 +24,8 @@ function SaveButton({ onClick, classes, label }) {
 export default function EditSingleRecordDialog({
   open,
   onDialogCloseClicked,
-  clickedPbId,
-  exerciseName,
+  onRecordInputChange,
+  tempRecord,
 }) {
   const classes = quickStyles({
     dialog: {
@@ -60,26 +58,6 @@ export default function EditSingleRecordDialog({
       height: "max-content",
     },
   })
-
-  const record = useSelector((state) =>
-    selectPracticeBestRecordsById(state, exerciseName, clickedPbId)
-  )
-
-  console.log(record)
-
-  const [tempRecord, setTempRecord] = useState(record)
-
-  function onRecordInputChange(e) {
-    const changedField = e.currentTarget.getAttribute("name")
-    const newValue = e.currentTarget.value
-    setTempRecord((currentRecord) => {
-      let newRecord = { ...currentRecord }
-      newRecord[`${changedField}`] = newValue
-      return newRecord
-    })
-  }
-
-  console.log(clickedPbId, exerciseName)
 
   return (
     <Dialog

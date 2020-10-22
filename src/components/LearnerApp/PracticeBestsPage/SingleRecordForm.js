@@ -43,7 +43,11 @@ export function SingleRecordForm({ record, onRecordInputChange, saveBtn }) {
       <Typography
         variant="h5"
         style={{ textTransform: "capitalize", textAlign: "center" }}
-      >{`${exerciseName} ${repMax} REPs`}</Typography>
+      >
+        {`${exerciseName}`}
+        <br />
+        {`${repMax} REPs`}
+      </Typography>
     )
   }
 
