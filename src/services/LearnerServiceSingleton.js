@@ -12,6 +12,7 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     this.updateLearnerPbs = safeSpinnerWrapper(this.updateLearnerPbs)
     this.createNewPracticeBest = safeSpinnerWrapper(this.createNewPracticeBest)
     this.updatePracticeBest = safeSpinnerWrapper(this.updatePracticeBest)
+    this.deletePracticeBest = safeSpinnerWrapper(this.deletePracticeBest)
 
     this.getPracticeBestsByExerciseName = safeSpinnerWrapper(
       this.getPracticeBestsByExerciseName
@@ -86,6 +87,13 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     return await LearnerServiceSingleton._fetchPutFactory(
       "learners/practice.bests"
     )({ pbId, weight, repMax })
+  }
+
+  async deletePracticeBest({ pbId }) {
+    console.log(`Deleting record id ${pbId}`)
+    return await LearnerServiceSingleton._fetchDeleteFactory(
+      `learners/practice.bests/${pbId}`
+    )()
   }
 
   static getLearnerInstance() {

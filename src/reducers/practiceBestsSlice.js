@@ -29,6 +29,12 @@ export const practiceBestsSlice = createSlice({
         .toISOString()
         .substr(0, 10)
     },
+    deleteOneRecord: (state, action) => {
+      const { exerciseName, pbId } = action.payload
+      const targetArr = state[`${exerciseName}`]
+      const deletedIndex = targetArr.findIndex((r) => r.pbId === pbId)
+      targetArr.splice(deletedIndex, 1)
+    },
   },
 })
 
@@ -47,6 +53,7 @@ export const selectPracticeBestRecordsById = (state, exerciseName, pbId) => {
 export const {
   setOnePracticeBest,
   updateOneRecord,
+  deleteOneRecord,
 } = practiceBestsSlice.actions
 
 //reducer to register with global store

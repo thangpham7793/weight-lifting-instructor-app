@@ -34,10 +34,6 @@ export default function SingleExerciseRecordList({ records, onEditClicked }) {
 
   let items
 
-  function formatRecordString(repMax, weight, lastEdited) {
-    return `${repMax} | ${weight} Kg | ${lastEdited}`
-  }
-
   if (records.length === 0) {
     items = (
       <ListItem divider>
@@ -53,7 +49,15 @@ export default function SingleExerciseRecordList({ records, onEditClicked }) {
         <ListItem button divider key={pbId} className="practice-best-list-item">
           <ListItemText
             classes={{ primary: classes.listItemTextPrimary }}
-            primary={formatRecordString(repMax, weight, lastEdited)}
+            primary={repMax}
+          />
+          <ListItemText
+            classes={{ primary: classes.listItemTextPrimary }}
+            primary={`${weight} Kg`}
+          />
+          <ListItemText
+            classes={{ primary: classes.listItemTextPrimary }}
+            primary={lastEdited}
           />
           <IconButton
             classes={{ root: classes.iconBtn }}

@@ -42,7 +42,7 @@ export function SingleRecordForm({
     }
 
     if (fieldName === "repMax" && isValid === false) {
-      return "Please enter a Valid Rep Max: x1, x2, etc."
+      return "Please enter a Valid Rep Max from x1 to x10"
     }
 
     if (fieldName === "lastEdited" && isValid === false) {
@@ -80,7 +80,7 @@ export function SingleRecordForm({
   function FormTitle({ exerciseName, repMax, lastEdited }) {
     return (
       <Typography
-        variant="h5"
+        variant="h6"
         style={{ textTransform: "capitalize", textAlign: "center" }}
       >
         {`${exerciseName}`}

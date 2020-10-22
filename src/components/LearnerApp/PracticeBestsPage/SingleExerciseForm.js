@@ -4,6 +4,7 @@ import {
   selectOnePracticeBest,
   setOnePracticeBest,
   updateOneRecord,
+  deleteOneRecord,
 } from "../../../reducers/practiceBestsSlice"
 import httpService from "../../../services/LearnerServiceSingleton"
 import { useParams } from "react-router-dom"
@@ -138,7 +139,6 @@ export function SingleExerciseForm() {
     (e) => {
       function onEditClicked(e) {
         const pbId = e.currentTarget.getAttribute("pbid")
-        console.log(pbId)
         const clicked = records.find((r) => r.pbId === parseInt(pbId))
         setClickedRecord(clicked)
         setOpenEditRecordDialog(true)
@@ -152,6 +152,17 @@ export function SingleExerciseForm() {
     const btnName = e.currentTarget.getAttribute("name")
 
     if (btnName === "Close") {
+      resetStateAndValidator(false)
+      return setOpenEditRecordDialog(false)
+    } else if (btnName === "Delete") {
+      if (window.confirm(`Are you sure you want to delete this record?`)) {
+        const { ok } = await httpService.deletePracticeBest({
+          pbId: clickedRecord.pbId,
+        })
+        if (ok) {
+          dispatch(deleteOneRecord(clickedRecord))
+        }
+      }
       resetStateAndValidator(false)
       return setOpenEditRecordDialog(false)
     }
@@ -169,7 +180,8 @@ export function SingleExerciseForm() {
     } else {
       console.log("Same shit no update!")
     }
-    setOpenEditRecordDialog(false)
+    resetStateAndValidator(false)
+    return setOpenEditRecordDialog(false)
   }
 
   return (

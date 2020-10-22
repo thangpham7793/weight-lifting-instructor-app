@@ -963,3 +963,6 @@ label.Mui-focused {
   background: var(--bg-cl) !important;
   color: var(--txt-cl);
 }
+
+.MuiListItem-button.practice-best-list-item > div > span {
+}
