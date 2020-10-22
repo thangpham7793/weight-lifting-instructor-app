@@ -13,6 +13,20 @@ export function camelCaseToNormal(camelCaseStr) {
   }, "")
 }
 
+export function normalToCamelCase(normalStr) {
+  return normalStr
+    .split(" ")
+    .map((word, index) => {
+      //first letter is uppercased and returned
+      if (index === 0) {
+        return word.toLowerCase()
+      } else {
+        return word.substring(0, 1).toUpperCase() + word.substr(1)
+      }
+    })
+    .join("")
+}
+
 //async error handler decorator
 export function catchAsync(asyncFunc, errorHandler = null) {
   return async function (...args) {
