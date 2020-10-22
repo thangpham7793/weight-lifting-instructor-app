@@ -76,9 +76,9 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     )({ exerciseName, repMax, weight })
   }
 
-  async getPracticeBestsByExerciseName(learnerId, exerciseName) {
+  async getPracticeBestsByExerciseName(exerciseName) {
     return await LearnerServiceSingleton._fetchJsonFactory(
-      `learners/${learnerId}/practice.bests/${encodeURI(exerciseName)}`
+      `learners/practice.bests/${encodeURI(exerciseName)}`
     )()
   }
 

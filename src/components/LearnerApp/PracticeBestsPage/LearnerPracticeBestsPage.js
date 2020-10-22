@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Grid, TextField, InputAdornment } from "@material-ui/core"
 import { Search } from "@material-ui/icons"
-import { exerciseNames } from "./exerciseNames"
+import { exerciseNames } from "../../../reducers/exerciseNames"
 import { ExerciseList } from "./ExerciseList"
 import { quickStyles } from "../../../services/register"
 
