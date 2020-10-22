@@ -1,6 +1,17 @@
 import React from "react"
 import { camelCaseToNormal } from "../../../utils"
-import { TextField, Grid, Typography } from "@material-ui/core"
+import { TextField, Grid, Typography, InputAdornment } from "@material-ui/core"
+
+function InputEndAdornMent({ fieldName }) {
+  switch (fieldName) {
+    case "weight":
+      return <InputAdornment position="end">Kg</InputAdornment>
+    case "repMax":
+      return <InputAdornment position="end">Times</InputAdornment>
+    default:
+      return null
+  }
+}
 
 function PersonalBestInput({ label, ...props }) {
   return (
@@ -9,22 +20,43 @@ function PersonalBestInput({ label, ...props }) {
         label={camelCaseToNormal(label)}
         className="text-input"
         {...props}
+        InputProps={{
+          endAdornment: <InputEndAdornMent fieldName={label} />,
+          required: true,
+        }}
       />
     </Grid>
   )
 }
 
 //for learnerApp
-export function SingleRecordForm({ record, onRecordInputChange, saveBtn }) {
+export function SingleRecordForm({
+  record,
+  onRecordInputChange,
+  buttons,
+  isInputValid,
+}) {
+  function pickHelperText(fieldName, isValid) {
+    if (fieldName === "weight" && isValid === false) {
+      return "Must Be A Positive Number"
+    }
+
+    if (fieldName === "repMax" && isValid === false) {
+      return "Please enter a Valid Rep Max: x1, x2, etc."
+    }
+
+    if (fieldName === "lastEdited" && isValid === false) {
+      return "Please enter a valid Date!"
+    }
+
+    return null
+  }
+
   //it does changes, but doesn't show on the UI
   const inputs = !record
     ? null
     : Object.keys(record).map((fieldName) => {
-        if (
-          ["learnerId", "pbId", "exerciseName", "lastEdited"].includes(
-            fieldName
-          )
-        )
+        if (["learnerId", "pbId", "exerciseName"].includes(fieldName))
           return null
         return (
           <PersonalBestInput
@@ -34,11 +66,14 @@ export function SingleRecordForm({ record, onRecordInputChange, saveBtn }) {
             key={fieldName}
             value={record[fieldName]}
             onChange={onRecordInputChange}
+            error={!isInputValid[`${fieldName}`]}
+            helperText={pickHelperText(fieldName, isInputValid[`${fieldName}`])}
+            disabled={fieldName === "lastEdited"}
           />
         )
       })
 
-  function FormTitle({ exerciseName, repMax }) {
+  function FormTitle({ exerciseName, repMax, lastEdited }) {
     return (
       <Typography
         variant="h5"
@@ -47,6 +82,12 @@ export function SingleRecordForm({ record, onRecordInputChange, saveBtn }) {
         {`${exerciseName}`}
         <br />
         {`${repMax} REPs`}
+        <br />
+        <small
+          style={{ fontSize: "1rem", opacity: "0.75", fontStyle: "italic" }}
+        >
+          {new Date(lastEdited).toDateString()}
+        </small>
       </Typography>
     )
   }
@@ -59,19 +100,19 @@ export function SingleRecordForm({ record, onRecordInputChange, saveBtn }) {
       justify="center"
       style={{ overflow: "hidden" }}
     >
-      <FormTitle exerciseName={record.exerciseName} repMax={record.repMax} />
+      <FormTitle {...record} />
       <form>
         <Grid
           container
           direction="column"
-          justify="space-around"
+          justify="space-evenly"
           align="center"
           style={{ height: "40vh" }}
         >
           {inputs}
         </Grid>
       </form>
-      {saveBtn}
+      {buttons}
     </Grid>
   )
 }

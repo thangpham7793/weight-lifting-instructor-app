@@ -1,22 +1,26 @@
 import React from "react"
 import { Dialog, DialogContent } from "@material-ui/core"
 import { quickStyles } from "../../../services/register"
-import { Button, Typography } from "@material-ui/core"
-import { Save } from "@material-ui/icons"
+import { Button, Typography, Grid } from "@material-ui/core"
+import { Save, Close } from "@material-ui/icons"
 import { SingleRecordForm } from "./SingleRecordForm"
 
-function SaveButton({ onClick, classes, label }) {
+function FormButton({ onClick, classes, label, icon, disabled }) {
+  const Icon = icon
+
   return (
     <Button
       variant="contained"
       color="secondary"
+      name={label}
       onClick={onClick}
-      className={classes.saveBtn}
+      className={classes.formBtn}
+      disabled={disabled}
     >
-      <Typography variant="button" className={classes.saveBtnLabel}>
+      <Typography variant="button" className={classes.formBtnLabel}>
         {label}
       </Typography>
-      <Save fontSize="small" />
+      <Icon fontSize="small" />
     </Button>
   )
 }
@@ -25,7 +29,8 @@ export default function EditSingleRecordDialog({
   open,
   onDialogCloseClicked,
   onRecordInputChange,
-  tempRecord,
+  record,
+  isInputValid,
 }) {
   const classes = quickStyles({
     dialog: {
@@ -42,18 +47,17 @@ export default function EditSingleRecordDialog({
       width: "100%",
       height: "100%",
     },
-    saveBtn: {
+    formBtn: {
       display: "flex",
-      justifyContent: "space-evenly",
-      fontSize: "0.65rem",
+      justifyContent: "space-between",
       maxWidth: "100%",
       margin: "1rem auto",
     },
-    saveBtnLabel: {
-      fontSize: "0.75rem",
+    formBtnLabel: {
+      fontSize: "0.5rem",
     },
     paperScrollPaper: {
-      width: "90%",
+      width: "100%",
       maxWidth: "600px",
       height: "max-content",
     },
@@ -68,14 +72,25 @@ export default function EditSingleRecordDialog({
     >
       <DialogContent className={classes.content}>
         <SingleRecordForm
+          isInputValid={isInputValid}
           onRecordInputChange={onRecordInputChange}
-          record={tempRecord}
-          saveBtn={
-            <SaveButton
-              onClick={onDialogCloseClicked}
-              label="Save"
-              classes={classes}
-            />
+          record={record}
+          buttons={
+            <Grid container justify="space-between">
+              <FormButton
+                onClick={onDialogCloseClicked}
+                label="Close"
+                classes={classes}
+                icon={Close}
+              />
+              <FormButton
+                onClick={onDialogCloseClicked}
+                label="Save"
+                classes={classes}
+                icon={Save}
+                disabled={Object.values(isInputValid).some((i) => i === false)}
+              />
+            </Grid>
           }
         />
       </DialogContent>

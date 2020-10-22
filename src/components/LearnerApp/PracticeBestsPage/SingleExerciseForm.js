@@ -11,7 +11,12 @@ import SingleExerciseRecordList from "./SingleExerciseRecordList"
 import EditSingleRecordDialog from "./EditSingleRecordDialog"
 import { shallowEqual } from "../../../utils"
 import { Grid } from "@material-ui/core"
-import { quickStyles } from "../../../services/register"
+import {
+  quickStyles,
+  validateNewRepMax,
+  validateNewWeight,
+} from "../../../services/register"
+import { AddRecordFloatingButton } from "./AddRecordFloatingButton"
 
 export function SingleExerciseForm() {
   const classes = quickStyles({
@@ -26,18 +31,90 @@ export function SingleExerciseForm() {
   )
   const dispatch = useDispatch()
 
-  const [clickedRecord, setClickedRecord] = useState(null)
-  const [open, setOpen] = useState(false)
-  const [tempRecord, setTempRecord] = useState(null)
+  const newRecordTemplate = {
+    exerciseName: exerciseName,
+    repMax: "x1",
+    weight: 100.0,
+    lastEdited: new Date().toDateString(),
+  }
 
-  function onRecordInputChange(e) {
+  const isValidInputTemplate = {
+    repMax: true,
+    weight: true,
+    lastEdited: true,
+  }
+  //for an existing record
+  const [clickedRecord, setClickedRecord] = useState(null)
+
+  //for a new record (other fields will be auto filled in redux slice)
+  const [tempRecord, setTempRecord] = useState(newRecordTemplate)
+
+  const [openEditRecordDialog, setOpenEditRecordDialog] = useState(false)
+  const [openAddNewRecordDialog, setOpenAddNewRecordDialog] = useState(false)
+  const [isInputValid, setIsInputValid] = useState(isValidInputTemplate)
+
+  function validateNewRecordAndUpdateState(e, setNewState) {
     const changedField = e.currentTarget.getAttribute("name")
-    const newValue = e.currentTarget.value
-    setTempRecord((currentRecord) => {
+    let newValue = e.currentTarget.value
+    if (changedField === "weight") {
+      if (validateNewWeight(newValue)) {
+        setIsInputValid((state) => {
+          return { ...state, weight: true }
+        })
+      } else {
+        setIsInputValid((state) => {
+          return { ...state, weight: false }
+        })
+      }
+    }
+
+    if (changedField === "repMax") {
+      if (validateNewRepMax(newValue)) {
+        setIsInputValid((state) => {
+          return { ...state, repMax: true }
+        })
+      } else {
+        setIsInputValid((state) => {
+          return { ...state, repMax: false }
+        })
+      }
+    }
+
+    setNewState((currentRecord) => {
       let newRecord = { ...currentRecord }
       newRecord[`${changedField}`] = newValue
       return newRecord
     })
+  }
+
+  function onRecordInputChange(e) {
+    validateNewRecordAndUpdateState(e, setClickedRecord)
+  }
+
+  function onTempRecordInputChange(e) {
+    validateNewRecordAndUpdateState(e, setTempRecord)
+  }
+
+  function onAddNewRecordBtnClicked(e) {
+    setOpenAddNewRecordDialog(true)
+  }
+
+  function resetStateAndValidator(isNew = true) {
+    setIsInputValid(isValidInputTemplate)
+    if (isNew) {
+      setTempRecord(newRecordTemplate)
+    }
+  }
+
+  async function onNewRecordDialogCloseClicked(e) {
+    const btnName = e.currentTarget.getAttribute("name")
+
+    if (btnName === "Close") {
+      resetStateAndValidator()
+      return setOpenAddNewRecordDialog(false)
+    }
+    setTempRecord(newRecordTemplate)
+    setOpenAddNewRecordDialog(false)
   }
 
   useEffect(() => {
@@ -64,23 +141,35 @@ export function SingleExerciseForm() {
         console.log(pbId)
         const clicked = records.find((r) => r.pbId === parseInt(pbId))
         setClickedRecord(clicked)
-        setTempRecord(clicked)
-        setOpen(true)
+        setOpenEditRecordDialog(true)
       }
       onEditClicked(e)
     },
     [records]
   )
 
-  async function onDialogCloseClicked() {
-    if (!shallowEqual(clickedRecord, tempRecord)) {
-      //TODO: save to server first!
-      const { ok } = await httpService.updatePracticeBest(tempRecord)
-      if (ok) {
-        dispatch(updateOneRecord(tempRecord))
-      }
+  async function onEditDialogCloseClicked(e) {
+    const btnName = e.currentTarget.getAttribute("name")
+
+    if (btnName === "Close") {
+      resetStateAndValidator(false)
+      return setOpenEditRecordDialog(false)
     }
-    setOpen(false)
+
+    if (
+      !shallowEqual(
+        records.find((r) => r.pbId === clickedRecord.pbId),
+        clickedRecord
+      )
+    ) {
+      const { ok } = await httpService.updatePracticeBest(clickedRecord)
+      if (ok) {
+        dispatch(updateOneRecord(clickedRecord))
+      }
+    } else {
+      console.log("Same shit no update!")
+    }
+    setOpenEditRecordDialog(false)
   }
 
   return (
@@ -99,15 +188,24 @@ export function SingleExerciseForm() {
       ) : (
         <div>Fetching Records for {exerciseName}</div>
       )}
-      {tempRecord && (
+      {clickedRecord && (
         <EditSingleRecordDialog
-          open={open}
-          onDialogCloseClicked={onDialogCloseClicked}
-          tempRecord={tempRecord}
+          open={openEditRecordDialog}
+          onDialogCloseClicked={onEditDialogCloseClicked}
+          record={clickedRecord}
           exerciseName={exerciseName}
           onRecordInputChange={onRecordInputChange}
+          isInputValid={isInputValid}
         />
       )}
+      <AddRecordFloatingButton
+        open={openAddNewRecordDialog}
+        onDialogCloseClicked={onNewRecordDialogCloseClicked}
+        onRecordInputChange={onTempRecordInputChange}
+        record={tempRecord}
+        onAddNewRecordBtnClicked={onAddNewRecordBtnClicked}
+        isInputValid={isInputValid}
+      />
     </Grid>
   )
 }

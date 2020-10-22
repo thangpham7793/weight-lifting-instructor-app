@@ -1,3 +1,5 @@
+import { repMaxrange } from "../utils"
+
 function isNotEmpty(str) {
   return str && str.trim().length > 0
 }
@@ -5,6 +7,10 @@ function isNotEmpty(str) {
 function isValidEmail(email) {
   const pattern = /^([\w_-]+|[\w_-]+(.[\w_-]+)+?)@([\w_-]+|[\w_-]+(.[\w_-]+)+?)$/
   return email && pattern.test(email)
+}
+
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n)
 }
 
 export function validateInstructorCredentials({ email, password }) {
@@ -19,4 +25,12 @@ export function validateLearnerCredentials({ username, password }) {
   return isNotEmpty(username) && isNotEmpty(password)
     ? null
     : "Missing Email or Password"
+}
+
+export function validateNewWeight(weight) {
+  return isNotEmpty(weight) && isNumber(weight) && parseFloat(weight) > 0
+}
+
+export function validateNewRepMax(repMax) {
+  return repMaxrange(10).includes(repMax)
 }

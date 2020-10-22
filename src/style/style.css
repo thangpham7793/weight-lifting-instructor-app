@@ -103,6 +103,11 @@ body {
   line-height: 1.5rem;
 }
 
+.MuiButtonBase-root:hover,
+.MuiButtonBase-root:focus {
+  background-color: var(--secondary-cl) !important;
+}
+
 h1 {
   font-size: calc(0.5 * var(--fs-md));
 }
@@ -949,7 +954,12 @@ label.Mui-focused {
 .MuiIconButton-root.practice-best-btn-icon:hover,
 .MuiIconButton-root.practice-best-btn-icon:focus,
 .MuiButton-containedSecondary.makeStyles-saveBtn-40:hover,
-.MuiButton-containedSecondary.makeStyles-saveBtn-40:focus
- {
+.MuiButton-containedSecondary.makeStyles-saveBtn-40:focus {
   background: var(--secondary-cl);
+}
+
+#add-new-pb-btn:hover,
+#add-new-pb-btn:focus {
+  background: var(--bg-cl) !important;
+  color: var(--txt-cl);
 }
