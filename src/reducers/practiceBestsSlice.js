@@ -22,6 +22,12 @@ export const selectOnePracticeBest = (state, exerciseName) => {
   return state.practiceBests[`${exerciseName}`]
 }
 
+export const selectPracticeBestRecordsById = (state, exerciseName, pbId) => {
+  return state.practiceBests[`${exerciseName}`].find(
+    (i) => i.pbId === parseInt(pbId)
+  )
+}
+
 //action type
 export const { setOnePracticeBest } = practiceBestsSlice.actions
 

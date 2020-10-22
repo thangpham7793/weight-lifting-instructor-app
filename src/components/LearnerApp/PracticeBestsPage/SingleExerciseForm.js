@@ -45,7 +45,7 @@ export function SingleExerciseForm() {
   }, [exerciseName, dispatch, records])
 
   function onEditClicked(e) {
-    const pbId = parseInt(e.currentTarget.getAttribute("pbid"))
+    const pbId = e.currentTarget.getAttribute("pbid")
     console.log(pbId)
     setClickedPbId(pbId)
     setOpen(true)
@@ -75,11 +75,14 @@ export function SingleExerciseForm() {
       ) : (
         <div>Fetching Records for {exerciseName}</div>
       )}
-      <EditSingleRecordDialog
-        open={open}
-        onDialogCloseClicked={onDialogCloseClicked}
-        clickedPbId={clickedPbId}
-      />
+      {clickedPbId && (
+        <EditSingleRecordDialog
+          open={open}
+          onDialogCloseClicked={onDialogCloseClicked}
+          clickedPbId={clickedPbId}
+          exerciseName={exerciseName}
+        />
+      )}
     </Grid>
   )
 }

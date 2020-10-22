@@ -44,7 +44,7 @@ export default function SingleExerciseRecordList({ records, onEditClicked }) {
         <ListItemIcon>
           <SentimentDissatisfied />
         </ListItemIcon>
-        <ListItemText listItemTextPrimary="No Available Records Found!" />
+        <ListItemText primary="No Available Records Found!" />
       </ListItem>
     )
   } else {
