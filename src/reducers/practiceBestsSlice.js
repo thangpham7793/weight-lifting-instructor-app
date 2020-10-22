@@ -11,15 +11,16 @@ export const practiceBestsSlice = createSlice({
   initialState,
   reducers: {
     setOnePracticeBest: (state, action) => {
-      const { exerciseName, payload } = action.payload
-      state[`${exerciseName}`] = payload
+      const { exerciseName, records } = action.payload
+      state[`${exerciseName}`] = records
     },
   },
 })
 
 //selector
-export const selectOnePracticeBest = (state, exerciseName) =>
-  state[`${exerciseName}`]
+export const selectOnePracticeBest = (state, exerciseName) => {
+  return state.practiceBests[`${exerciseName}`]
+}
 
 //action type
 export const { setOnePracticeBest } = practiceBestsSlice.actions

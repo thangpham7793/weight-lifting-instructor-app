@@ -935,6 +935,18 @@ label.Mui-focused {
   color: var(--txt-cl);
 }
 
-.MuiListItem-button.exercise-list-item:hover {
+.MuiListItem-button.exercise-list-item:hover,
+.MuiListItem-button.exercise-list-item:focus {
   background: var(--bg-cl);
+}
+
+.MuiListItem-button.practice-best-list-item:hover,
+.MuiListItem-button.practice-best-list-item:focus {
+  background: var(--txt-cl);
+  color: "#333"
+}
+
+.MuiIconButton-root.practice-best-btn-icon:hover,
+.MuiIconButton-root.practice-best-btn-icon:focus {
+  background: var(--secondary-cl);
 }
