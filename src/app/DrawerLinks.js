@@ -9,42 +9,8 @@ import {
   ListItemIcon,
 } from "@material-ui/core"
 import { Menu } from "@material-ui/icons"
-import { makeStyles } from "@material-ui/core/styles"
 import { Link } from "react-router-dom"
 import { quickStyles } from "../services/register"
-
-const useStyles = makeStyles(() => ({
-  btn: {
-    padding: "0 0.25rem",
-    color: "var(--txt-cl)",
-    boxShadow: "none",
-    borderRadius: "0",
-    flex: "0",
-    border: "none",
-  },
-  drawer: {
-    width: "max-content",
-  },
-  drawerPaper: {
-    background: "var(--secondary-cl)",
-    width: "70vw",
-  },
-  navList: {
-    paddingTop: 0,
-    marginTop: `3.5rem`,
-  },
-  navItem: {
-    "& :hover": {
-      color: "var(--txt-cl)",
-    },
-    "& :focus": {
-      color: "var(--txt-cl)",
-    },
-  },
-  navItemText: {
-    fontSize: "0.75rem",
-  },
-}))
 
 export function DrawerLinks({ links, onLogOut, navBarHeight }) {
   const classes = quickStyles({
@@ -142,6 +108,7 @@ export function DrawerLinks({ links, onLogOut, navBarHeight }) {
         classes={{
           paper: classes.drawerPaper,
         }}
+        id="sidebar-drawer"
       >
         <List className={classes.navList}>{navLinks}</List>
       </Drawer>

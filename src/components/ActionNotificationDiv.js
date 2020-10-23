@@ -43,7 +43,7 @@ export const ActionNotificationDiv = React.memo(
           color,
           fontWeight: "600",
           background,
-          position: "absolute",
+          position: "fixed",
           width: "max-content",
           borderRadius: "1rem",
           left: "5%",

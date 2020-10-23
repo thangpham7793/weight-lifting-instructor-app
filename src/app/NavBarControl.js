@@ -64,7 +64,7 @@ export function NavBarControl({ links, onLogOut, onAppChange, pageTitle }) {
   }
 
   return (
-    <nav className="header index" ref={ref} style={{ zIndex: 5 }}>
+    <nav className="header index" ref={ref} style={{ zIndex: 1000 }}>
       <section>
         {currentWidth <= 450 && links.length > 1 && navBarHeight > 0 ? (
           <DrawerNavBar

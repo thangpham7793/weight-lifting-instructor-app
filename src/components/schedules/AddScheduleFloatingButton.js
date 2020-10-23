@@ -19,7 +19,7 @@ export function AddScheduleFloatingButton({ onActionSuccess }) {
         onClick={onDialogOpenClicked}
         variant="extended"
         aria-label="add"
-        style={{ position: "absolute", right: "5%", bottom: "7%", zIndex: "5" }}
+        style={{ position: "fixed", right: "5%", bottom: "7%", zIndex: "5" }}
       >
         <CloudUpload />
         <span

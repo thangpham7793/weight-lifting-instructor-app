@@ -841,12 +841,10 @@ a.logo {
   margin-top: calc(var(--mg-sm));
   width: 20vw;
   text-align: center;
-  background: rgb(241, 162, 142);
   margin-right: auto;
   margin-left: auto;
   font-size: calc(var(--fs-sm) / 1.25);
   padding: 0.5rem;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -966,4 +964,8 @@ label.Mui-focused {
 #add-new-pb-btn:focus {
   background: var(--bg-cl) !important;
   color: var(--txt-cl);
+}
+
+#sidebar-drawer {
+  z-index: 500 !important;
 }

@@ -15,7 +15,7 @@ export function AddRecordFloatingButton({
         onClick={onAddNewRecordBtnClicked}
         aria-label="add"
         style={{
-          position: "absolute",
+          position: "fixed",
           right: "7%",
           bottom: "7%",
           zIndex: 3,
