@@ -136,13 +136,13 @@ button {
 
 button:hover, button:focus, 
 a:hover, a:focus, 
-.learner-name:hover, .learner-name:focus, 
-.action-status-close:hover, .action-status-close:focus,
+.learner-name:hover, .learner-name:focus,
 .nav-item:hover, .nav-item:focus{
   background: var(--secondary-cl);
 /*   font-weight: var(--fw-md); */
   transition-duration: 0.2s;
   transform-origin: center;
+  cursor: pointer;
 }
 
 a:hover, a:focus,
@@ -871,7 +871,10 @@ a.logo {
 
 .action-status-close:hover,
 .action-status-close:focus {
-  background: darkgreen;
+  transition-duration: 0.2s;
+  transform-origin: center;
+  cursor: pointer;
+  background: #333;
 }
 
 /* file uploader */

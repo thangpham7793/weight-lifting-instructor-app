@@ -91,7 +91,9 @@ export function LearnerSignUpDialog({
                 label="Submit"
                 classes={classes}
                 icon={Save}
-                disabled={Object.values(isInputValid).some((i) => i === false)}
+                disabled={Object.values(isInputValid).some(
+                  (i) => i === false || i === null
+                )}
               />
             </Grid>
           }

@@ -6,6 +6,7 @@ export function useActionSnackbar(action, serviceMethod) {
   const [actionStatus, setActionStatus] = useState({
     action: null,
     isActionSuccess: true,
+    errorMessage: null,
   })
 
   // basically like a middleware that intercepts the response
@@ -16,7 +17,19 @@ export function useActionSnackbar(action, serviceMethod) {
       setActionStatus({ action: action, isActionSuccess: true })
       console.log(`${capitalise(action)} Successful!`)
     } else {
-      setActionStatus({ action: action, isActionSuccess: false })
+      if (res.payload.message) {
+        setActionStatus({
+          action: action,
+          isActionSuccess: false,
+          errorMessage: res.payload.message,
+        })
+      } else {
+        setActionStatus({
+          action: action,
+          isActionSuccess: false,
+          errorMessage: `${capitalise(action)} failed!`,
+        })
+      }
       console.log(`${capitalise(action)} failed!`)
     }
     //for custom side-effect outside of the component

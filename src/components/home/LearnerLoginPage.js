@@ -32,8 +32,7 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
     })
   }
 
-  async function onFormSubmitted(e) {
-    e.preventDefault()
+  async function logUserIn(credentials) {
     const error = validateLearnerCredentials(credentials)
     if (error) {
       setErrorMessage(error)
@@ -54,6 +53,11 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
       dispatch(initPbs(payload.pbs))
       onLearnerLogIn()
     }
+  }
+
+  async function onFormSubmitted(e) {
+    e.preventDefault()
+    logUserIn(credentials)
   }
 
   const [programmes, setProgrammes] = useState(getProgrammes())
@@ -149,7 +153,6 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
 
   function onSignUpBtnClicked(e) {
     e.preventDefault()
-    console.log("Clicked!")
     setSignUpDialogOpen(true)
   }
 
@@ -177,8 +180,17 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
       default:
         const { ok, payload } = await callDecoratedSignUpService(tempLearner)
         if (ok) {
-          console.log(payload.username)
-          //should you log the user in as well ? but at least let them know their credentials
+          const { username } = payload
+          if (
+            window.confirm(
+              `Your new username and password are "${username}" and "password. Would you like to sign in?`
+            )
+          ) {
+            return await logUserIn({
+              username,
+              password: "password",
+            })
+          }
         }
     }
     return resetSignUpForm()

@@ -3,10 +3,11 @@ import {
   CheckCircleOutlineRounded,
   ErrorOutlineRounded,
 } from "@material-ui/icons"
+import { Typography } from "@material-ui/core"
 
 export const ActionNotificationDiv = React.memo(
   ({ actionStatus, onCloseActionStatusDiv }) => {
-    const { action, isActionSuccess } = actionStatus
+    const { action, isActionSuccess, errorMessage } = actionStatus
 
     let message = "Action Status"
     let color = ""
@@ -28,7 +29,7 @@ export const ActionNotificationDiv = React.memo(
           background = "rgb(107, 236, 172)"
           break
         case false:
-          message = `${action.toUpperCase()} Failed!`
+          message = errorMessage
           color = "red"
           background = "rgb(241, 162, 142)"
           break
@@ -56,9 +57,13 @@ export const ActionNotificationDiv = React.memo(
           <ErrorOutlineRounded />
         )}
         <span>{message}</span>
-        <span className="action-status-close" onClick={onCloseActionStatusDiv}>
+        <Typography
+          variant="span"
+          className="action-status-close"
+          onClick={onCloseActionStatusDiv}
+        >
           X
-        </span>
+        </Typography>
       </div>
     )
   }
