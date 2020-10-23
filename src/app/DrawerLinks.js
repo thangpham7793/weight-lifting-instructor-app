@@ -11,6 +11,7 @@ import {
 import { Menu } from "@material-ui/icons"
 import { makeStyles } from "@material-ui/core/styles"
 import { Link } from "react-router-dom"
+import { quickStyles } from "../services/register"
 
 const useStyles = makeStyles(() => ({
   btn: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles(() => ({
   },
   navList: {
     paddingTop: 0,
+    marginTop: `3.5rem`,
   },
   navItem: {
     "& :hover": {
@@ -44,14 +46,45 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-export function DrawerLinks({ links, onLogOut }) {
+export function DrawerLinks({ links, onLogOut, navBarHeight }) {
+  const classes = quickStyles({
+    btn: {
+      padding: "0 0.25rem",
+      color: "var(--txt-cl)",
+      boxShadow: "none",
+      borderRadius: "0",
+      flex: "0",
+      border: "none",
+    },
+    drawer: {
+      width: "max-content",
+    },
+    drawerPaper: {
+      background: "var(--secondary-cl)",
+      width: "70vw",
+    },
+    navList: {
+      paddingTop: 0,
+      marginTop: navBarHeight ? `${parseInt(navBarHeight) + 20}px` : "3.5rem",
+    },
+    navItem: {
+      "& :hover": {
+        color: "var(--txt-cl)",
+      },
+      "& :focus": {
+        color: "var(--txt-cl)",
+      },
+    },
+    navItemText: {
+      fontSize: "0.75rem",
+    },
+  })
+
   const [open, setOpen] = useState(false)
 
   function toggleDrawer(state) {
     setOpen(state)
   }
-
-  const classes = useStyles()
 
   const navLinks = links
     .filter(({ display }) => display === true)
@@ -98,7 +131,7 @@ export function DrawerLinks({ links, onLogOut }) {
 
   return (
     <>
-      <IconButton className={classes.btn} onClick={() => toggleDrawer(true)}>
+      <IconButton className={classes.btn} onClick={() => toggleDrawer(!open)}>
         <Menu />
       </IconButton>
       <Drawer

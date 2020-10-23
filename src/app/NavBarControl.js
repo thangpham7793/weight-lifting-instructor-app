@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
 import { HorizontalNavBar, DrawerNavBar } from "./register"
 
@@ -15,11 +15,20 @@ export function NavBarControl({ links, onLogOut, onAppChange, pageTitle }) {
   let navLinks
 
   const [currentWidth, setCurrentWidth] = useState(window.innerWidth)
+  const [navBarHeight, setNavBarHeight] = useState(0)
+
+  const ref = useRef()
 
   useEffect(() => {
     function saveCurrentWidth() {
       setCurrentWidth(window.innerWidth)
     }
+
+    function saveNavBarHeight() {
+      setNavBarHeight(ref.current.scrollHeight)
+    }
+
+    saveNavBarHeight()
 
     window.addEventListener("resize", saveCurrentWidth)
 
@@ -55,15 +64,16 @@ export function NavBarControl({ links, onLogOut, onAppChange, pageTitle }) {
   }
 
   return (
-    <nav className="header index">
+    <nav className="header index" ref={ref} style={{ zIndex: 9999 }}>
       <section>
-        {currentWidth <= 450 && links.length > 1 ? (
+        {currentWidth <= 450 && links.length > 1 && navBarHeight > 0 ? (
           <DrawerNavBar
             pageTitle={pageTitle}
             navLinks={navLinks}
             links={links}
             onAppChange={onAppChange}
             onLogOut={onLogOut}
+            navBarHeight={navBarHeight}
           />
         ) : (
           <HorizontalNavBar

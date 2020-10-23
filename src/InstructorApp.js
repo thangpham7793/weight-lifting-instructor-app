@@ -86,7 +86,7 @@ export function InstructorApp({ onAppChange }) {
     <Router>
       <NavBarControl
         links={links}
-        pageTitle="Otago Weightlifting Instructor Space"
+        pageTitle="Instructor Space"
         onLogOut={onInstructorLogOut}
         onAppChange={onAppChange}
       />

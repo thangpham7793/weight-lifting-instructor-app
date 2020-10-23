@@ -96,7 +96,7 @@ export function LearnerApp({ onAppChange }) {
       <NavBarControl
         links={links}
         onLogOut={onLearnerLogOut}
-        pageTitle="Otago WeightLifting Learner Space"
+        pageTitle="Learner Space"
         onAppChange={onAppChange}
       />
       <div className="App main">
