@@ -121,7 +121,7 @@ export function SingleExercisePage() {
     }
 
     setTempRecord(newRecordTemplate)
-    setOpenAddNewRecordDialog(false)
+    return setOpenAddNewRecordDialog(false)
   }
 
   const memoizedOnEditClicked = useCallback(
@@ -150,10 +150,11 @@ export function SingleExercisePage() {
         })
         if (ok) {
           dispatch(deleteOneRecord(clickedRecord))
+          resetStateAndValidator(false)
+          return setOpenEditRecordDialog(false)
         }
+        return //don't close the dialog if they hit cancel
       }
-      resetStateAndValidator(false)
-      return setOpenEditRecordDialog(false)
     }
 
     if (
@@ -166,8 +167,6 @@ export function SingleExercisePage() {
       if (ok) {
         dispatch(updateOneRecord(clickedRecord))
       }
-    } else {
-      console.log("Same shit no update!")
     }
     resetStateAndValidator(false)
     return setOpenEditRecordDialog(false)
