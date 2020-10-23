@@ -849,7 +849,7 @@ a.logo {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .action-status-div > svg {
@@ -858,18 +858,22 @@ a.logo {
 }
 
 .action-status-close {
-  position: absolute;
-  right: 0%;
-  top: 0%;
-  padding: 0 0.25rem;
+  /* padding: 0.25rem; */
   color: gray;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
+  min-height: 45px;
+  min-width: 45px;
+  border-radius: 50%;
+  margin-left: 0.25rem;
+  color: white;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .action-status-close:hover,
 .action-status-close:focus {
-  background: #111;
-  color: #fff;
+  background: darkgreen;
 }
 
 /* file uploader */

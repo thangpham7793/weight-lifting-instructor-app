@@ -19,6 +19,7 @@ import {
   validateNewWeight,
 } from "../../../services/register"
 import { AddRecordFloatingButton } from "./AddRecordFloatingButton"
+import { useActionSnackbar } from "../../../hooks/useActionSnackbar"
 
 export function SingleExercisePage() {
   const classes = quickStyles({
@@ -32,6 +33,21 @@ export function SingleExercisePage() {
     selectOnePracticeBest(state, exerciseName)
   )
   const dispatch = useDispatch()
+
+  const { callDecoratedAddService, AddSnackbar } = useActionSnackbar(
+    "add",
+    httpService.createNewPracticeBest
+  )
+
+  const { callDecoratedUpdateService, UpdateSnackbar } = useActionSnackbar(
+    "update",
+    httpService.updatePracticeBest
+  )
+
+  const { callDecoratedDeleteService, DeleteSnackbar } = useActionSnackbar(
+    "delete",
+    httpService.deletePracticeBest
+  )
 
   const newRecordTemplate = {
     exerciseName: exerciseName,
@@ -114,7 +130,7 @@ export function SingleExercisePage() {
       return setOpenAddNewRecordDialog(false)
     }
 
-    const { ok, payload } = await httpService.createNewPracticeBest(tempRecord)
+    const { ok, payload } = await callDecoratedAddService(tempRecord)
 
     if (ok) {
       dispatch(addNewRecord(payload))
@@ -145,7 +161,7 @@ export function SingleExercisePage() {
       return setOpenEditRecordDialog(false)
     } else if (btnName === "Delete") {
       if (window.confirm(`Are you sure you want to delete this record?`)) {
-        const { ok } = await httpService.deletePracticeBest({
+        const { ok } = await callDecoratedDeleteService({
           pbId: clickedRecord.pbId,
         })
         if (ok) {
@@ -163,7 +179,7 @@ export function SingleExercisePage() {
         clickedRecord
       )
     ) {
-      const { ok } = await httpService.updatePracticeBest(clickedRecord)
+      const { ok } = await callDecoratedUpdateService(clickedRecord)
       if (ok) {
         dispatch(updateOneRecord(clickedRecord))
       }
@@ -223,6 +239,9 @@ export function SingleExercisePage() {
         onAddNewRecordBtnClicked={onAddNewRecordBtnClicked}
         isInputValid={isInputValid}
       />
+      <AddSnackbar />
+      <UpdateSnackbar />
+      <DeleteSnackbar />
     </Grid>
   )
 }

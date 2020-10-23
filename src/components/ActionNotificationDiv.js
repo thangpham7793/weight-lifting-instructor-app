@@ -43,6 +43,11 @@ export const ActionNotificationDiv = React.memo(
           color,
           fontWeight: "600",
           background,
+          position: "absolute",
+          width: "max-content",
+          borderRadius: "1rem",
+          left: "5%",
+          bottom: "7%",
         }}
       >
         {isActionSuccess ? (
