@@ -146,7 +146,6 @@ export function SchedulePanel() {
 
   return (
     <>
-      <DeleteSnackbar />
       <AddScheduleFloatingButton onActionSuccess={updateSchedulesList} />
       <Grid container className={classes.container}>
         {!schedules ? (
@@ -181,6 +180,8 @@ export function SchedulePanel() {
         scheduleId={clickedScheduleId}
         onActionSuccess={updateSchedulesList}
       />
+
+      <DeleteSnackbar />
     </>
   )
 }

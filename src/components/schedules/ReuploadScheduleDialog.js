@@ -47,51 +47,56 @@ export function ReuploadScheduleDialog({
   }
 
   return (
-    <Dialog
-      open={open}
-      onClose={onDialogCloseClicked}
-      aria-labelledby="form-dialog-title"
-    >
-      <DialogTitle
-        style={{
-          backgroundColor: "var(--txt-cl)",
-        }}
+    <>
+      <Dialog
+        open={open}
+        onClose={onDialogCloseClicked}
+        aria-labelledby="form-dialog-title"
       >
-        <Typography style={{ fontWeight: "var(--fw-md)" }}>
-          Reupload Cycle
-        </Typography>
-      </DialogTitle>
-      <DialogContent className="add-new-schedule-dialog">
-        <RepostSnackbar />
-        {clickedSchedule && (
-          <ScheduleReuploader
-            {...props}
-            onClickedScheduleNameChanged={onClickedScheduleNameChanged}
-            onFileUploaded={onFileUploaded}
-            scheduleName={clickedSchedule.scheduleName}
-            fileUploaded={fileUploaded}
-          />
-        )}
-      </DialogContent>
-      <DialogActions
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          padding: "0",
-          backgroundColor: "var(--txt-cl)",
-        }}
-      >
-        <button
-          disabled={!canUpdate}
-          onClick={onSaveUpdateClicked}
-          style={{ width: "max-content" }}
+        <DialogTitle
+          style={{
+            backgroundColor: "var(--txt-cl)",
+          }}
         >
-          Save
-        </button>
-        <button onClick={onDialogCloseClicked} style={{ width: "max-content" }}>
-          Close
-        </button>
-      </DialogActions>
-    </Dialog>
+          <Typography style={{ fontWeight: "var(--fw-md)" }}>
+            Reupload Cycle
+          </Typography>
+        </DialogTitle>
+        <DialogContent className="add-new-schedule-dialog">
+          {clickedSchedule && (
+            <ScheduleReuploader
+              {...props}
+              onClickedScheduleNameChanged={onClickedScheduleNameChanged}
+              onFileUploaded={onFileUploaded}
+              scheduleName={clickedSchedule.scheduleName}
+              fileUploaded={fileUploaded}
+            />
+          )}
+        </DialogContent>
+        <DialogActions
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            padding: "0",
+            backgroundColor: "var(--txt-cl)",
+          }}
+        >
+          <button
+            disabled={!canUpdate}
+            onClick={onSaveUpdateClicked}
+            style={{ width: "max-content" }}
+          >
+            Save
+          </button>
+          <button
+            onClick={onDialogCloseClicked}
+            style={{ width: "max-content" }}
+          >
+            Close
+          </button>
+        </DialogActions>
+      </Dialog>
+      <RepostSnackbar />
+    </>
   )
 }

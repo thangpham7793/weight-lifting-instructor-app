@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "var(--pd-sm)",
     width: "max-content",
     "&:hover": {
-      color: "var(--secondary-cl)",
+      color: "var(--txt-cl)",
       background: "#333",
     },
   },
@@ -101,68 +101,73 @@ export function ScheduleCard({
   }
 
   return (
-    <Card className={classes.root}>
-      <CardHeader
-        title={scheduleName ? scheduleName : "Unnamed"}
-        subheader={
-          weekCount ? `${weekCount} week(s)` : "No Exercises Added Yet"
-        } //TODO: should a created_at field be added?
-      />
-      <CardContent>
-        {programmes.length === 0 ? null : (
-          <List style={{ textAlign: "left" }} className="team-list">
-            <Typography variant="subtitle1">
-              Currently Used by Team(s):{" "}
-            </Typography>
-            {programmes.map((p) => (
-              <ListItem
-                button
-                key={p.programmeId}
-                onClick={onUnpublishScheduleClicked}
-                programmeid={p.programmeId}
-                scheduleid={scheduleId}
-                programmename={p.programmeName}
-                className="team-list-item"
-              >
-                <ListItemText
-                  className="team-list-item-text"
-                  primary={p.programmeName}
-                />
-                <ListItemIcon>
-                  <Close className="unpublish-schedule-icon" fontSize="small" />
-                </ListItemIcon>
-              </ListItem>
-            ))}
-          </List>
-        )}
-        <UnpublishSnackbar />
-      </CardContent>
-      <CardActions disableSpacing className={classes.actionBtnWrapper}>
-        <IconButton
-          className={classes.scheduleActionBtn}
-          aria-label="edit"
-          onClick={onEditScheduleClicked}
-          scheduleid={scheduleId}
-        >
-          <Edit />
-        </IconButton>
-        <IconButton
-          className={classes.scheduleActionBtn}
-          aria-label="publish"
-          onClick={onPublishScheduleClicked}
-          scheduleid={scheduleId}
-        >
-          <Share />
-        </IconButton>
-        <IconButton
-          className={classes.scheduleActionBtn}
-          aria-label="delete"
-          onClick={onDeleteScheduleClicked}
-          scheduleid={scheduleId}
-        >
-          <Delete />
-        </IconButton>
-      </CardActions>
-    </Card>
+    <>
+      <Card className={classes.root}>
+        <CardHeader
+          title={scheduleName ? scheduleName : "Unnamed"}
+          subheader={
+            weekCount ? `${weekCount} week(s)` : "No Exercises Added Yet"
+          } //TODO: should a created_at field be added?
+        />
+        <CardContent>
+          {programmes.length === 0 ? null : (
+            <List style={{ textAlign: "left" }} className="team-list">
+              <Typography variant="subtitle1">
+                Currently Used by Team(s):{" "}
+              </Typography>
+              {programmes.map((p) => (
+                <ListItem
+                  button
+                  key={p.programmeId}
+                  onClick={onUnpublishScheduleClicked}
+                  programmeid={p.programmeId}
+                  scheduleid={scheduleId}
+                  programmename={p.programmeName}
+                  className="team-list-item"
+                >
+                  <ListItemText
+                    className="team-list-item-text"
+                    primary={p.programmeName}
+                  />
+                  <ListItemIcon>
+                    <Close
+                      className="unpublish-schedule-icon"
+                      fontSize="small"
+                    />
+                  </ListItemIcon>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </CardContent>
+        <CardActions disableSpacing className={classes.actionBtnWrapper}>
+          <IconButton
+            className={classes.scheduleActionBtn}
+            aria-label="edit"
+            onClick={onEditScheduleClicked}
+            scheduleid={scheduleId}
+          >
+            <Edit />
+          </IconButton>
+          <IconButton
+            className={classes.scheduleActionBtn}
+            aria-label="publish"
+            onClick={onPublishScheduleClicked}
+            scheduleid={scheduleId}
+          >
+            <Share />
+          </IconButton>
+          <IconButton
+            className={classes.scheduleActionBtn}
+            aria-label="delete"
+            onClick={onDeleteScheduleClicked}
+            scheduleid={scheduleId}
+          >
+            <Delete />
+          </IconButton>
+        </CardActions>
+      </Card>
+      <UnpublishSnackbar />
+    </>
   )
 }

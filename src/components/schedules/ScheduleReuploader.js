@@ -12,7 +12,7 @@ export function ScheduleReuploader({
   isFileUploaded,
 }) {
   const [actionStatus, setActionStatus] = useState({
-    action: "File Upload",
+    action: null,
     isActionSuccess: isFileUploaded,
   })
 
@@ -38,6 +38,7 @@ export function ScheduleReuploader({
         scheduleName={scheduleName}
       />
 
+      {/* this needs special styling and its state needs to be hoisted */}
       <ActionNotificationDiv
         actionStatus={actionStatus}
         onCloseActionStatusDiv={onCloseActionStatusDiv}

@@ -11,7 +11,10 @@ import { useFetchSnackbar, useActionSnackbar } from "../../hooks/register"
 import httpService from "../../services/ProgrammeServiceSingleton"
 
 //a good candidate for Redux, since needed by many components, lets just do useState for now
-export function ScheduleUploader({ onActionSuccess }) {
+export function ScheduleUploader({
+  onActionSuccess,
+  callDecoratedUploadService,
+}) {
   const [programmes, setProgrammes] = useState(null)
   const [selectedProgrammeIds, setSelectedProgrammeIds] = useState([])
   const [scheduleName, setScheduleName] = useState("")
@@ -23,10 +26,10 @@ export function ScheduleUploader({ onActionSuccess }) {
     FetchNotificationDiv,
   } = useFetchSnackbar("programmes")
 
-  const { callDecoratedUploadService, UploadSnackbar } = useActionSnackbar(
-    "upload",
-    httpService.postNewSchedule
-  )
+  // const { callDecoratedUploadService, UploadSnackbar } = useActionSnackbar(
+  //   "upload",
+  //   httpService.postNewSchedule
+  // )
 
   function onProgrammeChecked(e) {
     const checkedProgrammeId = parseInt(e.target.value)
@@ -101,43 +104,45 @@ export function ScheduleUploader({ onActionSuccess }) {
   }
 
   return (
-    <Grid
-      item
-      xs={8}
-      md={12}
-      lg={12}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-around",
-      }}
-    >
-      {programmes ? (
-        <>
-          <ScheduleNameInput
-            label="Cycle Name"
-            onClickedScheduleNameChanged={onClickedScheduleNameChanged}
-            scheduleName={scheduleName}
-          />
-          <ProgrammeOptions
-            programmes={programmes}
-            isFetchSuccess={isFetchSuccess}
-            onProgrammeChecked={onProgrammeChecked}
-            label="Publish to Team: "
-          />
-          <UploadSnackbar />
-          {scheduleName.length > 5 ? (
-            <FileUploader onFileUploaded={onFileUploaded} />
-          ) : (
-            <FormHelperText>
-              Please Enter The Cycle's Name Before Uploading
-            </FormHelperText>
-          )}
-        </>
-      ) : (
-        // <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
-        <FetchNotificationDiv />
-      )}
-    </Grid>
+    <>
+      <Grid
+        item
+        xs={8}
+        md={12}
+        lg={12}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-around",
+        }}
+      >
+        {programmes ? (
+          <>
+            <ScheduleNameInput
+              label="Cycle Name"
+              onClickedScheduleNameChanged={onClickedScheduleNameChanged}
+              scheduleName={scheduleName}
+            />
+            <ProgrammeOptions
+              programmes={programmes}
+              isFetchSuccess={isFetchSuccess}
+              onProgrammeChecked={onProgrammeChecked}
+              label="Publish to Team: "
+            />
+
+            {scheduleName.length > 5 ? (
+              <FileUploader onFileUploaded={onFileUploaded} />
+            ) : (
+              <FormHelperText>
+                Please Enter The Cycle's Name Before Uploading
+              </FormHelperText>
+            )}
+          </>
+        ) : (
+          // <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
+          <FetchNotificationDiv />
+        )}
+      </Grid>
+    </>
   )
 }
