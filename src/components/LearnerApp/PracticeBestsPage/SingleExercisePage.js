@@ -5,6 +5,7 @@ import {
   setOnePracticeBest,
   updateOneRecord,
   deleteOneRecord,
+  addNewRecord,
 } from "../../../reducers/practiceBestsSlice"
 import httpService from "../../../services/LearnerServiceSingleton"
 import { useParams } from "react-router-dom"
@@ -19,7 +20,7 @@ import {
 } from "../../../services/register"
 import { AddRecordFloatingButton } from "./AddRecordFloatingButton"
 
-export function SingleExerciseForm() {
+export function SingleExercisePage() {
   const classes = quickStyles({
     wrapper: {
       height: "100%",
@@ -49,7 +50,6 @@ export function SingleExerciseForm() {
 
   //for a new record (other fields will be auto filled in redux slice)
   const [tempRecord, setTempRecord] = useState(newRecordTemplate)
-
   const [openEditRecordDialog, setOpenEditRecordDialog] = useState(false)
   const [openAddNewRecordDialog, setOpenAddNewRecordDialog] = useState(false)
   const [isInputValid, setIsInputValid] = useState(isValidInputTemplate)
@@ -109,31 +109,20 @@ export function SingleExerciseForm() {
 
   async function onNewRecordDialogCloseClicked(e) {
     const btnName = e.currentTarget.getAttribute("name")
-
     if (btnName === "Close") {
       resetStateAndValidator()
       return setOpenAddNewRecordDialog(false)
     }
+
+    const { ok, payload } = await httpService.createNewPracticeBest(tempRecord)
+
+    if (ok) {
+      dispatch(addNewRecord(payload))
+    }
+
     setTempRecord(newRecordTemplate)
     setOpenAddNewRecordDialog(false)
   }
-
-  useEffect(() => {
-    async function fetchRecords(exerciseName) {
-      if (!records) {
-        const {
-          ok,
-          payload,
-        } = await httpService.getPracticeBestsByExerciseName(exerciseName)
-        if (ok) {
-          dispatch(setOnePracticeBest({ exerciseName, records: payload }))
-        } else {
-          return
-        }
-      }
-    }
-    fetchRecords(exerciseName)
-  }, [exerciseName, dispatch, records])
 
   const memoizedOnEditClicked = useCallback(
     (e) => {
@@ -183,6 +172,23 @@ export function SingleExerciseForm() {
     resetStateAndValidator(false)
     return setOpenEditRecordDialog(false)
   }
+
+  useEffect(() => {
+    async function fetchRecords(exerciseName) {
+      if (!records) {
+        const {
+          ok,
+          payload,
+        } = await httpService.getPracticeBestsByExerciseName(exerciseName)
+        if (ok) {
+          dispatch(setOnePracticeBest({ exerciseName, records: payload }))
+        } else {
+          return
+        }
+      }
+    }
+    fetchRecords(exerciseName)
+  }, [exerciseName, dispatch, records])
 
   return (
     <Grid

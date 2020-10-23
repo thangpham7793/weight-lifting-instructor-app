@@ -27,10 +27,10 @@ function FormButton({ onClick, classes, label, icon, disabled }) {
 
 export default function EditSingleRecordDialog({
   open,
-  onDialogCloseClicked,
   onRecordInputChange,
   record,
   isInputValid,
+  onDialogCloseClicked,
 }) {
   const classes = quickStyles({
     dialog: {

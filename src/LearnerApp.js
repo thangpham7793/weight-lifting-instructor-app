@@ -12,7 +12,7 @@ import {
 import { LearnerLoginPage } from "./components/home/register"
 import {
   LearnerPracticeBestsPage,
-  SingleExerciseForm,
+  SingleExercisePage,
 } from "./components/LearnerApp/register"
 
 import { UserAuth, NavHelpers } from "./services/register"
@@ -47,7 +47,7 @@ const allLinks = {
     {
       to: "/practice.bests/:exerciseName", //using /learner/practice.bests will match with the previous item above https://reactrouter.com/web/guides/primary-components
       label: "Practice Best",
-      component: SingleExerciseForm,
+      component: SingleExercisePage,
       isProtected: true,
       display: false,
     },

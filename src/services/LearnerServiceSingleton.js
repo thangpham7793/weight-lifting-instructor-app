@@ -71,7 +71,7 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     })
   }
 
-  async createNewPracticeBest(exerciseName, repMax, weight) {
+  async createNewPracticeBest({ exerciseName, repMax, weight }) {
     return await LearnerServiceSingleton._fetchPostFactory(
       "learners/practice.bests"
     )({ exerciseName, repMax, weight })

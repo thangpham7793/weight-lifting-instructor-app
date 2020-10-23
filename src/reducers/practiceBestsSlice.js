@@ -19,6 +19,10 @@ export const practiceBestsSlice = createSlice({
       const { exerciseName, records } = action.payload
       state[`${exerciseName}`] = records
     },
+    addNewRecord: (state, action) => {
+      const { exerciseName } = action.payload
+      state[`${exerciseName}`].push(action.payload)
+    },
     updateOneRecord: (state, action) => {
       const { exerciseName, pbId } = action.payload
       const targetArr = state[`${exerciseName}`] //holds a reference to the orginal arr
@@ -54,6 +58,7 @@ export const {
   setOnePracticeBest,
   updateOneRecord,
   deleteOneRecord,
+  addNewRecord,
 } = practiceBestsSlice.actions
 
 //reducer to register with global store
