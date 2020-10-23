@@ -73,7 +73,11 @@ export function safeSpinnerWrapper(func) {
 }
 
 export function capitalise(string) {
-  return string.substring(0, 1).toUpperCase() + string.substring(1)
+  return string
+    .trim()
+    .split(" ")
+    .map((s) => s.substring(0, 1).toUpperCase() + s.substring(1))
+    .join("")
 }
 
 //starting from 1!

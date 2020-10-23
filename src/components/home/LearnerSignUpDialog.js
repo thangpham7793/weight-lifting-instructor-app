@@ -27,10 +27,11 @@ function FormButton({ onClick, classes, label, icon, disabled }) {
 
 export function LearnerSignUpDialog({
   open,
-  onLearnerInputChange,
+  onLearnerInputChanged,
   tempLearner,
   isInputValid,
   onSignUpDialogClosed,
+  programmes,
 }) {
   const classes = quickStyles({
     dialog: {
@@ -74,8 +75,9 @@ export function LearnerSignUpDialog({
       <DialogContent className={classes.content}>
         <LearnerSignUpForm
           isInputValid={isInputValid}
-          onLearnerInputChange={onLearnerInputChange}
+          onLearnerInputChanged={onLearnerInputChanged}
           tempLearner={tempLearner}
+          programmes={programmes}
           buttons={
             <Grid container wrap="nowrap" justify="space-between">
               <FormButton

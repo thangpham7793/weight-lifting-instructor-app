@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Redirect } from "react-router-dom"
 import { Logo, LoginForm, LearnerSignUpDialog } from "./register"
 import {
@@ -8,10 +8,12 @@ import {
   isNotEmpty,
   isValidEmail,
 } from "../../services/register"
-import httpService from "../../services/LearnerServiceSingleton"
+import learnerHttpService from "../../services/LearnerServiceSingleton"
+import programmeHttpService from "../../services/ProgrammeServiceSingleton"
 import { initSchedules } from "../../reducers/learnerSchedulesSlice"
 import { initPbs } from "../../reducers/learnerPbsSlice"
 import { useDispatch } from "react-redux"
+import { useActionSnackbar } from "../../hooks/useActionSnackbar"
 
 export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
   NavHelpers.setCurrentPage("/learner/login")
@@ -40,7 +42,7 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
     setErrorMessage(null)
     console.log("Logging in with ", credentials)
 
-    const { ok, payload } = await httpService.learnerLogin(credentials)
+    const { ok, payload } = await learnerHttpService.learnerLogin(credentials)
 
     if (!ok) {
       setErrorMessage(payload.message)
@@ -54,26 +56,48 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
     }
   }
 
+  const [programmes, setProgrammes] = useState(getProgrammes())
   const [openSignUpDialog, setSignUpDialogOpen] = useState(false)
+
+  useEffect(() => {
+    async function fetchProgrammes() {
+      if (!programmes && openSignUpDialog) {
+        const { ok, payload } = await programmeHttpService.fetchProgrammes()
+        if (ok) {
+          setProgrammes(payload.programmes)
+          saveProgrammes(payload.programmes)
+        }
+      }
+    }
+    fetchProgrammes()
+  }, [openSignUpDialog, programmes])
 
   const newLearnerTemplate = {
     firstName: "",
     lastName: "",
     email: "",
+    programmeId: programmes ? programmes[0].programmeId : "",
   }
 
   const isInputValidTemplate = {
-    firstName: false,
-    lastName: false,
-    email: false,
+    firstName: null,
+    lastName: null,
+    email: null,
+    programmeId: true,
   }
 
   const [tempLearner, setTempLearner] = useState(newLearnerTemplate)
   const [isInputValid, setIsInputValid] = useState(isInputValidTemplate)
 
   function validateNewRecordAndUpdateState(e, setNewState) {
+    //select uses e.target rather than e.currentTarget
     const changedField = e.currentTarget.getAttribute("name")
+      ? e.currentTarget.getAttribute("name")
+      : e.target.name
     let newValue = e.currentTarget.value
+      ? e.currentTarget.value
+      : e.target.value
+    console.log(changedField, newValue)
     if (changedField === "firstName" || changedField === "lastName") {
       if (isNotEmpty(newValue)) {
         setIsInputValid((state) => {
@@ -91,7 +115,7 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
     }
 
     if (changedField === "email") {
-      if (isValidEmail(newValue)) {
+      if (isValidEmail(newValue) && isNotEmpty(newValue)) {
         setIsInputValid((state) => {
           return { ...state, email: true }
         })
@@ -104,9 +128,23 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
 
     setNewState((currentRecord) => {
       let newRecord = { ...currentRecord }
-      newRecord[`${changedField}`] = newValue
+      if (changedField !== "programmeId") {
+        newRecord[`${changedField}`] = newValue.trim().toLowerCase()
+      } else {
+        newRecord[`${changedField}`] = parseInt(newValue)
+      }
       return newRecord
     })
+  }
+
+  function getProgrammes() {
+    return sessionStorage.getItem("programmes")
+      ? JSON.parse(sessionStorage.getItem("programmes"))
+      : null
+  }
+
+  function saveProgrammes(programmes) {
+    sessionStorage.setItem("programmes", JSON.stringify(programmes))
   }
 
   function onSignUpBtnClicked(e) {
@@ -115,14 +153,35 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
     setSignUpDialogOpen(true)
   }
 
-  function onLearnerInputChange(e) {
+  function onLearnerInputChanged(e) {
     validateNewRecordAndUpdateState(e, setTempLearner)
   }
 
-  function onSignUpDialogClosed() {
+  const { SignUpSnackbar, callDecoratedSignUpService } = useActionSnackbar(
+    "sign up",
+    learnerHttpService.learnerSignup
+  )
+
+  function resetSignUpForm() {
     setIsInputValid(isInputValidTemplate)
     setTempLearner(newLearnerTemplate)
     setSignUpDialogOpen(false)
+  }
+
+  async function onSignUpDialogClosed(e) {
+    const clickedBtn = e.currentTarget.getAttribute("name")
+
+    switch (clickedBtn) {
+      case "Close":
+        return resetSignUpForm()
+      default:
+        const { ok, payload } = await callDecoratedSignUpService(tempLearner)
+        if (ok) {
+          console.log(payload.username)
+          //should you log the user in as well ? but at least let them know their credentials
+        }
+    }
+    return resetSignUpForm()
   }
 
   return isLearnerLoggedIn ? (
@@ -146,13 +205,17 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
         errorMessage={errorMessage}
         onSignUpBtnClicked={onSignUpBtnClicked}
       />
-      <LearnerSignUpDialog
-        open={openSignUpDialog}
-        onSignUpDialogClosed={onSignUpDialogClosed}
-        onLearnerInputChange={onLearnerInputChange}
-        tempLearner={tempLearner}
-        isInputValid={isInputValid}
-      />
+      {programmes && (
+        <LearnerSignUpDialog
+          open={openSignUpDialog}
+          onSignUpDialogClosed={onSignUpDialogClosed}
+          onLearnerInputChanged={onLearnerInputChanged}
+          tempLearner={tempLearner}
+          isInputValid={isInputValid}
+          programmes={programmes}
+        />
+      )}
+      <SignUpSnackbar />
     </div>
   )
 }

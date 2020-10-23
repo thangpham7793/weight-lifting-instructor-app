@@ -13,7 +13,7 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
     this.createNewPracticeBest = safeSpinnerWrapper(this.createNewPracticeBest)
     this.updatePracticeBest = safeSpinnerWrapper(this.updatePracticeBest)
     this.deletePracticeBest = safeSpinnerWrapper(this.deletePracticeBest)
-
+    this.learnerSignup = safeSpinnerWrapper(this.learnerSignup)
     this.getPracticeBestsByExerciseName = safeSpinnerWrapper(
       this.getPracticeBestsByExerciseName
     )

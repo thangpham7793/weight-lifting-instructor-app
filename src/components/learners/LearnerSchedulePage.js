@@ -23,6 +23,7 @@ export function LearnerSchedulePage() {
   }
 
   function onWeekSelected(e) {
+    console.log(e.target)
     setSelectedWeek(parseInt(e.target.value))
   }
 

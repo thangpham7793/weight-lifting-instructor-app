@@ -1,6 +1,7 @@
 import React from "react"
 import { camelCaseToNormal } from "../../utils"
 import { TextField, Grid, Typography } from "@material-ui/core"
+import { ProgrammeOptions } from "./register"
 
 function NewLearnerInput({ label, ...props }) {
   return (
@@ -20,9 +21,10 @@ function NewLearnerInput({ label, ...props }) {
 //for learnerApp
 export function LearnerSignUpForm({
   tempLearner,
-  onLearnerInputChange,
+  onLearnerInputChanged,
   buttons,
   isInputValid,
+  programmes,
 }) {
   function pickHelperText(fieldName, isValid) {
     if (!isValid) {
@@ -41,21 +43,20 @@ export function LearnerSignUpForm({
 
   //it does changes, but doesn't show on the UI
   const inputs = Object.keys(tempLearner).map((fieldName) => {
+    if (fieldName === "programmeId") return null
     return (
       <NewLearnerInput
         label={fieldName}
         name={fieldName}
         type="text"
         key={fieldName}
-        value={
-          fieldName === "lastEdited"
-            ? new Date(tempLearner[fieldName]).toDateString()
-            : tempLearner[fieldName]
+        value={tempLearner[fieldName]}
+        onChange={onLearnerInputChanged}
+        error={isInputValid[`${fieldName}`] === false}
+        helperText={
+          isInputValid[`${fieldName}`] === false &&
+          pickHelperText(fieldName, isInputValid[`${fieldName}`])
         }
-        onChange={onLearnerInputChange}
-        error={!isInputValid[`${fieldName}`]}
-        helperText={pickHelperText(fieldName, isInputValid[`${fieldName}`])}
-        disabled={fieldName === "lastEdited"}
         style={{ minWidth: "100%" }}
       />
     )
@@ -90,6 +91,14 @@ export function LearnerSignUpForm({
           style={{ height: "40vh" }}
         >
           {inputs}
+          <ProgrammeOptions
+            programmes={programmes}
+            value={tempLearner.programmeId}
+            onChange={onLearnerInputChanged}
+            label={"Available Programmes"}
+            style={{ minWidth: "100%" }}
+            name="programmeId"
+          />
         </Grid>
       </form>
       {buttons}
