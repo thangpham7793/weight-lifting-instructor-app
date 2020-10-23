@@ -15,7 +15,7 @@ function InputEndAdornMent({ fieldName }) {
 
 function PersonalBestInput({ label, ...props }) {
   return (
-    <Grid item>
+    <Grid item align="left">
       <TextField
         label={camelCaseToNormal(label)}
         className="text-input"
@@ -73,6 +73,7 @@ export function SingleRecordForm({
             error={!isInputValid[`${fieldName}`]}
             helperText={pickHelperText(fieldName, isInputValid[`${fieldName}`])}
             disabled={fieldName === "lastEdited"}
+            style={{ minWidth: "100%" }}
           />
         )
       })
@@ -110,7 +111,7 @@ export function SingleRecordForm({
           container
           direction="column"
           justify="space-evenly"
-          align="center"
+          alignContent="center"
           style={{ height: "40vh" }}
         >
           {inputs}
