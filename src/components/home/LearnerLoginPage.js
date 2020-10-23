@@ -180,6 +180,7 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
       default:
         const { ok, payload } = await callDecoratedSignUpService(tempLearner)
         if (ok) {
+          resetSignUpForm()
           const { username } = payload
           if (
             window.confirm(

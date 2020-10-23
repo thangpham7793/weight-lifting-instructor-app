@@ -106,7 +106,7 @@ export function LearnerApp({ onAppChange }) {
               NavHelpers.getCurrentPage() !== "/learner/login" &&
               NavHelpers.getCurrentPage() !== null
                 ? NavHelpers.getCurrentPage()
-                : "/learner/practice.bests"
+                : "/learner/schedules"
             }
           />
         ) : (
