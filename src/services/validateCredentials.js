@@ -1,10 +1,10 @@
 import { repMaxrange } from "../utils"
 
-function isNotEmpty(str) {
+export function isNotEmpty(str) {
   return str && str.trim().length > 0
 }
 
-function isValidEmail(email) {
+export function isValidEmail(email) {
   const pattern = /^([\w_-]+|[\w_-]+(.[\w_-]+)+?)@([\w_-]+|[\w_-]+(.[\w_-]+)+?)$/
   return email && pattern.test(email)
 }

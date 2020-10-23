@@ -21,6 +21,7 @@ export function LoginForm({
   type,
   credentials,
   onInputChanged,
+  onSignUpBtnClicked,
 }) {
   return (
     <>
@@ -38,7 +39,10 @@ export function LoginForm({
           onInputChanged={onInputChanged}
         />
         {<ErrorMessageDiv errorMessage={errorMessage} />}
-        <LoginFormButtonPanel type={type} />
+        <LoginFormButtonPanel
+          type={type}
+          onSignUpBtnClicked={onSignUpBtnClicked}
+        />
       </form>
     </>
   )

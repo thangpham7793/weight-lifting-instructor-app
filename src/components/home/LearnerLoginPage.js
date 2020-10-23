@@ -1,10 +1,12 @@
 import React, { useState } from "react"
 import { Redirect } from "react-router-dom"
-import { Logo, LoginForm } from "./register"
+import { Logo, LoginForm, LearnerSignUpDialog } from "./register"
 import {
   NavHelpers,
   UserAuth,
   validateLearnerCredentials,
+  isNotEmpty,
+  isValidEmail,
 } from "../../services/register"
 import httpService from "../../services/LearnerServiceSingleton"
 import { initSchedules } from "../../reducers/learnerSchedulesSlice"
@@ -46,12 +48,81 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
     } else {
       UserAuth.saveToken(payload.token)
       delete payload.token
-      //redux?
-      //hard-code for now
       dispatch(initSchedules(payload.schedules))
       dispatch(initPbs(payload.pbs))
       onLearnerLogIn()
     }
+  }
+
+  const [openSignUpDialog, setSignUpDialogOpen] = useState(false)
+
+  const newLearnerTemplate = {
+    firstName: "",
+    lastName: "",
+    email: "",
+  }
+
+  const isInputValidTemplate = {
+    firstName: false,
+    lastName: false,
+    email: false,
+  }
+
+  const [tempLearner, setTempLearner] = useState(newLearnerTemplate)
+  const [isInputValid, setIsInputValid] = useState(isInputValidTemplate)
+
+  function validateNewRecordAndUpdateState(e, setNewState) {
+    const changedField = e.currentTarget.getAttribute("name")
+    let newValue = e.currentTarget.value
+    if (changedField === "firstName" || changedField === "lastName") {
+      if (isNotEmpty(newValue)) {
+        setIsInputValid((state) => {
+          let newState = { ...state }
+          newState[`${changedField}`] = true
+          return newState
+        })
+      } else {
+        setIsInputValid((state) => {
+          let newState = { ...state }
+          newState[`${changedField}`] = false
+          return newState
+        })
+      }
+    }
+
+    if (changedField === "email") {
+      if (isValidEmail(newValue)) {
+        setIsInputValid((state) => {
+          return { ...state, email: true }
+        })
+      } else {
+        setIsInputValid((state) => {
+          return { ...state, email: false }
+        })
+      }
+    }
+
+    setNewState((currentRecord) => {
+      let newRecord = { ...currentRecord }
+      newRecord[`${changedField}`] = newValue
+      return newRecord
+    })
+  }
+
+  function onSignUpBtnClicked(e) {
+    e.preventDefault()
+    console.log("Clicked!")
+    setSignUpDialogOpen(true)
+  }
+
+  function onLearnerInputChange(e) {
+    validateNewRecordAndUpdateState(e, setTempLearner)
+  }
+
+  function onSignUpDialogClosed() {
+    setIsInputValid(isInputValidTemplate)
+    setTempLearner(newLearnerTemplate)
+    setSignUpDialogOpen(false)
   }
 
   return isLearnerLoggedIn ? (
@@ -73,6 +144,14 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
         credentials={credentials}
         onInputChanged={onInputChanged}
         errorMessage={errorMessage}
+        onSignUpBtnClicked={onSignUpBtnClicked}
+      />
+      <LearnerSignUpDialog
+        open={openSignUpDialog}
+        onSignUpDialogClosed={onSignUpDialogClosed}
+        onLearnerInputChange={onLearnerInputChange}
+        tempLearner={tempLearner}
+        isInputValid={isInputValid}
       />
     </div>
   )

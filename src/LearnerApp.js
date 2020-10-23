@@ -12,7 +12,6 @@ import {
 import { LearnerLoginPage } from "./components/home/register"
 import {
   LearnerPracticeBestsPage,
-  SignUpForm,
   SingleExercisePage,
 } from "./components/LearnerApp/register"
 
@@ -44,14 +43,6 @@ const allLinks = {
       isProtected: true,
       display: true,
       icon: ExitToApp,
-    },
-    {
-      to: "/learner/signup",
-      label: "Sign Up",
-      component: SignUpForm,
-      isProtected: false,
-      display: false,
-      icon: null,
     },
     {
       to: "/practice.bests/:exerciseName", //using /learner/practice.bests will match with the previous item above https://reactrouter.com/web/guides/primary-components
