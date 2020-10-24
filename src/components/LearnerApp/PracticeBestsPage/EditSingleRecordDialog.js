@@ -1,29 +1,10 @@
 import React from "react"
 import { Dialog, DialogContent } from "@material-ui/core"
 import { quickStyles } from "../../../services/register"
-import { Button, Typography, Grid } from "@material-ui/core"
+import { Grid } from "@material-ui/core"
 import { Save, Close, Delete } from "@material-ui/icons"
 import { SingleRecordForm } from "./SingleRecordForm"
-
-function FormButton({ onClick, classes, label, icon, disabled }) {
-  const Icon = icon
-
-  return (
-    <Button
-      variant="contained"
-      color="secondary"
-      name={label}
-      onClick={onClick}
-      className={classes.formBtn}
-      disabled={disabled}
-    >
-      <Typography variant="button" className={classes.formBtnLabel}>
-        {label}
-      </Typography>
-      <Icon fontSize="small" />
-    </Button>
-  )
-}
+import { FormButton } from "./FormButton"
 
 export default function EditSingleRecordDialog({
   open,

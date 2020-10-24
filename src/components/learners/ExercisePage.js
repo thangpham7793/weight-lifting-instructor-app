@@ -6,28 +6,19 @@ import {
   selectDailyExercises,
 } from "../../reducers/dailyExercisesSlice"
 import { useParams } from "react-router-dom"
-import { LinkButton } from "../factoryComponent"
-import { useFetchSnackbar } from "../../hooks/useFetchSnackbar"
+import { useFetchSnackbar, useActionSnackbar } from "../../hooks/register"
 import {
   DayOptions,
   DailyExerciseTable,
   FeedBackDialog,
   PbsDialog,
 } from "./register"
-import { Grid, Typography, Button } from "@material-ui/core"
-import { makeStyles } from "@material-ui/core/styles"
+import { Grid, Typography } from "@material-ui/core"
 import { shallowEqual } from "../../utils"
 import programmeHttpService from "../../services/ProgrammeServiceSingleton"
 import learnerHttpService from "../../services/LearnerServiceSingleton"
-
-const useStyles = makeStyles(() => ({
-  btn: {
-    fontSize: "0.5rem",
-    minWidth: "max-content",
-    color: "var(--txt-cl)",
-    padding: "0.5rem",
-  },
-}))
+import { ExercisePageBtnPanel } from "./register"
+import { quickStyles } from "../../services/register"
 
 export function ExercisePage() {
   const dispatch = useDispatch()
@@ -39,13 +30,17 @@ export function ExercisePage() {
   const [selectedDay, setSelectedDay] = useState("day 1")
   const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false)
   const [openPbsDialog, setOpenPbsDialog] = useState(false)
-  // const [pbs, setPbs] = useState(useSelector(selectLearnerPbs))
   const pbs = useSelector(selectLearnerPbs)
   const [tempPbs, setTempPbs] = useState(useSelector(selectLearnerPbs))
 
   const { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
     "exercises"
   )
+
+  const {
+    callDecoratedUpdatePbsService,
+    UpdatePbsSnackbar,
+  } = useActionSnackbar("update pbs", learnerHttpService.updateLearnerPbs)
 
   function onFeedbackDialogCloseClicked() {
     setOpenFeedbackDialog(false)
@@ -55,10 +50,16 @@ export function ExercisePage() {
     setOpenFeedbackDialog(true)
   }
 
-  async function onPbsDialogCloseClicked() {
+  async function onPbsDialogCloseClicked(e) {
+    const clickedBtn = e.currentTarget.getAttribute("name")
+    if (clickedBtn === "Close") {
+      setTempPbs(pbs)
+      setOpenPbsDialog(false)
+      return
+    }
+
     if (!shallowEqual(pbs, tempPbs)) {
-      //does this auto update UI ? like setState? (yes it does)
-      const { ok } = await learnerHttpService.updateLearnerPbs(tempPbs)
+      const { ok } = await callDecoratedUpdatePbsService(tempPbs)
       if (ok) {
       }
     }
@@ -73,12 +74,9 @@ export function ExercisePage() {
   function onPersonalBestsInputChange(e) {
     const changedField = e.target.getAttribute("name")
     const newValue = e.target.value
-    console.log(changedField)
     setTempPbs((tempPbs) => {
       let newTempPbs = { ...tempPbs }
-      newTempPbs[`${changedField}`] = parseFloat(newValue)
-        ? parseFloat(newValue)
-        : 0
+      newTempPbs[`${changedField}`] = newValue
       return newTempPbs
     })
   }
@@ -107,7 +105,17 @@ export function ExercisePage() {
     setSelectedDay(e.target.value)
   }
 
-  const classes = useStyles()
+  const classes = quickStyles({
+    btn: {
+      fontSize: "0.5rem",
+      width: "100%",
+      color: "var(--txt-cl)",
+      padding: "0.5rem",
+    },
+    btnWrapper: {
+      width: "30%",
+    },
+  })
 
   return exercises ? (
     <>
@@ -115,7 +123,12 @@ export function ExercisePage() {
         container
         direction="column"
         justify="space-around"
-        style={{ height: "100%" }}
+        style={{ height: "100%", margin: "0 auto" }}
+        xs={12}
+        sm={10}
+        md={8}
+        lg={6}
+        wrap="nowrap"
       >
         <Grid item>
           <Typography variant="h6" component="div">
@@ -132,45 +145,11 @@ export function ExercisePage() {
             pbs={pbs}
           />
         </Grid>
-        <Grid
-          item
-          container
-          justify="space-between"
-          wrap="nowrap"
-          style={{ margin: "1rem auto", width: "100%", padding: "0 0.25rem" }}
-        >
-          <Grid item>
-            <LinkButton
-              variant="contained"
-              color="primary"
-              className={classes.btn}
-              to="/learner/schedules"
-              label="Schedules"
-            >
-              Schedules
-            </LinkButton>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.btn}
-              onClick={onPbsDialogOpenClicked}
-            >
-              Edit PBs
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.btn}
-              onClick={onFeedbackDialogOpenClicked}
-            >
-              Feedback
-            </Button>
-          </Grid>
-        </Grid>
+        <ExercisePageBtnPanel
+          classes={classes}
+          onPbsDialogOpenClicked={onPbsDialogOpenClicked}
+          onFeedbackDialogOpenClicked={onFeedbackDialogOpenClicked}
+        />
       </Grid>
       <FeedBackDialog
         onDialogCloseClicked={onFeedbackDialogCloseClicked}
@@ -182,6 +161,7 @@ export function ExercisePage() {
         pbs={tempPbs}
         onPersonalBestsInputChange={onPersonalBestsInputChange}
       />
+      <UpdatePbsSnackbar />
     </>
   ) : (
     <Grid

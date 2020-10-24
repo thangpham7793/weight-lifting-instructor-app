@@ -1,11 +1,13 @@
 import React from "react"
-import { Save } from "@material-ui/icons"
+import { Save, Close } from "@material-ui/icons"
 import { camelCaseToNormal } from "../../utils"
-import { TextField, Grid } from "@material-ui/core"
+import { TextField, Grid, Button } from "@material-ui/core"
+import { validateNewPb } from "../../services/register"
+import { quickStyles } from "../../services/register"
 
 function PersonalBestInput({ label, ...props }) {
   return (
-    <Grid item>
+    <Grid item style={{ marginBottom: "0.5rem" }}>
       <TextField
         label={camelCaseToNormal(label)}
         className="text-input"
@@ -31,40 +33,87 @@ export function LearnerPbsForm({
         type="text"
         key={fieldName}
         value={pbs[fieldName]}
+        error={!validateNewPb(pbs[fieldName])}
+        helperText={!validateNewPb(pbs[fieldName]) && "Must be 0 or bigger"}
         onChange={onPersonalBestsInputChange}
       />
     )
   })
 
+  const classes = quickStyles({
+    btn: {
+      width: "40%",
+      margin: "1rem auto",
+      background: "var(--txt-cl)",
+      display: "flex",
+      fontSize: "0.5rem",
+      justifyContent: "space-around",
+    },
+  })
+
   //use modal then
   return (
-    <div className="pbs-form-wrapper">
-      <h3 style={{ textTransform: "capitalize" }}>Personal Bests</h3>
+    <>
+      <Grid
+        item
+        xs={10}
+        sm={8}
+        md={6}
+        lg={4}
+        style={{ margin: "0 auto 0.5rem" }}
+      >
+        <h3 style={{ textTransform: "capitalize", textAlign: "center" }}>
+          Personal Bests
+        </h3>
+      </Grid>
       <form>
         <Grid
           container
+          item
           direction="column"
           justify="space-around"
           align="center"
-          style={{ height: "80vh" }}
+          wrap="nowrap"
+          style={{ height: "90vh", margin: "0 auto" }}
+          xs={10}
+          sm={8}
+          md={6}
+          lg={4}
         >
           {inputs}
         </Grid>
       </form>
       <Grid
         item
-        className="pbs-form-btn-wrapper"
-        style={{ justifyContent: "center" }}
+        container
+        style={{ justifyContent: "center", margin: "0 auto" }}
+        xs={10}
+        sm={8}
+        md={6}
+        lg={4}
       >
-        <button
-          className="pbs-btn"
+        <Button
           onClick={onDialogCloseClicked}
-          style={{ width: "30%" }}
+          className={classes.btn}
+          variant="contained"
+          name="Close"
+        >
+          <Close className="pbs-btn-icon" />
+          {"Close"}
+        </Button>
+        <Button
+          onClick={onDialogCloseClicked}
+          className={classes.btn}
+          variant="contained"
+          name="Save"
+          disabled={Object.values(pbs).some(
+            (pb) => validateNewPb(pb) === false
+          )}
         >
           <Save className="pbs-btn-icon" />
           {"Save"}
-        </button>
+        </Button>
       </Grid>
-    </div>
+    </>
   )
 }

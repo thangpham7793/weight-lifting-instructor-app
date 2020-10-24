@@ -11,7 +11,7 @@ export function LearnerPracticeBestsPage() {
     searchBar: { padding: "1rem" },
     icon: { color: "#315c4d" },
     listWrapper: {
-      maxHeight: "80vh",
+      maxHeight: "65vh",
       overflow: "auto",
       textTransform: "capitalize",
     },

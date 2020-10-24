@@ -1,10 +1,15 @@
 import React from "react"
 import { LearnerPbsForm } from "./register"
-import { Dialog, DialogContent } from "@material-ui/core"
+import { Dialog, DialogContent, Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(() => ({
   dialog: {
+    width: "90vw",
+    height: "90%",
+    margin: "1rem auto",
+  },
+  paperScrollPaper: {
     width: "90vw",
     height: "90%",
     margin: "1rem auto",
@@ -29,20 +34,24 @@ export function PbsDialog({
   const classes = useStyles()
 
   return (
-    <Dialog
-      fullScreen={true}
-      open={open}
-      onClose={onDialogCloseClicked}
-      aria-labelledby="form-dialog-title"
-      className={classes.dialog}
-    >
-      <DialogContent className={classes.content}>
-        <LearnerPbsForm
-          pbs={pbs}
-          onPersonalBestsInputChange={onPersonalBestsInputChange}
-          onDialogCloseClicked={onDialogCloseClicked}
-        />
-      </DialogContent>
-    </Dialog>
+    <Grid container item xs={10} sm={8} md={6} lg={4}>
+      <Dialog
+        // fullScreen={true}
+        open={open}
+        onClose={onDialogCloseClicked}
+        aria-labelledby="form-dialog-title"
+        maxWidth={false}
+        className={classes.dialog}
+        classes={{ paperScrollPaper: classes.paperScrollPaper }}
+      >
+        <DialogContent className={classes.content}>
+          <LearnerPbsForm
+            pbs={pbs}
+            onPersonalBestsInputChange={onPersonalBestsInputChange}
+            onDialogCloseClicked={onDialogCloseClicked}
+          />
+        </DialogContent>
+      </Dialog>
+    </Grid>
   )
 }

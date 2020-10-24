@@ -9,7 +9,7 @@ export function isValidEmail(email) {
   return email && pattern.test(email)
 }
 
-function isNumber(n) {
+export function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n)
 }
 
@@ -33,4 +33,8 @@ export function validateNewWeight(weight) {
 
 export function validateNewRepMax(repMax) {
   return repMaxrange(10).includes(repMax)
+}
+
+export function validateNewPb(pb) {
+  return isNumber(pb) && parseFloat(pb) >= 0
 }

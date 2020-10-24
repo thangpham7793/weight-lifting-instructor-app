@@ -1,6 +1,6 @@
 import React from "react"
 import { ScheduleOptions, WeekOptions } from "./register"
-import { Grid, Typography } from "@material-ui/core"
+import { Grid, Typography, Button } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(() => ({
@@ -64,13 +64,23 @@ export function ScheduleSelect({
         />
       </Grid>
       <Grid item xs={8} md={6} lg={4} className={classes.itemWrapper}>
-        <button
-          className={`submit-btn`}
-          style={{ width: "100%", margin: "1rem", alignSelf: "center" }}
+        <Button
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            width: "100%",
+            margin: "1rem auto",
+            padding: "0.5rem",
+            background: "var(--txt-cl)",
+            fontSize: "1rem",
+          }}
+          variant="contained"
           onClick={onScheduleSubmitted}
         >
-          Let's Go!
-        </button>
+          <Typography variant="button" style={{ fontSize: "0.75rem" }}>
+            Let's Go
+          </Typography>
+        </Button>
       </Grid>
     </Grid>
   )

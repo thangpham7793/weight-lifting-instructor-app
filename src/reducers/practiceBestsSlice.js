@@ -45,8 +45,9 @@ export const practiceBestsSlice = createSlice({
       state[`${exerciseName}`] = records
     },
     addNewRecord: (state, action) => {
-      const { exerciseName } = action.payload
+      const { exerciseName, repMax } = action.payload
       state[`${exerciseName}`].push(action.payload)
+      state.currentRepMax = repMax
     },
     updateOneRecord: (state, action) => {
       const { exerciseName, pbId } = action.payload
