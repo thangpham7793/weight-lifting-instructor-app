@@ -6,13 +6,15 @@ import {
   updateOneRecord,
   deleteOneRecord,
   addNewRecord,
+  selectCurrentRepMax,
+  setCurrentRepMax,
 } from "../../../reducers/practiceBestsSlice"
 import httpService from "../../../services/LearnerServiceSingleton"
 import { useParams } from "react-router-dom"
 import SingleExerciseRecordList from "./SingleExerciseRecordList"
 import EditSingleRecordDialog from "./EditSingleRecordDialog"
-import { shallowEqual } from "../../../utils"
-import { Grid } from "@material-ui/core"
+import { shallowEqual, repMaxrange } from "../../../utils"
+import { Grid, Typography } from "@material-ui/core"
 import {
   quickStyles,
   validateNewRepMax,
@@ -20,6 +22,7 @@ import {
 } from "../../../services/register"
 import { AddRecordFloatingButton } from "./AddRecordFloatingButton"
 import { useActionSnackbar } from "../../../hooks/useActionSnackbar"
+import { FilterPanel } from "./FilterPanel"
 
 export function SingleExercisePage() {
   const classes = quickStyles({
@@ -69,6 +72,11 @@ export function SingleExercisePage() {
   const [openEditRecordDialog, setOpenEditRecordDialog] = useState(false)
   const [openAddNewRecordDialog, setOpenAddNewRecordDialog] = useState(false)
   const [isInputValid, setIsInputValid] = useState(isValidInputTemplate)
+  const currentRepMax = useSelector(selectCurrentRepMax)
+
+  function onRepMaxChange(e) {
+    dispatch(setCurrentRepMax(e.target.value))
+  }
 
   function validateNewRecordAndUpdateState(e, setNewState) {
     const changedField = e.currentTarget.getAttribute("name")
@@ -213,6 +221,14 @@ export function SingleExercisePage() {
       alignContent="center"
       className={classes.wrapper}
     >
+      <Typography variant="h5" style={{ textTransform: "capitalize" }}>
+        {exerciseName}
+      </Typography>
+      <FilterPanel
+        items={["All", ...repMaxrange(10)]}
+        value={currentRepMax}
+        onChange={onRepMaxChange}
+      />
       {records ? (
         <SingleExerciseRecordList
           records={records}

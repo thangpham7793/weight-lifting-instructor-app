@@ -87,9 +87,10 @@ export function LearnerSignUpForm({
         <Grid
           container
           direction="column"
-          justify="space-evenly"
+          justify="space-between"
           alignContent="center"
-          style={{ height: "40vh" }}
+          wrap="nowrap"
+          style={{ height: "50vh", padding: "1rem" }}
         >
           {inputs}
           <ProgrammeOptions

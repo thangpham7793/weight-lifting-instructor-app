@@ -6,10 +6,12 @@ Date.prototype.addHours = function (h) {
   return this
 }
 
-const initialState = exerciseNames.reduce((acc, k) => {
+let initialState = exerciseNames.reduce((acc, k) => {
   acc[k] = null
   return acc
 }, {})
+
+initialState = { ...initialState, currentRepMax: "All" }
 
 export const practiceBestsSlice = createSlice({
   name: "practiceBests",
@@ -39,12 +41,28 @@ export const practiceBestsSlice = createSlice({
       const deletedIndex = targetArr.findIndex((r) => r.pbId === pbId)
       targetArr.splice(deletedIndex, 1)
     },
+    setCurrentRepMax: (state, action) => {
+      state.currentRepMax = action.payload
+    },
   },
 })
 
 //selector
 export const selectOnePracticeBest = (state, exerciseName) => {
+  // if (state.practiceBests[`${exerciseName}`]) {
+  //   return state.currentRepMax === "All"
+  //     ? state.practiceBests[`${exerciseName}`]
+  //     : state.practiceBests[`${exerciseName}`].filter(
+  //         (i) => i.repMax === state.currentRepMax
+  //       )
+  // }
   return state.practiceBests[`${exerciseName}`]
+    ? state.practiceBests[`${exerciseName}`].filter((exercise) => {
+        return state.practiceBests.currentRepMax === "All"
+          ? true
+          : exercise.repMax === state.practiceBests.currentRepMax
+      })
+    : null
 }
 
 export const selectPracticeBestRecordsById = (state, exerciseName, pbId) => {
@@ -53,12 +71,16 @@ export const selectPracticeBestRecordsById = (state, exerciseName, pbId) => {
   )
 }
 
+export const selectCurrentRepMax = (state) => state.practiceBests.currentRepMax
+
 //action type
 export const {
   setOnePracticeBest,
   updateOneRecord,
   deleteOneRecord,
   addNewRecord,
+
+  setCurrentRepMax,
 } = practiceBestsSlice.actions
 
 //reducer to register with global store
