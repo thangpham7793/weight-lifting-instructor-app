@@ -15,6 +15,10 @@ export default function SingleExerciseRecordList({
   currentRepMax,
 }) {
   const classes = quickStyles({
+    list: {
+      overflow: "auto",
+      maxHeight: "65vh",
+    },
     listItemTextPrimary: {
       fontSize: "0.85rem",
       color: "#333",
@@ -84,5 +88,5 @@ export default function SingleExerciseRecordList({
     })
   }
 
-  return <List>{items}</List>
+  return <List className={classes.list}>{items}</List>
 }

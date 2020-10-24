@@ -1,9 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { exerciseNames } from "./exerciseNames"
+
+import { repMaxrange } from "../utils"
 // eslint-disable-next-line no-extend-native
 Date.prototype.addHours = function (h) {
   this.setTime(this.getTime() + h * 60 * 60 * 1000)
   return this
+}
+
+function sortByDescendingDate(a, b) {
+  return new Date(a.lastEdited).valueOf() < new Date(b.lastEdited).valueOf()
+}
+
+function sortByAscendingRepMax(a, b) {
+  return parseInt(a.repMax.substr(1)) > parseInt(b.repMax.substr(1))
+}
+
+function groupByRepMax(sortedArr) {
+  return repMaxrange(10).reduce((acc, repMax) => {
+    let sorted = sortedArr
+      .filter((e) => e.repMax === repMax)
+      .sort(sortByDescendingDate)
+    return sorted.length === 0 ? acc : [...acc, ...sorted]
+  }, [])
+}
+
+function sortExercises(exercises) {
+  return groupByRepMax(exercises.sort(sortByAscendingRepMax))
 }
 
 let initialState = exerciseNames.reduce((acc, k) => {
@@ -49,19 +72,14 @@ export const practiceBestsSlice = createSlice({
 
 //selector
 export const selectOnePracticeBest = (state, exerciseName) => {
-  // if (state.practiceBests[`${exerciseName}`]) {
-  //   return state.currentRepMax === "All"
-  //     ? state.practiceBests[`${exerciseName}`]
-  //     : state.practiceBests[`${exerciseName}`].filter(
-  //         (i) => i.repMax === state.currentRepMax
-  //       )
-  // }
   return state.practiceBests[`${exerciseName}`]
-    ? state.practiceBests[`${exerciseName}`].filter((exercise) => {
-        return state.practiceBests.currentRepMax === "All"
-          ? true
-          : exercise.repMax === state.practiceBests.currentRepMax
-      })
+    ? sortExercises(
+        state.practiceBests[`${exerciseName}`].filter((exercise) => {
+          return state.practiceBests.currentRepMax === "All"
+            ? true
+            : exercise.repMax === state.practiceBests.currentRepMax
+        })
+      )
     : null
 }
 
