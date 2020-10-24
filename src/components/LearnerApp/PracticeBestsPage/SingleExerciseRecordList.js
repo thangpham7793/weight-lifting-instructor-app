@@ -9,7 +9,11 @@ import {
 } from "@material-ui/core"
 import { quickStyles } from "../../../services/register"
 
-export default function SingleExerciseRecordList({ records, onEditClicked }) {
+export default function SingleExerciseRecordList({
+  records,
+  onEditClicked,
+  currentRepMax,
+}) {
   const classes = quickStyles({
     listItemTextPrimary: {
       fontSize: "0.85rem",
@@ -30,27 +34,35 @@ export default function SingleExerciseRecordList({ records, onEditClicked }) {
         color: "#111",
       },
     },
+    icon: {
+      justifyContent: "center",
+    },
   })
 
   let items
 
   if (records.length === 0) {
     items = (
-      <ListItem divider>
-        <ListItemIcon>
+      <ListItem divider className="practice-best-list-item">
+        <ListItemIcon className={classes.icon}>
           <SentimentDissatisfied />
         </ListItemIcon>
-        <ListItemText primary="No Available Records Found!" />
+        <ListItemText
+          primary="No Available Records Found!"
+          classes={{ primary: classes.listItemTextPrimary }}
+        />
       </ListItem>
     )
   } else {
     items = records.map(({ pbId, repMax, weight, lastEdited }) => {
       return (
         <ListItem button divider key={pbId} className="practice-best-list-item">
-          <ListItemText
-            classes={{ primary: classes.listItemTextPrimary }}
-            primary={repMax}
-          />
+          {currentRepMax === "All" && (
+            <ListItemText
+              classes={{ primary: classes.listItemTextPrimary }}
+              primary={repMax}
+            />
+          )}
           <ListItemText
             classes={{ primary: classes.listItemTextPrimary }}
             primary={`${weight} Kg`}

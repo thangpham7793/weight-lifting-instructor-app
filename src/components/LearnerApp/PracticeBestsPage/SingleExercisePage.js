@@ -28,6 +28,7 @@ export function SingleExercisePage() {
   const classes = quickStyles({
     wrapper: {
       height: "100%",
+      margin: "0 auto",
     },
   })
 
@@ -220,6 +221,8 @@ export function SingleExercisePage() {
       justify="center"
       alignContent="center"
       className={classes.wrapper}
+      xs={12}
+      md={6}
     >
       <Typography variant="h5" style={{ textTransform: "capitalize" }}>
         {exerciseName}
@@ -231,6 +234,7 @@ export function SingleExercisePage() {
       />
       {records ? (
         <SingleExerciseRecordList
+          currentRepMax={currentRepMax}
           records={records}
           onEditClicked={memoizedOnEditClicked}
         />
