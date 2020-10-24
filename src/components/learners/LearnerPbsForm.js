@@ -1,7 +1,7 @@
 import React from "react"
 import { Save, Close } from "@material-ui/icons"
 import { camelCaseToNormal } from "../../utils"
-import { TextField, Grid, Button } from "@material-ui/core"
+import { TextField, Grid, Button, InputAdornment } from "@material-ui/core"
 import { validateNewPb } from "../../services/register"
 import { quickStyles } from "../../services/register"
 
@@ -36,6 +36,9 @@ export function LearnerPbsForm({
         error={!validateNewPb(pbs[fieldName])}
         helperText={!validateNewPb(pbs[fieldName]) && "Must be 0 or bigger"}
         onChange={onPersonalBestsInputChange}
+        InputProps={{
+          endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+        }}
       />
     )
   })
