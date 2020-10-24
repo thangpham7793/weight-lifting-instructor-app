@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Grid } from "@material-ui/core"
 import { PersonalBestsForm, LearnerSearchPanel } from "./register"
 import { ActionNotificationDiv } from "../ActionNotificationDiv"
@@ -14,6 +14,7 @@ import {
 
 export function LearnersPanel() {
   NavHelpers.setCurrentPage("/instructor/learners")
+  const dispatch = useDispatch()
   const [learners, setLearners] = useState(null)
   const [displayedLearners, setDisplayedLearners] = useState([])
   const [searchPhrase, setSearchPhrase] = useState("")
@@ -42,11 +43,6 @@ export function LearnersPanel() {
     )
   }
 
-  function getLearnerById(id) {
-    //avoid filter if ur searching for just one and all items are unique
-    return learners.find(({ learnerId }) => learnerId === parseInt(id))
-  }
-
   function onSearchPhraseChanged(e) {
     const phrase = e.target.value
 
@@ -56,23 +52,33 @@ export function LearnersPanel() {
     setDisplayedLearners(filterLearners(learners, phrase))
   }
 
-  function onLearnerItemClicked(e) {
-    const selected = getLearnerById(e.currentTarget.getAttribute("learnerId"))
-    setSelectedLearner(selected)
-  }
+  const onLearnerItemClicked = useCallback(
+    (e) => {
+      function getLearnerById(id) {
+        //avoid filter if ur searching for just one and all items are unique
+        return learners.find(({ learnerId }) => learnerId === parseInt(id))
+      }
+      return (function (e) {
+        const selected = getLearnerById(
+          e.currentTarget.getAttribute("learnerId")
+        )
+        setSelectedLearner(selected)
+      })(e)
+    },
+    [setSelectedLearner, learners]
+  )
 
-  function onPersonalBestsInputChange(e) {
-    const changedField = e.currentTarget.getAttribute("name")
-    const newValue = e.currentTarget.value
-
-    //console.log(e.target.getAttribute("name"))
-
-    setSelectedLearner((selectedLearner) => {
-      let newSelectedLearner = { ...selectedLearner }
-      newSelectedLearner[changedField] = newValue
-      return newSelectedLearner
-    })
-  }
+  const onPersonalBestsInputChange = useCallback((e) => {
+    return (function (e) {
+      const changedField = e.currentTarget.getAttribute("name")
+      const newValue = e.currentTarget.value
+      setSelectedLearner((selectedLearner) => {
+        let newSelectedLearner = { ...selectedLearner }
+        newSelectedLearner[changedField] = newValue
+        return newSelectedLearner
+      })
+    })(e)
+  }, [])
 
   //FIXME: this may break if user's currently filtering!
   function updateUILearnerList(updatedLearnerIndex, action = "UPDATE") {
@@ -82,6 +88,7 @@ export function LearnersPanel() {
         newLearnersList[updatedLearnerIndex] = selectedLearner
         //updated the list because name can be updated
         setLearners(newLearnersList)
+        dispatch(initAllLearners(newLearnersList))
         setDisplayedLearners(
           filterLearners(newLearnersList, `${selectedLearner.firstName}`)
         )
@@ -93,6 +100,7 @@ export function LearnersPanel() {
         //should go back to the full list after deleting
         setDisplayedLearners(newLearnersList)
         setLearners(newLearnersList)
+        dispatch(initAllLearners(newLearnersList))
         //reset form
         setSelectedLearner(null)
         //reset searchPhrase
@@ -143,15 +151,16 @@ export function LearnersPanel() {
         //refill the form with the old information
         setSelectedLearner(learners[updatedLearnerIndex])
         setSearchPhrase(selectedLearner.firstName)
-
         setActionStatus({ action: "update", isActionSuccess: false })
       }
     }
   }
 
-  function enableEditAndUpdate() {
-    setCanEditAndUpdate(!canEditAndUpdate)
-  }
+  const enableEditAndUpdate = useCallback(() => {
+    return (function () {
+      setCanEditAndUpdate(!canEditAndUpdate)
+    })()
+  }, [canEditAndUpdate])
 
   async function onDeleteLearner(e) {
     if (
@@ -187,12 +196,13 @@ export function LearnersPanel() {
 
       if (ok) {
         //the two operations are not synchronous!
+        dispatch(initAllLearners(payload))
         setLearners(payload)
         setDisplayedLearners(payload)
       }
     }
-    fetchLearners()
-  }, [])
+    if (!learners) fetchLearners()
+  }, [learners, dispatch])
 
   return (
     <>

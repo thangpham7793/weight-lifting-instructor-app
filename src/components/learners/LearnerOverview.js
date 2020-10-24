@@ -7,6 +7,7 @@ import {
 } from "../../reducers/allLearnersReducerSlice"
 import httpService from "../../services/LearnerServiceSingleton"
 import { NavHelpers } from "../../services/register"
+import { Grid } from "@material-ui/core"
 
 export function LearnerOverview() {
   NavHelpers.setCurrentPage("/instructor/overview")
@@ -30,7 +31,7 @@ export function LearnerOverview() {
   console.log(learners && learners.length)
 
   return (
-    <div>
+    <Grid>
       <h2>Learners</h2>
       {learners && (
         <PBTable
@@ -39,11 +40,11 @@ export function LearnerOverview() {
             delete copy.username
             delete copy.email
             copy.firstName = `${copy.firstName} ${copy.lastName}`
-            delete copy.firstName
+            delete copy.lastName
             return copy
           })}
         />
       )}
-    </div>
+    </Grid>
   )
 }

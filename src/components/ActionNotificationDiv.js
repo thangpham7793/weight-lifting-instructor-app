@@ -3,7 +3,6 @@ import {
   CheckCircleOutlineRounded,
   ErrorOutlineRounded,
 } from "@material-ui/icons"
-import { Typography } from "@material-ui/core"
 
 export const ActionNotificationDiv = React.memo(
   ({ actionStatus, onCloseActionStatusDiv }) => {
@@ -58,13 +57,9 @@ export const ActionNotificationDiv = React.memo(
           <ErrorOutlineRounded />
         )}
         <span>{message}</span>
-        <Typography
-          variant="span"
-          className="action-status-close"
-          onClick={onCloseActionStatusDiv}
-        >
+        <span className="action-status-close" onClick={onCloseActionStatusDiv}>
           X
-        </Typography>
+        </span>
       </div>
     )
   }

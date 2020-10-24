@@ -9,7 +9,14 @@ function makeTableData(rawData) {
     if (k === "learnerId") {
       return acc
     }
-    return [...acc, { Header: camelCaseToNormal(k), accessor: k }]
+    return [
+      ...acc,
+      {
+        Header:
+          k === "firstName" ? camelCaseToNormal("Name") : camelCaseToNormal(k),
+        accessor: k,
+      },
+    ]
   }, [])
 
   return [rawData, rawColumns]
