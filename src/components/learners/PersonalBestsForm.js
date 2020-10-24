@@ -1,14 +1,16 @@
 import React from "react"
 import { Edit, Delete, Save } from "@material-ui/icons"
-
+import { Button, TextField, Grid, InputAdornment } from "@material-ui/core"
 import { camelCaseToNormal } from "../../utils"
+import { quickStyles } from "../../services/register"
 
 function PersonalBestInput({ label, ...props }) {
   return (
-    <div className="pbs-field">
-      <label htmlFor={props.id || props.name}>{camelCaseToNormal(label)}</label>
-      <input className="text-input" {...props} />
-    </div>
+    <TextField
+      label={camelCaseToNormal(label)}
+      className="text-input"
+      {...props}
+    />
   )
 }
 
@@ -20,6 +22,21 @@ export function PersonalBestsForm({
   canEditAndUpdate,
   onDeleteLearner,
 }) {
+  const classes = quickStyles({
+    btn: {
+      fontSize: "0.75rem",
+      width: "max-content",
+    },
+    btnLabel: {
+      fontSize: "0.5rem",
+    },
+    input: {
+      fontWeight: "var(--fw-md)",
+      marginBottom: "0.5rem",
+      minWidth: "max-content",
+    },
+  })
+
   //it does changes, but doesn't show on the UI
   const inputs = Object.keys(selectedLearner).map((fieldName) => {
     if (fieldName === "learnerId") return null
@@ -32,42 +49,60 @@ export function PersonalBestsForm({
         value={selectedLearner[fieldName]}
         onChange={onPersonalBestsInputChange}
         readOnly={!canEditAndUpdate}
-        style={{ opacity: canEditAndUpdate ? "1" : "0.75" }}
+        disabled={!canEditAndUpdate}
+        className={classes.input}
+        InputProps={{
+          endAdornment: ![
+            "username",
+            "email",
+            "firstName",
+            "lastName",
+          ].includes(fieldName) && (
+            <InputAdornment position="end">Kg</InputAdornment>
+          ),
+        }}
       />
     )
   })
 
   //use modal then
   return (
-    <div className="pbs-form-wrapper">
-      <h3 style={{ textTransform: "capitalize" }}>
-        {selectedLearner.firstName}
-      </h3>
-      <form readOnly={!canEditAndUpdate} onDoubleClick={enableEditAndUpdate}>
-        {inputs}
-      </form>
-      <div className="pbs-form-btn-wrapper">
-        <button className="pbs-btn" onClick={enableEditAndUpdate}>
-          <Edit className="pbs-btn-icon" />
-          {!canEditAndUpdate ? "Enable Edit " : "Disable Edit "}
-        </button>
-        <button
-          className="pbs-btn"
-          onClick={onUpdatePersonalBests}
-          disabled={!canEditAndUpdate}
-        >
-          <Save className="pbs-btn-icon" />
-          {"Save "}
-        </button>
-        <button
-          className="pbs-btn"
-          onClick={onDeleteLearner}
-          disabled={!canEditAndUpdate}
-        >
-          <Delete className="pbs-btn-icon" />
-          {"Delete "}
-        </button>
-      </div>
-    </div>
+    <>
+      <Grid item style={{ width: "30%", overflow: "auto" }}>
+        <form readOnly={!canEditAndUpdate} onDoubleClick={enableEditAndUpdate}>
+          <Grid container wrap="nowrap" direction="column" justify="center">
+            {inputs}
+          </Grid>
+        </form>
+        <div className="pbs-form-btn-wrapper">
+          <Button
+            onClick={enableEditAndUpdate}
+            className={classes.btn}
+            classes={{ label: classes.btnLabel }}
+          >
+            <Edit className="pbs-btn-icon" />
+            {!canEditAndUpdate ? "Enable Edit " : "Disable Edit "}
+          </Button>
+          <Button
+            onClick={onUpdatePersonalBests}
+            disabled={!canEditAndUpdate}
+            className={classes.btn}
+            classes={{ label: classes.btnLabel }}
+          >
+            <Save className="pbs-btn-icon" />
+            {"Save "}
+          </Button>
+          <Button
+            onClick={onDeleteLearner}
+            disabled={!canEditAndUpdate}
+            className={classes.btn}
+            classes={{ label: classes.btnLabel }}
+          >
+            <Delete className="pbs-btn-icon" />
+            {"Delete "}
+          </Button>
+        </div>
+      </Grid>
+    </>
   )
 }

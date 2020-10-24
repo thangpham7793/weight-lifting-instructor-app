@@ -5,6 +5,7 @@ export class LearnerServiceSingleton extends HttpServiceSingleton {
   constructor() {
     super()
     console.log("New LearnerServiceSingleton!")
+    this.fetchLearners = safeSpinnerWrapper(this.fetchLearners)
     this.updateLearner = safeSpinnerWrapper(this.updateLearner)
     this.deleteLearner = safeSpinnerWrapper(this.deleteLearner)
     this.createLearner = safeSpinnerWrapper(this.createLearner)

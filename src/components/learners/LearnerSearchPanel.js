@@ -1,7 +1,14 @@
 import React from "react"
 import { LearnerNameList } from "./register"
+import {
+  TextField,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+} from "@material-ui/core"
 
-export function LearnerSearchInput({
+export function LearnerSearchPanel({
   searchPhrase,
   onSearchPhraseChanged,
   learners,
@@ -9,12 +16,23 @@ export function LearnerSearchInput({
   onLearnerItemClicked,
 }) {
   return (
-    <div className="learnerListPanel" style={{ display: "flex" }}>
-      <div
-        className="searchInputWrapper"
-        style={{ display: "flex", flexDirection: "column" }}
+    <Grid
+      item
+      container
+      wrap="nowrap"
+      className="learnerListPanel"
+      direction="column"
+      style={{ width: "30%" }}
+    >
+      <Grid
+        item
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          marginBottom: "0.5rem",
+        }}
       >
-        <input
+        <TextField
           className="learnerSearchInput"
           value={searchPhrase}
           onChange={onSearchPhraseChanged}
@@ -23,19 +41,21 @@ export function LearnerSearchInput({
           }
           disabled={learners.length === 0 ? true : false}
         />
-      </div>
-      <div className="learnerNameList">
+      </Grid>
+      <Grid item className="learnerNameList">
         {learners.length === 0 ? (
-          <ul>
-            <li className="learner-name">No Learners Added Yet</li>
-          </ul>
+          <List>
+            <ListItem button>
+              <ListItemText primary="No Learners Added Yet" />
+            </ListItem>
+          </List>
         ) : (
           <LearnerNameList
             learners={displayedLearners}
             onLearnerItemClicked={onLearnerItemClicked}
           />
         )}
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   )
 }

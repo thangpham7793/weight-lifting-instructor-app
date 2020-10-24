@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react"
-
-import { PersonalBestsForm, LearnerSearchInput } from "./register"
-import { FetchNotificationDivFactory } from "../factoryComponent"
+import { Grid } from "@material-ui/core"
+import { PersonalBestsForm, LearnerSearchPanel } from "./register"
 import { ActionNotificationDiv } from "../ActionNotificationDiv"
-
+import { useFetchSnackbar } from "../../hooks/register"
 import httpService from "../../services/LearnerServiceSingleton"
 import { shallowEqual } from "../../utils"
 import { NavHelpers } from "../../services/register"
 
 export function LearnersPanel() {
   NavHelpers.setCurrentPage("/instructor/learners")
-  const [learners, setLearners] = useState([])
+  const [learners, setLearners] = useState(null)
   const [displayedLearners, setDisplayedLearners] = useState([])
   const [searchPhrase, setSearchPhrase] = useState("")
   const [selectedLearner, setSelectedLearner] = useState(null)
@@ -20,12 +19,7 @@ export function LearnersPanel() {
     isActionSuccess: null,
   })
 
-  //maybe these can be combined into a useNotification hook?
-  const [isFetchSuccess, setIsFetchSuccess] = useState(null)
-  const FetchLearnersNotificationDiv = FetchNotificationDivFactory(
-    "learners",
-    "Click On A Name"
-  )
+  const { FetchNotificationDiv } = useFetchSnackbar("learner")
 
   function onCloseActionStatusDiv(e) {
     setActionStatus({ action: null, isActionSuccess: null })
@@ -58,13 +52,13 @@ export function LearnersPanel() {
   }
 
   function onLearnerItemClicked(e) {
-    const selected = getLearnerById(e.target.getAttribute("learnerId"))
+    const selected = getLearnerById(e.currentTarget.getAttribute("learnerId"))
     setSelectedLearner(selected)
   }
 
   function onPersonalBestsInputChange(e) {
-    const changedField = e.target.getAttribute("name")
-    const newValue = e.target.value
+    const changedField = e.currentTarget.getAttribute("name")
+    const newValue = e.currentTarget.value
 
     //console.log(e.target.getAttribute("name"))
 
@@ -190,9 +184,6 @@ export function LearnersPanel() {
         //the two operations are not synchronous!
         setLearners(payload)
         setDisplayedLearners(payload)
-        setIsFetchSuccess(true)
-      } else {
-        setIsFetchSuccess(false)
       }
     }
     fetchLearners()
@@ -200,23 +191,27 @@ export function LearnersPanel() {
 
   return (
     <>
+      {!learners && <FetchNotificationDiv />}
       <ActionNotificationDiv
         actionStatus={actionStatus}
         onCloseActionStatusDiv={onCloseActionStatusDiv}
       />
-      <div className="learnerPanelWrapper" style={{ display: "flex" }}>
-        {isFetchSuccess ? (
-          <LearnerSearchInput
+      <Grid
+        container
+        className="learnerPanelWrapper"
+        style={{ display: "flex" }}
+        wrap="nowrap"
+      >
+        {learners && (
+          <LearnerSearchPanel
             searchPhrase={searchPhrase}
             onSearchPhraseChanged={onSearchPhraseChanged}
             learners={learners}
             displayedLearners={displayedLearners}
             onLearnerItemClicked={onLearnerItemClicked}
           />
-        ) : (
-          <FetchLearnersNotificationDiv isFetchSuccess={isFetchSuccess} />
         )}
-        {selectedLearner ? (
+        {selectedLearner && (
           <PersonalBestsForm
             selectedLearner={selectedLearner}
             onPersonalBestsInputChange={onPersonalBestsInputChange}
@@ -225,10 +220,8 @@ export function LearnersPanel() {
             enableEditAndUpdate={enableEditAndUpdate}
             onDeleteLearner={onDeleteLearner}
           />
-        ) : (
-          <FetchLearnersNotificationDiv isFetchSuccess={isFetchSuccess} />
         )}
-      </div>
+      </Grid>
     </>
   )
 }
