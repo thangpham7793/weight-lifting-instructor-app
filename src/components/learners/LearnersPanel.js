@@ -15,8 +15,8 @@ import {
 export function LearnersPanel() {
   NavHelpers.setCurrentPage("/instructor/learners")
   const dispatch = useDispatch()
-  const [learners, setLearners] = useState(null)
-  const [displayedLearners, setDisplayedLearners] = useState([])
+  const [learners, setLearners] = useState(useSelector(selectAllLearners))
+  const [displayedLearners, setDisplayedLearners] = useState(learners)
   const [searchPhrase, setSearchPhrase] = useState("")
   const [selectedLearner, setSelectedLearner] = useState(null)
   const [canEditAndUpdate, setCanEditAndUpdate] = useState(false)
@@ -217,7 +217,7 @@ export function LearnersPanel() {
         style={{ display: "flex" }}
         wrap="nowrap"
       >
-        {learners && (
+        {learners && displayedLearners && (
           <LearnerSearchPanel
             searchPhrase={searchPhrase}
             onSearchPhraseChanged={onSearchPhraseChanged}
