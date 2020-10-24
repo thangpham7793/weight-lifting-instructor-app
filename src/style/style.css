@@ -95,6 +95,7 @@ body {
   background: var(--bg-cl);
   font-size: var(--sm);
   line-height: 1.5rem;
+  overflow: hidden;
 }
 
 .MuiTypography-root {
@@ -199,7 +200,8 @@ a.disabled {
 
 .main {
  grid-area: main; 
- background-image: linear-gradient(to left top, #00a896, #00a896, #00a896, #f0f3bd);
+ background-image: linear-gradient(
+   to left top, #00a896, #00a896, #00a896, #f0f3bd);
 }
 
 .footer {
@@ -208,11 +210,13 @@ a.disabled {
 }
 
 .header, .footer {
-  background: var(--primary-cl);
+  background-image: linear-gradient(
+    to right bottom, var(--primary-cl), #1b7fa7, 60%, #055e81);
   display: flex;
   flex-direction: column;
   align-content: center;
   justify-content: center;
+  box-shadow: var(--bsd-sm);
 }
 
 .search-form-label {
@@ -971,4 +975,11 @@ label.Mui-focused {
 
 #sidebar-drawer {
   z-index: 500 !important;
+}
+
+a.MuiButtonBase-root.MuiListItem-root:hover,
+a.MuiButtonBase-root.MuiListItem-root:focus,
+#sidebar-logout-link:hover,
+#sidebar-logout-link:focus {
+  background: var(--bg-cl) !important;
 }

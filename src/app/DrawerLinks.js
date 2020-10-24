@@ -9,7 +9,7 @@ import {
   ListItemIcon,
 } from "@material-ui/core"
 import { Menu } from "@material-ui/icons"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { quickStyles } from "../services/register"
 
 export function DrawerLinks({ links, onLogOut, navBarHeight }) {
@@ -62,10 +62,15 @@ export function DrawerLinks({ links, onLogOut, navBarHeight }) {
           <Divider />
           <ListItem
             button
-            component={Link}
+            component={NavLink}
             to={to}
             onClick={() => toggleDrawer(false)}
             className={classes.navItem}
+            classes={{ root: classes.navItem }}
+            activeStyle={{
+              fontWeight: "600",
+              color: "var(--txt-cl)",
+            }}
           >
             <ListItemIcon>
               <Icon />
@@ -80,7 +85,7 @@ export function DrawerLinks({ links, onLogOut, navBarHeight }) {
         //basically need to make a fake link here!
         <React.Fragment key={to}>
           <Divider />
-          <ListItem button className={classes.navItem}>
+          <ListItem button className={classes.navItem} id="sidebar-logout-link">
             <ListItemIcon>
               <Icon />
             </ListItemIcon>
