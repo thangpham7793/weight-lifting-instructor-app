@@ -6,6 +6,11 @@ import { useFetchSnackbar } from "../../hooks/register"
 import httpService from "../../services/LearnerServiceSingleton"
 import { shallowEqual } from "../../utils"
 import { NavHelpers } from "../../services/register"
+import { useDispatch, useSelector } from "react-redux"
+import {
+  initAllLearners,
+  selectAllLearners,
+} from "../../reducers/allLearnersReducerSlice"
 
 export function LearnersPanel() {
   NavHelpers.setCurrentPage("/instructor/learners")

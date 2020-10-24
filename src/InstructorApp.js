@@ -1,11 +1,17 @@
 import React, { useState } from "react"
 import { BrowserRouter as Router, Redirect } from "react-router-dom"
-import { VpnKey, ExitToApp, TodayOutlined, PeopleAlt } from "@material-ui/icons"
+import {
+  VpnKey,
+  ExitToApp,
+  TodayOutlined,
+  PeopleAlt,
+  TableChart,
+} from "@material-ui/icons"
 
 //https://reactrouter.com/web/api
 import { NavBarControl, Footer, PageRoutes } from "./app/register"
 
-import { LearnersPanel } from "./components/learners/register"
+import { LearnersPanel, LearnerOverview } from "./components/learners/register"
 import { SchedulePanel } from "./components/schedules/register"
 import {
   InstructorLoginPage,
@@ -23,6 +29,14 @@ const allLinks = {
       isProtected: true,
       display: true,
       icon: TodayOutlined,
+    },
+    {
+      to: "/instructor/overview",
+      label: "Overview",
+      component: LearnerOverview,
+      isProtected: true,
+      display: true,
+      icon: TableChart,
     },
     {
       to: "/instructor/learners",
