@@ -79,6 +79,7 @@ export function LearnerSignUpForm({
       container
       direction="column"
       justify="center"
+      wrap="nowrap"
       style={{ overflow: "hidden" }}
     >
       <FormTitle />
