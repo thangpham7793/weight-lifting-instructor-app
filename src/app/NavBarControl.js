@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
-import { Link } from "react-router-dom"
 import { HorizontalNavBar, DrawerNavBar } from "./register"
-
-function NavLink({ to, label }) {
-  return (
-    <Link to={to} className="nav-item">
-      {label}
-    </Link>
-  )
-}
 
 //https://reactrouter.com/web/api/Redirect
 export function NavBarControl({ links, onLogOut, onAppChange, pageTitle }) {
@@ -41,7 +32,6 @@ export function NavBarControl({ links, onLogOut, onAppChange, pageTitle }) {
         {currentWidth <= 450 && links.length > 2 && navBarHeight > 0 ? (
           <DrawerNavBar
             pageTitle={pageTitle}
-            // navLinks={navLinks}
             links={links}
             onAppChange={onAppChange}
             onLogOut={onLogOut}
@@ -50,7 +40,6 @@ export function NavBarControl({ links, onLogOut, onAppChange, pageTitle }) {
         ) : (
           <HorizontalNavBar
             pageTitle={pageTitle}
-            // navLinks={navLinks}
             links={links}
             onAppChange={onAppChange}
             onLogOut={onLogOut}
