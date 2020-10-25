@@ -32,6 +32,7 @@ export function useFetchSnackbar(resourceName = null, postFetchAction = null) {
   function FetchNotificationDiv({ ...props }) {
     return (
       <Grid
+        item
         container
         direction="column"
         style={{ height: "100%", paddingTop: "2rem" }}

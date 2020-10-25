@@ -40,6 +40,10 @@ export function ScheduleNameInput({
       InputLabelProps={{
         className: classes.formLabelRoot,
       }}
+      error={scheduleName.length <= 5}
+      helperText={
+        scheduleName.length <= 5 && "Must be at least 5 characters long"
+      }
     />
   )
 }

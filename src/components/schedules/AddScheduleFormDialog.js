@@ -6,6 +6,7 @@ import {
   DialogTitle,
   DialogContent,
   Typography,
+  Button,
 } from "@material-ui/core"
 import { useActionSnackbar } from "../../hooks/register"
 import httpService from "../../services/ProgrammeServiceSingleton"
@@ -42,13 +43,21 @@ export function AddScheduleFormDialog({ handleClose, open, onActionSuccess }) {
         <DialogActions
           style={{
             justifyContent: "center",
-            padding: "0",
+            padding: "1rem",
             backgroundColor: "var(--txt-cl)",
           }}
         >
-          <button onClick={handleClose} style={{ width: "max-content" }}>
+          <Button
+            variant="contained"
+            onClick={handleClose}
+            style={{
+              width: "max-content",
+              fontSize: "0.75rem",
+              background: "inherit",
+            }}
+          >
             Close
-          </button>
+          </Button>
         </DialogActions>
       </Dialog>
       <UploadSnackbar />

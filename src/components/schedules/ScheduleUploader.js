@@ -7,7 +7,7 @@ import {
 } from "../../services/register"
 import { FileUploader, ProgrammeOptions, ScheduleNameInput } from "./register"
 import { Grid, FormHelperText } from "@material-ui/core"
-import { useFetchSnackbar, useActionSnackbar } from "../../hooks/register"
+import { useFetchSnackbar } from "../../hooks/register"
 import httpService from "../../services/ProgrammeServiceSingleton"
 
 //a good candidate for Redux, since needed by many components, lets just do useState for now
@@ -17,19 +17,8 @@ export function ScheduleUploader({
 }) {
   const [programmes, setProgrammes] = useState(null)
   const [selectedProgrammeIds, setSelectedProgrammeIds] = useState([])
-  const [scheduleName, setScheduleName] = useState("")
-  // const [isFetchSuccess, setIsFetchSuccess] = useState(null)
-
-  const {
-    isFetchSuccess,
-    setIsFetchSuccess,
-    FetchNotificationDiv,
-  } = useFetchSnackbar("programmes")
-
-  // const { callDecoratedUploadService, UploadSnackbar } = useActionSnackbar(
-  //   "upload",
-  //   httpService.postNewSchedule
-  // )
+  const [scheduleName, setScheduleName] = useState("My Toughest Cycle Yet")
+  const { FetchNotificationDiv } = useFetchSnackbar("programmes")
 
   function onProgrammeChecked(e) {
     const checkedProgrammeId = parseInt(e.target.value)
@@ -58,14 +47,10 @@ export function ScheduleUploader({
         console.log(payload)
         //effect here
         setProgrammes(payload.programmes)
-        setIsFetchSuccess(true)
-      } else {
-        //another effect
-        setIsFetchSuccess(false)
       }
     }
     fetchProgrammes()
-  }, [setIsFetchSuccess])
+  }, [])
 
   async function onFileUploaded(e) {
     const selectedFile = e.target.files[0]
@@ -125,7 +110,6 @@ export function ScheduleUploader({
             />
             <ProgrammeOptions
               programmes={programmes}
-              isFetchSuccess={isFetchSuccess}
               onProgrammeChecked={onProgrammeChecked}
               label="Publish to Team: "
             />
@@ -139,7 +123,6 @@ export function ScheduleUploader({
             )}
           </>
         ) : (
-          // <FetchProgrammesNotificationDiv isFetchSuccess={isFetchSuccess} />
           <FetchNotificationDiv />
         )}
       </Grid>
