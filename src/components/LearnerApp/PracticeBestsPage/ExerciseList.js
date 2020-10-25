@@ -1,28 +1,15 @@
-import React, { useCallback } from "react"
-import { useHistory } from "react-router-dom"
+import React from "react"
 import { List, ListItem, ListItemText, ListItemIcon } from "@material-ui/core"
 import { FitnessCenter, SentimentDissatisfied } from "@material-ui/icons"
 
-export function ExerciseList({ exerciseNames }) {
-  const history = useHistory()
-
-  const navigateToSingleExercisePage = useCallback(
-    (e) => {
-      const targetExercise = e.currentTarget.getAttribute("id")
-      console.log("Clicked!", targetExercise)
-      //do you need to encode here?
-      history.push(`/practice.bests/${encodeURI(targetExercise)}`)
-    },
-    [history]
-  )
-
+export function ExerciseList({ exerciseNames, onExerciseClicked }) {
   const exerciseList = exerciseNames.map((name) => {
     return (
       <ListItem
         button
         key={name}
         id={name}
-        onClick={navigateToSingleExercisePage}
+        onClick={onExerciseClicked}
         divider
         className="exercise-list-item"
       >

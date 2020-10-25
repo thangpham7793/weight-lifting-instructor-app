@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
+import { useHistory } from "react-router-dom"
 import { Grid, TextField, InputAdornment } from "@material-ui/core"
 import { Search } from "@material-ui/icons"
 import { exerciseNames } from "../../../reducers/exerciseNames"
@@ -34,6 +35,17 @@ export function LearnerPracticeBestsPage() {
     setDisplayedExerciseNames(filterExerciseNames(e.currentTarget.value))
   }
 
+  const history = useHistory()
+  const navigateToSingleExercisePage = useCallback(
+    (e) => {
+      const targetExercise = e.currentTarget.getAttribute("id")
+      console.log("Clicked!", targetExercise)
+      //do you need to encode here?
+      history.push(`/practice.bests/${encodeURI(targetExercise)}`)
+    },
+    [history]
+  )
+
   return (
     <Grid
       container
@@ -59,7 +71,10 @@ export function LearnerPracticeBestsPage() {
         />
       </Grid>
       <Grid item container justify="center" className={classes.listWrapper}>
-        <ExerciseList exerciseNames={displayedExerciseNames} />
+        <ExerciseList
+          exerciseNames={displayedExerciseNames}
+          onExerciseClicked={navigateToSingleExercisePage}
+        />
       </Grid>
       <BackButton to="/learner/schedules" label="Back to Schedules" />
     </Grid>

@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { exerciseNames } from "./exerciseNames"
-
+import httpService from "../services/LearnerServiceSingleton"
 import { repMaxrange } from "../utils"
 // eslint-disable-next-line no-extend-native
 Date.prototype.addHours = function (h) {
@@ -34,7 +34,20 @@ let initialState = exerciseNames.reduce((acc, k) => {
   return acc
 }, {})
 
-initialState = { ...initialState, currentRepMax: "All" }
+initialState = { ...initialState, currentRepMax: "All", instructorApp: {} }
+
+export const fetchAllPbsByLearnerId = createAsyncThunk(
+  "practiceBests/fetchAll",
+  async (learnerId) => {
+    console.log("I was called!")
+    const { ok, payload } = await httpService.getAllPracticeBestsOfOneLearner(
+      learnerId
+    )
+    if (ok) {
+      return { payload, learnerId }
+    }
+  }
+)
 
 export const practiceBestsSlice = createSlice({
   name: "practiceBests",
@@ -68,6 +81,16 @@ export const practiceBestsSlice = createSlice({
     setCurrentRepMax: (state, action) => {
       state.currentRepMax = action.payload
     },
+    initLearnerPbs: (state, action) => {
+      const { learnerId, historicalPbs } = action.payload
+      state.instructorApp[`${learnerId}`] = historicalPbs
+    },
+  },
+  extraReducers: {
+    [fetchAllPbsByLearnerId.fulfilled]: (state, action) => {
+      const { payload, learnerId } = action.payload
+      state.instructorApp[`${learnerId}`] = payload
+    },
   },
 })
 
@@ -92,14 +115,20 @@ export const selectPracticeBestRecordsById = (state, exerciseName, pbId) => {
 
 export const selectCurrentRepMax = (state) => state.practiceBests.currentRepMax
 
+export const selectPbsByLearnerId = (state, learnerId) =>
+  state.practiceBests.instructorApp[`${learnerId}`]
+
+export const selectFetchedLearnerIds = (state) =>
+  Object.keys(state.practiceBests.instructorApp)
+
 //action type
 export const {
   setOnePracticeBest,
   updateOneRecord,
   deleteOneRecord,
   addNewRecord,
-
   setCurrentRepMax,
+  initLearnerPbs,
 } = practiceBestsSlice.actions
 
 //reducer to register with global store

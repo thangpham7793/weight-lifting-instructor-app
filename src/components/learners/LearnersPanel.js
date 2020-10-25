@@ -1,6 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, useRef } from "react"
 import { Grid } from "@material-ui/core"
-import { PersonalBestsForm, LearnerSearchPanel } from "./register"
+import {
+  PersonalBestsForm,
+  LearnerSearchPanel,
+  HistoricalPersonalBestsList,
+  ExerciseNameOptions,
+} from "./register"
 import { ActionNotificationDiv } from "../ActionNotificationDiv"
 import { useFetchSnackbar } from "../../hooks/register"
 import httpService from "../../services/LearnerServiceSingleton"
@@ -11,6 +16,10 @@ import {
   initAllLearners,
   selectAllLearners,
 } from "../../reducers/allLearnersReducerSlice"
+import {
+  fetchAllPbsByLearnerId,
+  selectPbsByLearnerId,
+} from "../../reducers/practiceBestsSlice"
 
 export function LearnersPanel() {
   NavHelpers.setCurrentPage("/instructor/learners")
@@ -25,7 +34,20 @@ export function LearnersPanel() {
     isActionSuccess: null,
   })
 
+  const selectedLearnerPbs = useSelector((state) => {
+    return selectedLearner
+      ? selectPbsByLearnerId(state, selectedLearner.learnerId)
+      : null
+  })
+
+  const fetchedLearnerIds = useRef([])
+
   const { FetchNotificationDiv } = useFetchSnackbar("learner")
+  const [selectedExerciseName, setSelectedExerciseName] = useState("snatch")
+
+  const onExerciseNameSelected = useCallback((e) => {
+    setSelectedExerciseName(e.target.value)
+  }, [])
 
   function onCloseActionStatusDiv(e) {
     setActionStatus({ action: null, isActionSuccess: null })
@@ -217,6 +239,16 @@ export function LearnersPanel() {
     }
   }, [actionStatus.isActionSuccess])
 
+  useEffect(() => {
+    if (
+      selectedLearner &&
+      !fetchedLearnerIds.current.includes(selectedLearner.learnerId)
+    ) {
+      fetchedLearnerIds.current.push(selectedLearner.learnerId)
+      dispatch(fetchAllPbsByLearnerId(selectedLearner.learnerId))
+    }
+  }, [selectedLearner, dispatch])
+
   return (
     <>
       {!learners && <FetchNotificationDiv />}
@@ -250,15 +282,18 @@ export function LearnersPanel() {
               onDeleteLearner={onDeleteLearner}
               title="Personal Bests"
             />
-            <PersonalBestsForm
-              selectedLearner={selectedLearner}
-              onPersonalBestsInputChange={onPersonalBestsInputChange}
-              onUpdatePersonalBests={onUpdatePersonalBests}
-              canEditAndUpdate={canEditAndUpdate}
-              enableEditAndUpdate={enableEditAndUpdate}
-              onDeleteLearner={onDeleteLearner}
-              title="Historical Bests"
-            />
+            {selectedLearnerPbs && (
+              <HistoricalPersonalBestsList
+                records={selectedLearnerPbs}
+                title="Historical Bests"
+                selectMenu={() => (
+                  <ExerciseNameOptions
+                    onExerciseNameSelected={onExerciseNameSelected}
+                    selectedExerciseName={selectedExerciseName}
+                  />
+                )}
+              />
+            )}
           </>
         )}
       </Grid>
