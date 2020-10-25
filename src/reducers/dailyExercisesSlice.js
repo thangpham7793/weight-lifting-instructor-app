@@ -1,26 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const initialState = {
-  exercises: null,
-  prevWeek: null,
-  prevScheduleId: null,
-  stale: false,
-}
+const initialState = {}
 
 export const dailyExercisesSlice = createSlice({
   name: "dailyExercises",
   initialState,
   reducers: {
     initDailyExercises: (state, action) => {
-      state.exercises = JSON.parse(action.payload.exercises)
-      state.prevWeek = action.payload.week
-      state.prevScheduleId = action.payload.scheduleId
+      const { week, scheduleId } = action.payload
+      state[`s${scheduleId}w${week}`] = JSON.parse(action.payload.exercises)
     },
   },
 })
 
+// [s1w2]: state[`s${scheduleId}]
+
 //selector
-export const selectDailyExercises = (state) => state.dailyExercises
+export const selectDailyExercises = (state, scheduleId, week) =>
+  state.dailyExercises[`s${scheduleId}w${week}`]
+
+export const selectFetchedKeys = (state) => Object.keys(state.dailyExercises)
 
 //action type
 export const { initDailyExercises } = dailyExercisesSlice.actions

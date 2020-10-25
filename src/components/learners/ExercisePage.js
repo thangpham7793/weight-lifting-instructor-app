@@ -4,6 +4,7 @@ import { initPbs, selectLearnerPbs } from "../../reducers/learnerPbsSlice"
 import {
   initDailyExercises,
   selectDailyExercises,
+  selectFetchedKeys,
 } from "../../reducers/dailyExercisesSlice"
 import { selectScheduleById } from "../../reducers/learnerSchedulesSlice"
 import { useParams } from "react-router-dom"
@@ -27,16 +28,17 @@ export function ExercisePage() {
   const dispatch = useDispatch()
   const history = useHistory()
   const { scheduleId, week } = useParams()
-  const { prevWeek, prevScheduleId, exercises } = useSelector(
-    selectDailyExercises
+  const exercises = useSelector((state) =>
+    selectDailyExercises(state, scheduleId, week)
   )
   const selectedSchedule = useSelector((state) =>
     selectScheduleById(state, scheduleId)
   )
 
+  const fetchedKeys = useSelector(selectFetchedKeys)
+
   const pbs = useSelector(selectLearnerPbs)
   const [tempPbs, setTempPbs] = useState(useSelector(selectLearnerPbs))
-
   const [selectedDay, setSelectedDay] = useState("day 1")
   const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false)
   const [openPbsDialog, setOpenPbsDialog] = useState(false)
@@ -89,8 +91,7 @@ export function ExercisePage() {
 
   useEffect(() => {
     async function fetchExercises(scheduleId, week) {
-      //if it's the same week, don't fetch (this logic can be hidden away in asyncThunk)
-      if (prevWeek === week && prevScheduleId === scheduleId) {
+      if (fetchedKeys.includes(`s${scheduleId}w${week}`)) {
         return
       }
       const { ok, payload } = await programmeHttpService.fetchExercises(
@@ -102,7 +103,7 @@ export function ExercisePage() {
       }
     }
     fetchExercises(scheduleId, week)
-  }, [scheduleId, week, prevScheduleId, prevWeek, dispatch])
+  }, [scheduleId, week, dispatch, fetchedKeys])
 
   function onDaySelected(e) {
     setSelectedDay(e.target.value)
