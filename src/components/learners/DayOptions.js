@@ -1,27 +1,26 @@
 import React from "react"
 import { FormControl, Select, MenuItem, Typography } from "@material-ui/core"
-import { makeStyles } from "@material-ui/core/styles"
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    maxWidth: "100%",
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-  select: {
-    paddingRight: theme.spacing(4),
-  },
-}))
+import { quickStyles } from "../../services/register"
 
 export function DayOptions({ exercises, onDaySelected, selectedDay, label }) {
-  const classes = useStyles()
+  const classes = quickStyles({
+    formControl: {
+      margin: "1rem",
+      maxWidth: "100%",
+      textTransform: "capitalize",
+    },
+    selectEmpty: {
+      marginTop: "1rem",
+    },
+    select: {
+      paddingRight: "0.75rem",
+    },
+  })
 
   if (!exercises)
     return <Typography component="p">No {label} Available</Typography>
 
-  const items = Object.keys(exercises).map((v) => {
+  const items = exercises.map((v) => {
     return (
       <MenuItem value={v} key={v}>
         {v}

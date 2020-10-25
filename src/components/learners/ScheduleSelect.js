@@ -70,16 +70,17 @@ export function ScheduleSelect({
         />
         <WeekOptions
           onWeekSelected={onWeekSelected}
-          selectedSchedule={selectedSchedule}
+          weekCount={selectedSchedule.weekCount}
           label="Week"
           selectedWeek={selectedWeek}
         />
       </Grid>
       <Grid
         item
-        xs={10}
-        md={6}
-        lg={4}
+        xs={9}
+        sm={6}
+        md={4}
+        lg={3}
         container
         wrap="nowrap"
         className={classes.itemWrapper}

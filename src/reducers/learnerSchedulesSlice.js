@@ -31,6 +31,11 @@ export const learnerSchedulesSlice = createSlice({
 export const selectLearnerSchedules = (state) =>
   state.learnerSchedules.schedules
 
+export const selectScheduleById = (state, scheduleId) =>
+  state.learnerSchedules.schedules.find(
+    (s) => s.scheduleId === parseInt(scheduleId)
+  )
+
 //action type
 export const { initSchedules } = learnerSchedulesSlice.actions
 

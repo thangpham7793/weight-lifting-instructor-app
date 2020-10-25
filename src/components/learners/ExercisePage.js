@@ -5,6 +5,7 @@ import {
   initDailyExercises,
   selectDailyExercises,
 } from "../../reducers/dailyExercisesSlice"
+import { selectScheduleById } from "../../reducers/learnerSchedulesSlice"
 import { useParams } from "react-router-dom"
 import { useFetchSnackbar, useActionSnackbar } from "../../hooks/register"
 import {
@@ -12,6 +13,7 @@ import {
   DailyExerciseTable,
   FeedBackDialog,
   PbsDialog,
+  WeekOptions,
 } from "./register"
 import { Grid, Typography } from "@material-ui/core"
 import { shallowEqual } from "../../utils"
@@ -19,19 +21,25 @@ import programmeHttpService from "../../services/ProgrammeServiceSingleton"
 import learnerHttpService from "../../services/LearnerServiceSingleton"
 import { ExercisePageBtnPanel } from "./register"
 import { quickStyles } from "../../services/register"
+import { useHistory } from "react-router-dom"
 
 export function ExercisePage() {
   const dispatch = useDispatch()
+  const history = useHistory()
   const { scheduleId, week } = useParams()
   const { prevWeek, prevScheduleId, exercises } = useSelector(
     selectDailyExercises
   )
+  const selectedSchedule = useSelector((state) =>
+    selectScheduleById(state, scheduleId)
+  )
+
+  const pbs = useSelector(selectLearnerPbs)
+  const [tempPbs, setTempPbs] = useState(useSelector(selectLearnerPbs))
 
   const [selectedDay, setSelectedDay] = useState("day 1")
   const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false)
   const [openPbsDialog, setOpenPbsDialog] = useState(false)
-  const pbs = useSelector(selectLearnerPbs)
-  const [tempPbs, setTempPbs] = useState(useSelector(selectLearnerPbs))
 
   const { FetchNotificationDiv } = useFetchSnackbar("exercises")
 
@@ -100,6 +108,10 @@ export function ExercisePage() {
     setSelectedDay(e.target.value)
   }
 
+  function onWeekSelected(e) {
+    history.push(`/learner/${scheduleId}/${e.target.value}`)
+  }
+
   const classes = quickStyles({
     btn: {
       fontSize: "0.5rem",
@@ -127,15 +139,27 @@ export function ExercisePage() {
         wrap="nowrap"
       >
         <Grid item>
-          <Typography variant="h6" component="div">
-            Week {week}
-          </Typography>
-          <DayOptions
-            exercises={exercises}
-            onDaySelected={onDaySelected}
-            selectedDay={selectedDay}
-            label="Day"
-          />
+          {selectedSchedule && (
+            <>
+              <Typography variant="h6" component="div">
+                {selectedSchedule.scheduleName}
+              </Typography>
+              <Grid item container justify="space-evenly" wrap="nowrap">
+                <WeekOptions
+                  weekCount={selectedSchedule.weekCount}
+                  onWeekSelected={onWeekSelected}
+                  selectedWeek={week}
+                  label="Week"
+                />
+                <DayOptions
+                  exercises={Object.keys(exercises)}
+                  onDaySelected={onDaySelected}
+                  selectedDay={selectedDay}
+                  label="Day"
+                />
+              </Grid>
+            </>
+          )}
           <DailyExerciseTable
             dailyExercises={exercises[selectedDay]}
             pbs={pbs}
