@@ -204,6 +204,19 @@ export function LearnersPanel() {
     if (!learners) fetchLearners()
   }, [learners, dispatch])
 
+  useEffect(() => {
+    function setTimeOutFadeAway(second = 2) {
+      return setTimeout(() => onCloseActionStatusDiv(), second * 1000)
+    }
+
+    if (actionStatus.isActionSuccess !== null) {
+      const timerId = setTimeOutFadeAway()
+      return function () {
+        clearTimeout(timerId)
+      }
+    }
+  }, [actionStatus.isActionSuccess])
+
   return (
     <>
       {!learners && <FetchNotificationDiv />}

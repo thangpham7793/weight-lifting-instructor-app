@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { capitalise } from "../utils"
 import { ActionNotificationDiv } from "../components/ActionNotificationDiv"
 
@@ -48,6 +48,20 @@ export function useActionSnackbar(action, serviceMethod) {
       />
     )
   }
+
+  //api would be: callback, dependenciesArr, timeout
+  useEffect(() => {
+    function setTimeOutFadeAway(second = 2) {
+      return setTimeout(() => onCloseActionStatusDiv(), second * 1000)
+    }
+
+    if (actionStatus.isActionSuccess !== null) {
+      const timerId = setTimeOutFadeAway()
+      return function () {
+        clearTimeout(timerId)
+      }
+    }
+  }, [actionStatus.isActionSuccess])
 
   //this allows the hook to be used with different services in the same component
   function makePayloadObjectWithCustomPropNames(action) {

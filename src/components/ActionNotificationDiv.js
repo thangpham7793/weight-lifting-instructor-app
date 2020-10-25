@@ -48,7 +48,7 @@ export const ActionNotificationDiv = React.memo(
           borderRadius: "1rem",
           left: "5%",
           bottom: "7%",
-          zIndex: "10",
+          zIndex: "1301",
         }}
       >
         {isActionSuccess ? (

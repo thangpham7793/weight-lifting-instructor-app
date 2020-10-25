@@ -33,9 +33,7 @@ export function ExercisePage() {
   const pbs = useSelector(selectLearnerPbs)
   const [tempPbs, setTempPbs] = useState(useSelector(selectLearnerPbs))
 
-  const { setIsFetchSuccess, FetchNotificationDiv } = useFetchSnackbar(
-    "exercises"
-  )
+  const { FetchNotificationDiv } = useFetchSnackbar("exercises")
 
   const {
     callDecoratedUpdatePbsService,
@@ -92,14 +90,11 @@ export function ExercisePage() {
         week
       )
       if (ok) {
-        setIsFetchSuccess(true)
         dispatch(initDailyExercises({ exercises: payload, scheduleId, week }))
-      } else {
-        setIsFetchSuccess(false)
       }
     }
     fetchExercises(scheduleId, week)
-  }, [scheduleId, week, setIsFetchSuccess, prevScheduleId, prevWeek, dispatch])
+  }, [scheduleId, week, prevScheduleId, prevWeek, dispatch])
 
   function onDaySelected(e) {
     setSelectedDay(e.target.value)
@@ -121,6 +116,7 @@ export function ExercisePage() {
     <>
       <Grid
         container
+        item
         direction="column"
         justify="space-around"
         style={{ height: "100%", margin: "0 auto" }}
@@ -167,8 +163,7 @@ export function ExercisePage() {
     <Grid
       container
       direction="column"
-      justify="space-around"
-      style={{ height: "100%" }}
+      style={{ height: "100%", paddingTop: "2rem" }}
     >
       <FetchNotificationDiv />
     </Grid>

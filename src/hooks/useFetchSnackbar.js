@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { Grid } from "@material-ui/core"
 
 export function useFetchSnackbar(resourceName = null, postFetchAction = null) {
   const [isFetchSuccess, setIsFetchSuccess] = useState(null)
@@ -29,7 +30,15 @@ export function useFetchSnackbar(resourceName = null, postFetchAction = null) {
   })
 
   function FetchNotificationDiv({ ...props }) {
-    return <Component isFetchSuccess={isFetchSuccess} {...props} />
+    return (
+      <Grid
+        container
+        direction="column"
+        style={{ height: "100%", paddingTop: "2rem" }}
+      >
+        <Component isFetchSuccess={isFetchSuccess} {...props} />
+      </Grid>
+    )
   }
 
   return { isFetchSuccess, setIsFetchSuccess, FetchNotificationDiv }
