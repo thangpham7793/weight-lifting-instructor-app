@@ -306,7 +306,9 @@ export function LearnersPanel() {
                       (pb) => pb.exerciseName === selectedExerciseName
                     )}
                     onEditClicked={() => console.log("Add Comment?")}
-                    icon={Message}
+                    icon={() => (
+                      <Message style={{ color: "var(--primary-cl)" }} />
+                    )}
                   />
                 )}
               />
