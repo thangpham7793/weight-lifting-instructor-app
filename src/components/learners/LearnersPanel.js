@@ -240,14 +240,26 @@ export function LearnersPanel() {
           />
         )}
         {selectedLearner && (
-          <PersonalBestsForm
-            selectedLearner={selectedLearner}
-            onPersonalBestsInputChange={onPersonalBestsInputChange}
-            onUpdatePersonalBests={onUpdatePersonalBests}
-            canEditAndUpdate={canEditAndUpdate}
-            enableEditAndUpdate={enableEditAndUpdate}
-            onDeleteLearner={onDeleteLearner}
-          />
+          <>
+            <PersonalBestsForm
+              selectedLearner={selectedLearner}
+              onPersonalBestsInputChange={onPersonalBestsInputChange}
+              onUpdatePersonalBests={onUpdatePersonalBests}
+              canEditAndUpdate={canEditAndUpdate}
+              enableEditAndUpdate={enableEditAndUpdate}
+              onDeleteLearner={onDeleteLearner}
+              title="Personal Bests"
+            />
+            <PersonalBestsForm
+              selectedLearner={selectedLearner}
+              onPersonalBestsInputChange={onPersonalBestsInputChange}
+              onUpdatePersonalBests={onUpdatePersonalBests}
+              canEditAndUpdate={canEditAndUpdate}
+              enableEditAndUpdate={enableEditAndUpdate}
+              onDeleteLearner={onDeleteLearner}
+              title="Historical Bests"
+            />
+          </>
         )}
       </Grid>
     </>

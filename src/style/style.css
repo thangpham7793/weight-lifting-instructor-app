@@ -775,13 +775,10 @@ a.logo {
 .learnerPanelWrapper > div {
   margin: var(--mg-sm) 0;
   box-shadow: var(--bsd-md);
-  border: 1px solid var(--primary-cl);
   border-radius: 1%;
   padding: calc(var(--pd-sm) / 2);
   background: var(--txt-cl);
   color: var(--primary-cl);
-  min-width: calc((100vw - 4 * var(--mg-sm)) / 2);
-  max-height: calc(80vw - 3.5rem - var(--mg-sm));
 }
 
 

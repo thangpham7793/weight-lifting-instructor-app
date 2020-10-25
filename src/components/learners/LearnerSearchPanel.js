@@ -22,7 +22,7 @@ export function LearnerSearchPanel({
       wrap="nowrap"
       className="learnerListPanel"
       direction="column"
-      style={{ width: "30%" }}
+      style={{ width: "20%", maxHeight: "80vh" }}
     >
       <Grid
         item
