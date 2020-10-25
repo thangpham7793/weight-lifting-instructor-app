@@ -982,3 +982,12 @@ a.MuiButtonBase-root.MuiListItem-root:focus,
 #sidebar-logout-link:focus {
   background: var(--bg-cl) !important;
 }
+
+#learner-panel-exercise-select {
+  display: flex;
+  padding: 0 1rem;
+}
+
+#learner-panel-exercise-select > svg {
+  margin-left: 0.5rem;
+}

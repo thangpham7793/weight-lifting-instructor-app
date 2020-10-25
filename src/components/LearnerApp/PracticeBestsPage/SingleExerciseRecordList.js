@@ -12,7 +12,8 @@ import { quickStyles } from "../../../services/register"
 export default function SingleExerciseRecordList({
   records,
   onEditClicked,
-  currentRepMax,
+  currentRepMax = "All",
+  icon = Edit,
 }) {
   const classes = quickStyles({
     list: {
@@ -43,6 +44,7 @@ export default function SingleExerciseRecordList({
     },
   })
 
+  const Icon = icon
   let items
 
   if (records.length === 0) {
@@ -81,7 +83,7 @@ export default function SingleExerciseRecordList({
             pbid={pbId}
             onClick={onEditClicked}
           >
-            <Edit fontSize="small" />
+            <Icon fontSize="small" />
           </IconButton>
         </ListItem>
       )

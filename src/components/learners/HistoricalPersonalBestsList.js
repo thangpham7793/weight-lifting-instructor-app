@@ -1,25 +1,8 @@
 import React from "react"
-import { Edit, Delete, Save } from "@material-ui/icons"
-import { TextField, Grid, Typography } from "@material-ui/core"
-import { camelCaseToNormal } from "../../utils"
+import { Grid, Typography } from "@material-ui/core"
 import { quickStyles } from "../../services/register"
 
-function PersonalBestInput({ label, ...props }) {
-  return (
-    <TextField
-      label={camelCaseToNormal(label)}
-      className="text-input"
-      {...props}
-    />
-  )
-}
-
-export function HistoricalPersonalBestsList({
-  records,
-  exerciseNames,
-  title,
-  selectMenu,
-}) {
+export function HistoricalPersonalBestsList({ pbsList, title, selectMenu }) {
   const classes = quickStyles({
     btn: {
       fontSize: "0.75rem",
@@ -42,7 +25,7 @@ export function HistoricalPersonalBestsList({
   })
 
   const SelectMenu = selectMenu
-
+  const PbsList = pbsList
   //use modal then
   return (
     <Grid item style={{ width: "35%", overflow: "auto", maxHeight: "80vh" }}>
@@ -50,6 +33,7 @@ export function HistoricalPersonalBestsList({
         {title}
       </Typography>
       <SelectMenu />
+      <PbsList />
     </Grid>
   )
 }

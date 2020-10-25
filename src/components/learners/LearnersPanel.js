@@ -20,6 +20,8 @@ import {
   fetchAllPbsByLearnerId,
   selectPbsByLearnerId,
 } from "../../reducers/practiceBestsSlice"
+import { Message } from "@material-ui/icons"
+import SingleExerciseRecordList from "../LearnerApp/PracticeBestsPage/SingleExerciseRecordList"
 
 export function LearnersPanel() {
   NavHelpers.setCurrentPage("/instructor/learners")
@@ -284,12 +286,27 @@ export function LearnersPanel() {
             />
             {selectedLearnerPbs && (
               <HistoricalPersonalBestsList
-                records={selectedLearnerPbs}
                 title="Historical Bests"
                 selectMenu={() => (
                   <ExerciseNameOptions
                     onExerciseNameSelected={onExerciseNameSelected}
                     selectedExerciseName={selectedExerciseName}
+                    availableExercises={selectedLearnerPbs.reduce(
+                      (exerciseNames, pbs) => [
+                        ...exerciseNames,
+                        pbs.exerciseName,
+                      ],
+                      []
+                    )}
+                  />
+                )}
+                pbsList={() => (
+                  <SingleExerciseRecordList
+                    records={selectedLearnerPbs.filter(
+                      (pb) => pb.exerciseName === selectedExerciseName
+                    )}
+                    onEditClicked={() => console.log("Add Comment?")}
+                    icon={Message}
                   />
                 )}
               />
