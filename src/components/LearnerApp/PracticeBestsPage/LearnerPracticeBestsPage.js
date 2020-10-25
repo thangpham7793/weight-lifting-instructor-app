@@ -4,6 +4,7 @@ import { Search } from "@material-ui/icons"
 import { exerciseNames } from "../../../reducers/exerciseNames"
 import { ExerciseList } from "./ExerciseList"
 import { quickStyles } from "../../../services/register"
+import { BackButton } from "./BackButton"
 
 export function LearnerPracticeBestsPage() {
   const classes = quickStyles({
@@ -60,6 +61,7 @@ export function LearnerPracticeBestsPage() {
       <Grid item container justify="center" className={classes.listWrapper}>
         <ExerciseList exerciseNames={displayedExerciseNames} />
       </Grid>
+      <BackButton to="/learner/schedules" label="Back to Schedules" />
     </Grid>
   )
 }

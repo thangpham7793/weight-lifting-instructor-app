@@ -10,7 +10,7 @@ import {
   setCurrentRepMax,
 } from "../../../reducers/practiceBestsSlice"
 import httpService from "../../../services/LearnerServiceSingleton"
-import { useParams, useHistory } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import SingleExerciseRecordList from "./SingleExerciseRecordList"
 import EditSingleRecordDialog from "./EditSingleRecordDialog"
 import { shallowEqual, repMaxrange } from "../../../utils"
@@ -22,10 +22,10 @@ import {
   validateNewWeight,
 } from "../../../services/register"
 import { AddRecordFloatingButton } from "./AddRecordFloatingButton"
-import { FormButton } from "./FormButton"
 import { useActionSnackbar } from "../../../hooks/useActionSnackbar"
 import { FilterPanel } from "./FilterPanel"
-import { Backspace } from "@material-ui/icons"
+import { BackButton } from "./BackButton"
+import { ArrowForward } from "@material-ui/icons"
 
 export function SingleExercisePage() {
   const classes = quickStyles({
@@ -33,16 +33,8 @@ export function SingleExercisePage() {
       height: "100%",
       margin: "0 auto",
     },
-    formBtn: {
-      width: "max-content",
-    },
-    formBtnLabel: {
-      fontSize: "0.5rem",
-      marginRight: "0.5rem",
-    },
   })
 
-  const history = useHistory()
   const dispatch = useDispatch()
   const { exerciseName } = useParams()
   //stop-gap method for now
@@ -276,14 +268,13 @@ export function SingleExercisePage() {
       <AddSnackbar />
       <UpdateSnackbar />
       <DeleteSnackbar />
-      <Grid item justify="center" style={{ padding: "1rem" }}>
-        <FormButton
-          classes={classes}
-          label={"Back to PBs List"}
-          icon={Backspace}
-          onClick={() => {
-            history.push("/learner/practice.bests")
-          }}
+      <Grid item container align="space-between" direction="column">
+        <BackButton to="/learner/practice.bests" label="Back to PBs List" />
+        <BackButton
+          to="/learner/schedules"
+          label="To Schedules"
+          icon={ArrowForward}
+          style={{ padding: "0" }}
         />
       </Grid>
     </Grid>
