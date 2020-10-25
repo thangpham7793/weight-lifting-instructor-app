@@ -1,10 +1,10 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 export function HorizontalNavBar({ pageTitle, links, onAppChange, onLogOut }) {
   let navLinks
 
-  if (links.length === 1 && !links[0].component) {
+  if (links.length === 2) {
     navLinks = [
       <span
         className="nav-item"
@@ -14,15 +14,28 @@ export function HorizontalNavBar({ pageTitle, links, onAppChange, onLogOut }) {
       >
         {links[0].label}
       </span>,
+      <a className="nav-item" href={links[1].to} key={links[1].to}>
+        {links[1].label}
+      </a>,
     ]
   } else {
     navLinks = links
       .filter(({ display }) => display === true)
       .map(({ to, label }) => {
         return to !== "/logout" ? (
-          <Link key={to} to={to} className="nav-item">
+          <NavLink
+            key={to}
+            to={to}
+            className="nav-item"
+            activeClassName="current-page"
+            activeStyle={{
+              fontWeight: "600",
+              pointerEvents: "none",
+              cursor: "default",
+            }}
+          >
             {label}
-          </Link>
+          </NavLink>
         ) : (
           //basically need to make a fake link here!
           <span className="nav-item" key={to} label={label} onClick={onLogOut}>

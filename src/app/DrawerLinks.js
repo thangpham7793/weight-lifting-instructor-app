@@ -36,13 +36,16 @@ export function DrawerLinks({ links, onLogOut, navBarHeight }) {
     navItem: {
       "& :hover": {
         color: "var(--txt-cl)",
+        fontWeight: "600",
       },
       "& :focus": {
         color: "var(--txt-cl)",
+        fontWeight: "600",
       },
     },
     navItemText: {
       fontSize: "0.75rem",
+      fontWeight: "inherit",
     },
   })
 
@@ -70,6 +73,8 @@ export function DrawerLinks({ links, onLogOut, navBarHeight }) {
             activeStyle={{
               fontWeight: "600",
               color: "var(--txt-cl)",
+              pointerEvents: "none",
+              cursor: "default",
             }}
           >
             <ListItemIcon>

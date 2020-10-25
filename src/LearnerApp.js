@@ -66,6 +66,12 @@ const allLinks = {
       isProtected: false,
       display: true,
     },
+    {
+      to: "http://lifting-schedule.herokuapp.com",
+      label: "Version 1.0",
+      isProtected: false,
+      display: true,
+    },
   ],
 }
 
@@ -106,7 +112,7 @@ export function LearnerApp({ onAppChange }) {
               NavHelpers.getCurrentPage() !== "/learner/login" &&
               NavHelpers.getCurrentPage() !== null
                 ? NavHelpers.getCurrentPage()
-                : "/learner/practice.bests"
+                : "/learner/scheduless"
             }
           />
         ) : (

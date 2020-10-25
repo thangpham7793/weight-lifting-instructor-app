@@ -12,8 +12,6 @@ function NavLink({ to, label }) {
 
 //https://reactrouter.com/web/api/Redirect
 export function NavBarControl({ links, onLogOut, onAppChange, pageTitle }) {
-  let navLinks
-
   const [currentWidth, setCurrentWidth] = useState(window.innerWidth)
   const [navBarHeight, setNavBarHeight] = useState(0)
 
@@ -37,39 +35,13 @@ export function NavBarControl({ links, onLogOut, onAppChange, pageTitle }) {
     }
   }, [currentWidth])
 
-  if (links.length === 1 && !links[0].component) {
-    navLinks = [
-      <span
-        className="nav-item"
-        key={links[0].to}
-        onClick={onAppChange}
-        to={links[0].to}
-      >
-        {links[0].label}
-      </span>,
-    ]
-  } else {
-    navLinks = links
-      .filter(({ display }) => display === true)
-      .map(({ to, label }) => {
-        return to !== "/logout" ? (
-          <NavLink key={to} to={to} label={label} />
-        ) : (
-          //basically need to make a fake link here!
-          <span className="nav-item" key={to} label={label} onClick={onLogOut}>
-            {label}
-          </span>
-        )
-      })
-  }
-
   return (
     <nav className="header index" ref={ref} style={{ zIndex: 1000 }}>
       <section>
-        {currentWidth <= 450 && links.length > 1 && navBarHeight > 0 ? (
+        {currentWidth <= 450 && links.length > 2 && navBarHeight > 0 ? (
           <DrawerNavBar
             pageTitle={pageTitle}
-            navLinks={navLinks}
+            // navLinks={navLinks}
             links={links}
             onAppChange={onAppChange}
             onLogOut={onLogOut}
@@ -78,7 +50,7 @@ export function NavBarControl({ links, onLogOut, onAppChange, pageTitle }) {
         ) : (
           <HorizontalNavBar
             pageTitle={pageTitle}
-            navLinks={navLinks}
+            // navLinks={navLinks}
             links={links}
             onAppChange={onAppChange}
             onLogOut={onLogOut}

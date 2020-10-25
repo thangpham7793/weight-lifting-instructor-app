@@ -136,9 +136,7 @@ button {
 }
 
 button:hover, button:focus, 
-a:hover, a:focus, 
-.learner-name:hover, .learner-name:focus,
-.nav-item:hover, .nav-item:focus{
+.learner-name:hover, .learner-name:focus {
   background: var(--secondary-cl);
 /*   font-weight: var(--fw-md); */
   transition-duration: 0.2s;
@@ -148,10 +146,18 @@ a:hover, a:focus,
 
 a:hover, a:focus,
 .nav-item:hover, .nav-item:focus {
-  box-shadow: var(--bsd-sm);
-  color: #111;
   cursor: pointer;
 }
+
+.current-page::after {
+  content: ""; /* This is necessary for the pseudo element to work. */
+  display: block; /* This will put the pseudo element on its own line. */
+  margin: 0 auto; /* This will center the border. */
+  padding: 1px;
+  margin-top: -0.25rem;
+  border-bottom: 0.5px solid var(--txt-cl);
+}
+
 
 select {
   background: var(--bg-cl);
