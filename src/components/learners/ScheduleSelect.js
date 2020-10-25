@@ -48,7 +48,7 @@ export function ScheduleSelect({
         md={6}
         lg={4}
         className={classes.itemWrapper}
-        style={{ background: "var(--txt-cl)" }}
+        style={{ background: "var(--txt-cl)", boxShadow: "var(--bsd-sm)" }}
       >
         <ScheduleOptions
           schedules={schedules}

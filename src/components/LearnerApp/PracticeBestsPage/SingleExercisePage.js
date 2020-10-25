@@ -10,19 +10,22 @@ import {
   setCurrentRepMax,
 } from "../../../reducers/practiceBestsSlice"
 import httpService from "../../../services/LearnerServiceSingleton"
-import { useParams } from "react-router-dom"
+import { useParams, useHistory } from "react-router-dom"
 import SingleExerciseRecordList from "./SingleExerciseRecordList"
 import EditSingleRecordDialog from "./EditSingleRecordDialog"
 import { shallowEqual, repMaxrange } from "../../../utils"
 import { Grid, Typography } from "@material-ui/core"
 import {
+  NavHelpers,
   quickStyles,
   validateNewRepMax,
   validateNewWeight,
 } from "../../../services/register"
 import { AddRecordFloatingButton } from "./AddRecordFloatingButton"
+import { FormButton } from "./FormButton"
 import { useActionSnackbar } from "../../../hooks/useActionSnackbar"
 import { FilterPanel } from "./FilterPanel"
+import { Backspace } from "@material-ui/icons"
 
 export function SingleExercisePage() {
   const classes = quickStyles({
@@ -30,13 +33,24 @@ export function SingleExercisePage() {
       height: "100%",
       margin: "0 auto",
     },
+    formBtn: {
+      width: "max-content",
+    },
+    formBtnLabel: {
+      fontSize: "0.5rem",
+      marginRight: "0.5rem",
+    },
   })
 
+  const history = useHistory()
+  const dispatch = useDispatch()
   const { exerciseName } = useParams()
+  //stop-gap method for now
+  NavHelpers.setCurrentPage(`/learner/practice.bests`)
+
   const records = useSelector((state) =>
     selectOnePracticeBest(state, exerciseName)
   )
-  const dispatch = useDispatch()
 
   const { callDecoratedAddService, AddSnackbar } = useActionSnackbar(
     "add",
@@ -262,6 +276,16 @@ export function SingleExercisePage() {
       <AddSnackbar />
       <UpdateSnackbar />
       <DeleteSnackbar />
+      <Grid item justify="center" style={{ padding: "1rem" }}>
+        <FormButton
+          classes={classes}
+          label={"Back to PBs List"}
+          icon={Backspace}
+          onClick={() => {
+            history.push("/learner/practice.bests")
+          }}
+        />
+      </Grid>
     </Grid>
   )
 }
