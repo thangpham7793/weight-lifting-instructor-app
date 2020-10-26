@@ -106,6 +106,9 @@ export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
       flexDirection: "column",
       justifyContent: "space-between",
     },
+    textField: {
+      marginBottom: "0.5rem",
+    },
     formLabel: {
       marginBottom: "0.5rem",
     },
@@ -145,6 +148,7 @@ export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
           value={formData[formInputProps.name.name]}
           onChange={onFeedbackFormChanged}
           inputProps={formInputProps.name}
+          className={classes.textField}
           error={
             formData.isNameEdited &&
             formData[formInputProps.name.name].length === 0
@@ -194,6 +198,7 @@ export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
         value={formData[formInputProps.comment.name]}
         onChange={onFeedbackFormChanged}
         inputProps={formInputProps.comment}
+        className={classes.textField}
       />
       <Grid
         container
