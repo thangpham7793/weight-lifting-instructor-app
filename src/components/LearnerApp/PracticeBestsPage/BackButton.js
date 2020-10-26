@@ -13,7 +13,7 @@ export function BackButton({
 }) {
   const history = useHistory()
   return (
-    <Grid item justify="center" style={style || { padding: "1rem" }}>
+    <Grid container item justify="center" style={style || { padding: "1rem" }}>
       <FormButton
         classes={classes}
         label={label}

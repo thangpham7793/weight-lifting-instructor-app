@@ -95,7 +95,7 @@ export function ScheduleSelect({
           label="To PBs"
           style={{ padding: "1rem 0" }}
         />
-        <Grid item justify="center" style={{ padding: "0" }}>
+        <Grid container item justify="center" style={{ padding: "0" }}>
           <Button
             className={classes.btn}
             variant="contained"

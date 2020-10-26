@@ -4,12 +4,13 @@ import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(() => ({
   dialog: {
-    width: "90vw",
+    width: "90%",
     height: "90%",
+    maxWidth: "600px",
     margin: "1rem auto",
   },
   content: {
-    background: "var(--secondary-cl)",
+    background: "var(--txt-cl)",
     paddingTop: "0",
   },
   form: {
@@ -17,10 +18,12 @@ const useStyles = makeStyles(() => ({
     width: "100vw",
     height: "100vh",
   },
+  container: {},
 }))
 
-export function FeedBackDialog({ onDialogCloseClicked, open }) {
+export function FeedBackDialog({ onDialogCloseClicked, open, feedbackForm }) {
   const classes = useStyles()
+  const FeedbackForm = feedbackForm
 
   return (
     <Dialog
@@ -31,7 +34,7 @@ export function FeedBackDialog({ onDialogCloseClicked, open }) {
       className={classes.dialog}
     >
       <DialogContent className={classes.content}>
-        <iframe
+        {/* <iframe
           title="learner-feedback-form"
           style={{
             margin: "11% auto var(--mg-sm)",
@@ -41,9 +44,11 @@ export function FeedBackDialog({ onDialogCloseClicked, open }) {
           src="https://docs.google.com/forms/d/e/1FAIpQLSeBrxdCbRf1M0YvZVHp2n3taph7-pAS9mkbN99m2ZPeBrf0yQ/viewform?embedded=true"
         >
           Loading…
-        </iframe>
+        </iframe> */}
+        {/* http://stefano.brilli.me/google-forms-html-exporter/ */}
+        <FeedbackForm />
       </DialogContent>
-      <DialogActions
+      {/* <DialogActions
         style={{
           display: "flex",
           justifyContent: "space-evenly",
@@ -53,7 +58,7 @@ export function FeedBackDialog({ onDialogCloseClicked, open }) {
         <button onClick={onDialogCloseClicked} style={{ width: "max-content" }}>
           Close
         </button>
-      </DialogActions>
+      </DialogActions> */}
     </Dialog>
   )
 }

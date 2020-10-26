@@ -15,6 +15,7 @@ import {
   FeedBackDialog,
   PbsDialog,
   WeekOptions,
+  FeedbackForm,
 } from "./register"
 import { Grid, Typography } from "@material-ui/core"
 import { shallowEqual } from "../../utils"
@@ -23,6 +24,7 @@ import learnerHttpService from "../../services/LearnerServiceSingleton"
 import { ExercisePageBtnPanel } from "./register"
 import { quickStyles } from "../../services/register"
 import { useHistory } from "react-router-dom"
+import { ActionNotificationDiv } from "../ActionNotificationDiv"
 
 export function ExercisePage() {
   const dispatch = useDispatch()
@@ -113,6 +115,31 @@ export function ExercisePage() {
     history.push(`/learner/${scheduleId}/${e.target.value}`)
   }
 
+  //for feedback form
+  //api would be: callback, dependenciesArr, timeout
+  const [actionStatus, setActionStatus] = useState({
+    action: null,
+    isActionSuccess: true,
+    errorMessage: null,
+  })
+
+  function onCloseActionStatusDiv() {
+    setActionStatus({ action: null, isActionSuccess: null })
+  }
+
+  useEffect(() => {
+    function setTimeOutFadeAway(second = 2) {
+      return setTimeout(() => onCloseActionStatusDiv(), second * 1000)
+    }
+
+    if (actionStatus.isActionSuccess !== null) {
+      const timerId = setTimeOutFadeAway()
+      return function () {
+        clearTimeout(timerId)
+      }
+    }
+  }, [actionStatus.isActionSuccess])
+
   const classes = quickStyles({
     btn: {
       fontSize: "0.5rem",
@@ -175,6 +202,16 @@ export function ExercisePage() {
       <FeedBackDialog
         onDialogCloseClicked={onFeedbackDialogCloseClicked}
         open={openFeedbackDialog}
+        feedbackForm={() => (
+          <FeedbackForm
+            setOpenFeedbackDialog={setOpenFeedbackDialog}
+            setActionStatus={setActionStatus}
+          />
+        )}
+      />
+      <ActionNotificationDiv
+        actionStatus={actionStatus}
+        onCloseActionStatusDiv={onCloseActionStatusDiv}
       />
       <PbsDialog
         onDialogCloseClicked={onPbsDialogCloseClicked}
