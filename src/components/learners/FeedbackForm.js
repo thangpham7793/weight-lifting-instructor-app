@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import {
   TextField,
   RadioGroup,
@@ -31,11 +31,16 @@ export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
     [formInputProps.name.name]: "",
     [formInputProps.feeling.name]: "",
     [formInputProps.comment.name]: "",
+    isNameEdited: false,
   }
 
   const [formData, setFormData] = useState(defaultFormData)
 
   function onFeedbackFormChanged(e) {
+    if (e.target.name === formInputProps.name.name && !formData.isNameEdited) {
+      formData.isNameEdited = true
+    }
+
     setFormData({
       ...formData,
       [e.target.name]:
@@ -118,9 +123,14 @@ export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
         label="Name"
         value={formData[formInputProps.name.name]}
         onChange={onFeedbackFormChanged}
-        error={formData[formInputProps.name.name].length === 0}
+        error={
+          formData.isNameEdited &&
+          formData[formInputProps.name.name].length === 0
+        }
         helperText={
-          formData[formInputProps.name.name].length === 0 && "Must not be empty"
+          formData.isNameEdited &&
+          formData[formInputProps.name.name].length === 0 &&
+          "Must not be empty"
         }
         inputProps={formInputProps.name}
       />
