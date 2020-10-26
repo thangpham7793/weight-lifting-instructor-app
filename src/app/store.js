@@ -4,6 +4,7 @@ import learnerPbsReducer from "../reducers/learnerPbsSlice"
 import dailyExercisesReducer from "../reducers/dailyExercisesSlice"
 import practiceBestsReducer from "../reducers/practiceBestsSlice"
 import allLearnersReducer from "../reducers/allLearnersReducerSlice"
+import learnerInfoReducer from "../reducers/learnerInfoSlice"
 
 export default configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export default configureStore({
     allLearners: allLearnersReducer,
     dailyExercises: dailyExercisesReducer,
     practiceBests: practiceBestsReducer,
+    learnerInfo: learnerInfoReducer,
   },
 })

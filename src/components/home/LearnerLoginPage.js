@@ -14,6 +14,7 @@ import { initSchedules } from "../../reducers/learnerSchedulesSlice"
 import { initPbs } from "../../reducers/learnerPbsSlice"
 import { useDispatch } from "react-redux"
 import { useActionSnackbar } from "../../hooks/useActionSnackbar"
+import { initLearnerInfo } from "../../reducers/learnerInfoSlice"
 
 export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
   NavHelpers.setCurrentPage("/learner/login")
@@ -49,8 +50,10 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
     } else {
       UserAuth.saveToken(payload.token)
       delete payload.token
-      dispatch(initSchedules(payload.schedules))
-      dispatch(initPbs(payload.pbs))
+      const { pbs, schedules, learnerName } = payload
+      dispatch(initSchedules(schedules))
+      dispatch(initPbs(pbs))
+      dispatch(initLearnerInfo({ learnerName }))
       onLearnerLogIn()
     }
   }

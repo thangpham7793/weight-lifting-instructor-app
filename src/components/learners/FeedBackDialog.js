@@ -1,11 +1,11 @@
 import React from "react"
-import { Dialog, DialogActions, DialogContent } from "@material-ui/core"
+import { Dialog, DialogContent } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(() => ({
   dialog: {
     width: "90%",
-    height: "90%",
+    height: "95%",
     maxWidth: "600px",
     margin: "1rem auto",
   },
@@ -48,17 +48,6 @@ export function FeedBackDialog({ onDialogCloseClicked, open, feedbackForm }) {
         {/* http://stefano.brilli.me/google-forms-html-exporter/ */}
         <FeedbackForm />
       </DialogContent>
-      {/* <DialogActions
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          backgroundColor: "var(--txt-cl)",
-        }}
-      >
-        <button onClick={onDialogCloseClicked} style={{ width: "max-content" }}>
-          Close
-        </button>
-      </DialogActions> */}
     </Dialog>
   )
 }

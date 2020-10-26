@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react"
+import React, { useState } from "react"
+import { useSelector } from "react-redux"
 import {
   TextField,
   RadioGroup,
@@ -14,11 +15,13 @@ import { range, spinner } from "../../utils"
 import { FormButton } from "../LearnerApp/PracticeBestsPage/FormButton"
 import { quickStyles } from "../../services/register"
 import { formInputProps } from "./formInputProps"
+import { selectLearnerInfo } from "../../reducers/learnerInfoSlice"
+import { capitalise } from "../../utils"
 
 function makeLabel(value) {
   switch (value) {
     case 1:
-      return `Meh ${value}`
+      return `${value} Meh`
     case 5:
       return `${value} Fantastic`
     default:
@@ -27,8 +30,10 @@ function makeLabel(value) {
 }
 
 export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
+  const { learnerName } = useSelector(selectLearnerInfo)
+
   const defaultFormData = {
-    [formInputProps.name.name]: "",
+    [formInputProps.name.name]: learnerName ? learnerName : "",
     [formInputProps.feeling.name]: "",
     [formInputProps.comment.name]: "",
     isNameEdited: false,
@@ -37,16 +42,26 @@ export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
   const [formData, setFormData] = useState(defaultFormData)
 
   function onFeedbackFormChanged(e) {
-    if (e.target.name === formInputProps.name.name && !formData.isNameEdited) {
+    const fieldName = e.target.name
+    let fieldValue = e.target.value
+
+    if (fieldName === formInputProps.name.name && !formData.isNameEdited) {
       formData.isNameEdited = true
+    }
+
+    if (fieldName === formInputProps.name.name) {
+      if (!fieldValue.substr(-1) === " ") {
+        fieldValue = capitalise(fieldValue, true)
+      }
+    }
+
+    if (fieldName === formInputProps.feeling.name) {
+      fieldValue = parseInt(fieldValue)
     }
 
     setFormData({
       ...formData,
-      [e.target.name]:
-        e.target.name === formInputProps.feeling.name
-          ? parseInt(e.target.value)
-          : e.target.value,
+      [fieldName]: fieldValue,
     })
     console.log(e.target.value)
   }
@@ -89,10 +104,13 @@ export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
       display: "flex",
       height: "100%",
       flexDirection: "column",
-      justifyContent: "space-evenly",
+      justifyContent: "space-between",
     },
     formLabel: {
       marginBottom: "0.5rem",
+    },
+    btnWrapper: {
+      marginBottom: "1rem",
     },
     formBtn: {
       width: "40%",
@@ -113,27 +131,31 @@ export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
       {...formInputProps.form}
     >
       <Typography variant="h6" className={classes.formTitle} color="primary">
-        {"\u{1F3CB}"} Help Me Makes You Train Better {"\u{1F3CB}"}
+        Help Me Makes You <br /> {"\u{1F3CB}"} Train Better {"\u{1F3CB}"}
       </Typography>
-      <FormLabel
-        component="legend"
-        htmlFor={formInputProps.nameLegend.for}
-      ></FormLabel>
-      <TextField
-        label="Name"
-        value={formData[formInputProps.name.name]}
-        onChange={onFeedbackFormChanged}
-        error={
-          formData.isNameEdited &&
-          formData[formInputProps.name.name].length === 0
-        }
-        helperText={
-          formData.isNameEdited &&
-          formData[formInputProps.name.name].length === 0 &&
-          "Must not be empty"
-        }
-        inputProps={formInputProps.name}
-      />
+      {learnerName ? (
+        <input
+          {...formInputProps.name}
+          type="hidden"
+          value={capitalise(formData[formInputProps.name.name], true)}
+        />
+      ) : (
+        <TextField
+          label="Name"
+          value={formData[formInputProps.name.name]}
+          onChange={onFeedbackFormChanged}
+          inputProps={formInputProps.name}
+          error={
+            formData.isNameEdited &&
+            formData[formInputProps.name.name].length === 0
+          }
+          helperText={
+            formData.isNameEdited &&
+            formData[formInputProps.name.name].length === 0 &&
+            "Must not be empty"
+          }
+        />
+      )}
       <Grid item>
         <FormLabel
           component="legend"
@@ -161,10 +183,10 @@ export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
           })}
         </RadioGroup>
       </Grid>
-      <FormLabel
+      {/* <FormLabel
         component="legend"
         htmlFor={formInputProps.commentLegend.for}
-      ></FormLabel>
+      ></FormLabel> */}
       <TextField
         multiline
         label="Comment"
@@ -173,7 +195,13 @@ export function FeedbackForm({ setOpenFeedbackDialog, setActionStatus }) {
         onChange={onFeedbackFormChanged}
         inputProps={formInputProps.comment}
       />
-      <Grid container item wrap="nowrap" justify="space-between">
+      <Grid
+        container
+        item
+        wrap="nowrap"
+        justify="space-between"
+        className={classes.btnWrapper}
+      >
         <FormButton
           onClick={onFeedbackFormSubmitted}
           label="Close"

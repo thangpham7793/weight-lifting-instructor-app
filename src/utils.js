@@ -72,12 +72,18 @@ export function safeSpinnerWrapper(func) {
   }
 }
 
-export function capitalise(string) {
-  return string
-    .trim()
-    .split(" ")
-    .map((s) => s.substring(0, 1).toUpperCase() + s.substring(1))
-    .join("")
+export function capitalise(string, space = false) {
+  return space
+    ? string
+        .trim()
+        .split(" ")
+        .map((s) => s.substring(0, 1).toUpperCase() + s.substring(1))
+        .join(" ")
+    : string
+        .trim()
+        .split(" ")
+        .map((s) => s.substring(0, 1).toUpperCase() + s.substring(1))
+        .join("")
 }
 
 //starting from 1!
