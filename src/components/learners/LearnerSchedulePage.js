@@ -33,7 +33,7 @@ export function LearnerSchedulePage() {
 
   return isSchedulePicked ? (
     <Redirect to={`/learner/${selectedSchedule.scheduleId}/${selectedWeek}`} />
-  ) : (
+  ) : schedules.length > 0 ? (
     <ScheduleSelect
       selectedSchedule={selectedSchedule}
       schedules={schedules}
@@ -42,5 +42,15 @@ export function LearnerSchedulePage() {
       selectedWeek={selectedWeek}
       onWeekSelected={onWeekSelected}
     />
+  ) : (
+    <div>
+      <h1
+        style={{
+          margin: "10rem auto 0",
+        }}
+      >
+        Please Log In Again
+      </h1>
+    </div>
   )
 }

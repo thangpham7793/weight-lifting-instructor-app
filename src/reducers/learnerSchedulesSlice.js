@@ -1,20 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  schedules: [
-    {
-      scheduleId: 12,
-      scheduleName: "October 2020 Peaking Cycle",
-      weekCount: 6,
-      programmeName: "Youth and Junior",
-    },
-    {
-      scheduleId: 6,
-      scheduleName: "September 2020 Strength",
-      weekCount: 5,
-      programmeName: "Youth and Junior",
-    },
-  ],
+  schedules: [],
 }
 
 export const learnerSchedulesSlice = createSlice({

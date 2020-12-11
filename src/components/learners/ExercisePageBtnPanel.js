@@ -26,10 +26,8 @@ export function ExercisePageBtnPanel({
           color="primary"
           className={classes.btn}
           to="/learner/schedules"
-          label="Schedules"
-        >
-          Schedules
-        </LinkButton>
+          label="Back"
+        />
       </Grid>
       <Grid item className={classes.btnWrapper}>
         <Button
