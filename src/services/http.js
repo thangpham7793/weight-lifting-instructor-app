@@ -3,13 +3,7 @@ import { UserAuth } from "./auth"
 
 //https://dmitripavlutin.com/javascript-fetch-async-await/
 export class HttpServiceSingleton {
-  //TODO: these methods can be refactored into their own service class as well
   constructor() {
-    //hide away implementation details from the client components
-    this.postInstructorCredentials = HttpServiceSingleton._fetchPostFactory(
-      "instructor/login"
-    )
-    //make sure that only an instance is created
     this._instance = this
     if (HttpServiceSingleton._instance) {
       return this._instance

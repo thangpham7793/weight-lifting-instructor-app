@@ -51,7 +51,7 @@ const allLinks = {
       label: "Account",
       component: InstructorAccountPage,
       isProtected: true,
-      display: true,
+      display: false,
       icon: VpnKey,
     },
     {
