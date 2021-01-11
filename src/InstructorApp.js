@@ -70,12 +70,6 @@ const allLinks = {
       isProtected: false,
       display: true,
     },
-    {
-      to: "http://lifting-schedule.herokuapp.com",
-      label: "Version 1.0",
-      isProtected: false,
-      display: true,
-    },
   ],
 }
 

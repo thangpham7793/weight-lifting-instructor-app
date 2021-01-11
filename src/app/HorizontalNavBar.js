@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom"
 export function HorizontalNavBar({ pageTitle, links, onAppChange, onLogOut }) {
   let navLinks
 
-  if (links.length === 2) {
+  if (links.length <= 2) {
     navLinks = [
       <span
         className="nav-item"
@@ -14,9 +14,6 @@ export function HorizontalNavBar({ pageTitle, links, onAppChange, onLogOut }) {
       >
         {links[0].label}
       </span>,
-      <a className="nav-item" href={links[1].to} key={links[1].to}>
-        {links[1].label}
-      </a>,
     ]
   } else {
     navLinks = links
