@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from "react"
-import { Redirect } from "react-router-dom"
-import { Logo, LoginForm, LearnerSignUpDialog } from "./register"
+import { LearnerSignUpDialog, LoginForm, Logo } from "./register"
 import {
   NavHelpers,
   UserAuth,
-  validateLearnerCredentials,
   isNotEmpty,
   isValidEmail,
+  validateLearnerCredentials,
 } from "../../services/register"
+import React, { useEffect, useState } from "react"
+
+import { Redirect } from "react-router-dom"
+import { initLearnerInfo } from "../../reducers/learnerInfoSlice"
+import { initPbs } from "../../reducers/learnerPbsSlice"
+import { initSchedules } from "../../reducers/learnerSchedulesSlice"
 import learnerHttpService from "../../services/LearnerServiceSingleton"
 import programmeHttpService from "../../services/ProgrammeServiceSingleton"
-import { initSchedules } from "../../reducers/learnerSchedulesSlice"
-import { initPbs } from "../../reducers/learnerPbsSlice"
-import { useDispatch } from "react-redux"
 import { useActionSnackbar } from "../../hooks/useActionSnackbar"
-import { initLearnerInfo } from "../../reducers/learnerInfoSlice"
+import { useDispatch } from "react-redux"
 
 export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
   NavHelpers.setCurrentPage("/learner/login")
@@ -62,8 +63,10 @@ export function LearnerLoginPage({ onLearnerLogIn, isLearnerLoggedIn }) {
     e.preventDefault()
     logUserIn(credentials)
   }
-
-  const [programmes, setProgrammes] = useState(getProgrammes())
+  // make Youth and Junior default programme for now
+  const [programmes, setProgrammes] = useState([
+    { programmeId: 1, programmeName: "Youth and Junior" },
+  ])
   const [openSignUpDialog, setSignUpDialogOpen] = useState(false)
 
   useEffect(() => {
